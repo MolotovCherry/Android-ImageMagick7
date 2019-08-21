@@ -1278,6 +1278,9 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libbz2
 
+# prefer arm over thumb mode for performance gains
+LOCAL_ARM_MODE := arm
+
 LOCAL_C_INCLUDES := \
     $(BZLIB_SRC_PATH)
 
