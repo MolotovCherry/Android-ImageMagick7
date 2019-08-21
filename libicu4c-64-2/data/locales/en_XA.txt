@@ -1,0 +1,1653 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+en_XA{
+    AuxExemplarCharacters{
+        "[a b c d e f g h i j k l m n o p q r s t u v w x y z \u2045 å \u2003 ƀ ç ð é"
+        " ƒ ĝ ĥ î ĵ ķ ļ ɱ ñ ö þ ǫ ŕ š ţ û ṽ ŵ ẋ ý ž \u2046]"
+    }
+    NumberElements{
+        default{"latn"}
+    }
+    Version{"2.0"}
+    calendar{
+        buddhist{
+            eras{
+                abbreviated{
+                    "[ƁÉ one]",
+                }
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "[h:mm:ss a zzzz]",
+                "[h:mm:ss a z]",
+                "[h:mm:ss a]",
+                "[h:mm a]",
+                "[EEEE, MMMM d, r(U)]",
+                "[MMMM d, r(U)]",
+                "[MMM d, r]",
+                "[M/d/r]",
+                "[{1}, {0}]",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1}, {0}]",
+                "[{1}, {0}]",
+            }
+            availableFormats{
+                Bh{"[h B]"}
+                Bhm{"[h:mm B]"}
+                Bhms{"[h:mm:ss B]"}
+                E{"[ccc]"}
+                EBhm{"[E h:mm B]"}
+                EBhms{"[E h:mm:ss B]"}
+                EHm{"[E HH:mm]"}
+                EHms{"[E HH:mm:ss]"}
+                Ed{"[d E]"}
+                Ehm{"[E h:mm a]"}
+                Ehms{"[E h:mm:ss a]"}
+                Gy{"[r(U)]"}
+                GyMMM{"[MMM r(U)]"}
+                GyMMMEd{"[E, MMM d, r(U)]"}
+                GyMMMd{"[MMM d, r]"}
+                H{"[HH]"}
+                Hm{"[HH:mm]"}
+                Hms{"[HH:mm:ss]"}
+                M{"[L]"}
+                MEd{"[E, M/d]"}
+                MMM{"[LLL]"}
+                MMMEd{"[E, MMM d]"}
+                MMMMd{"[MMMM d]"}
+                MMMd{"[MMM d]"}
+                Md{"[M/d]"}
+                UM{"[M/U]"}
+                UMMM{"[MMM U]"}
+                UMMMd{"[MMM d, U]"}
+                UMd{"[M/d/U]"}
+                d{"[d]"}
+                h{"[h a]"}
+                hm{"[h:mm a]"}
+                hms{"[h:mm:ss a]"}
+                ms{"[mm:ss]"}
+                y{"[r(U)]"}
+                yMd{"[M/d/r]"}
+                yyyy{"[r(U)]"}
+                yyyyM{"[M/r]"}
+                yyyyMEd{"[E, M/d/r]"}
+                yyyyMMM{"[MMM r(U)]"}
+                yyyyMMMEd{"[E, MMM d, r(U)]"}
+                yyyyMMMM{"[MMMM r(U)]"}
+                yyyyMMMd{"[MMM d, r]"}
+                yyyyMd{"[M/d/r]"}
+                yyyyQQQ{"[QQQ r(U)]"}
+                yyyyQQQQ{"[QQQQ r(U)]"}
+            }
+            cyclicNameSets{
+                zodiacs{
+                    format{
+                        abbreviated{
+                            "[Ŕåţ one]",
+                            "[Öẋ one]",
+                            "[Ţîĝéŕ one]",
+                            "[Ŕåƀƀîţ one]",
+                            "[Ðŕåĝöñ one]",
+                            "[Šñåķé one]",
+                            "[Ĥöŕšé one]",
+                            "[Ĝöåţ one]",
+                            "[Ṁöñķéý one]",
+                            "[Ŕööšţéŕ one]",
+                            "[Ðöĝ one]",
+                            "[Þîĝ one]",
+                        }
+                    }
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"[h B – h B]"}
+                    h{"[h – h B]"}
+                }
+                Bhm{
+                    B{"[h:mm B – h:mm B]"}
+                    h{"[h:mm – h:mm B]"}
+                    m{"[h:mm – h:mm B]"}
+                }
+                H{
+                    H{"[HH – HH]"}
+                }
+                Hm{
+                    H{"[HH:mm – HH:mm]"}
+                    m{"[HH:mm – HH:mm]"}
+                }
+                Hmv{
+                    H{"[HH:mm – HH:mm v]"}
+                    m{"[HH:mm – HH:mm v]"}
+                }
+                Hv{
+                    H{"[HH – HH v]"}
+                }
+                M{
+                    M{"[M – M]"}
+                }
+                MEd{
+                    M{"[E, M/d – E, M/d]"}
+                    d{"[E, M/d – E, M/d]"}
+                }
+                MMM{
+                    M{"[MMM – MMM]"}
+                }
+                MMMEd{
+                    M{"[E, MMM d – E, MMM d]"}
+                    d{"[E, MMM d – E, MMM d]"}
+                }
+                MMMd{
+                    M{"[MMM d – MMM d]"}
+                    d{"[MMM d – d]"}
+                }
+                Md{
+                    M{"[M/d – M/d]"}
+                    d{"[M/d – M/d]"}
+                }
+                d{
+                    d{"[d – d]"}
+                }
+                fallback{"[{0} – {1} one]"}
+                h{
+                    a{"[h a – h a]"}
+                    h{"[h – h a]"}
+                }
+                hm{
+                    a{"[h:mm a – h:mm a]"}
+                    h{"[h:mm – h:mm a]"}
+                    m{"[h:mm – h:mm a]"}
+                }
+                hmv{
+                    a{"[h:mm a – h:mm a v]"}
+                    h{"[h:mm – h:mm a v]"}
+                    m{"[h:mm – h:mm a v]"}
+                }
+                hv{
+                    a{"[h a – h a v]"}
+                    h{"[h – h a v]"}
+                }
+                y{
+                    y{"[U – U]"}
+                }
+                yM{
+                    M{"[M/y – M/y]"}
+                    y{"[M/y – M/y]"}
+                }
+                yMEd{
+                    M{"[E, M/d/y – E, M/d/y]"}
+                    d{"[E, M/d/y – E, M/d/y]"}
+                    y{"[E, M/d/y – E, M/d/y]"}
+                }
+                yMMM{
+                    M{"[MMM – MMM U]"}
+                    y{"[MMM U – MMM U]"}
+                }
+                yMMMEd{
+                    M{"[E, MMM d – E, MMM d, U]"}
+                    d{"[E, MMM d – E, MMM d, U]"}
+                    y{"[E, MMM d, U – E, MMM d, U]"}
+                }
+                yMMMM{
+                    M{"[MMMM – MMMM U]"}
+                    y{"[MMMM U – MMMM U]"}
+                }
+                yMMMd{
+                    M{"[MMM d – MMM d, U]"}
+                    d{"[MMM d – d, U]"}
+                    y{"[MMM d, U – MMM d, U]"}
+                }
+                yMd{
+                    M{"[M/d/y – M/d/y]"}
+                    d{"[M/d/y – M/d/y]"}
+                    y{"[M/d/y – M/d/y]"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "[Ṁö① one]",
+                        "[Ṁö② one]",
+                        "[Ṁö③ one]",
+                        "[Ṁö④ one]",
+                        "[Ṁö⑤ one]",
+                        "[Ṁö⑥ one]",
+                        "[Ṁö⑦ one]",
+                        "[Ṁö⑧ one]",
+                        "[Ṁö⑨ one]",
+                        "[Ṁö①⓪ one]",
+                        "[Ṁö①① one]",
+                        "[Ṁö①② one]",
+                    }
+                    wide{
+                        "[Ƒîŕšţ Ṁöñţĥ one two]",
+                        "[Šéçöñð Ṁöñţĥ one two]",
+                        "[Ţĥîŕð Ṁöñţĥ one two]",
+                        "[Ƒöûŕţĥ Ṁöñţĥ one two]",
+                        "[Ƒîƒţĥ Ṁöñţĥ one two]",
+                        "[Šîẋţĥ Ṁöñţĥ one two]",
+                        "[Šéṽéñţĥ Ṁöñţĥ one two]",
+                        "[Éîĝĥţĥ Ṁöñţĥ one two]",
+                        "[Ñîñţĥ Ṁöñţĥ one two]",
+                        "[Ţéñţĥ Ṁöñţĥ one two]",
+                        "[Éļéṽéñţĥ Ṁöñţĥ one two]",
+                        "[Ţŵéļƒţĥ Ṁöñţĥ one two]",
+                    }
+                }
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "[h:mm:ss a zzzz]",
+                "[h:mm:ss a z]",
+                "[h:mm:ss a]",
+                "[h:mm a]",
+                "[EEEE, MMMM d, y G]",
+                "[MMMM d, y G]",
+                "[MMM d, y G]",
+                "[M/d/y GGGGG]",
+                "[{1}, {0}]",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1}, {0}]",
+                "[{1}, {0}]",
+            }
+            appendItems{
+                Day{"[{0} ({2}∶ {1}) one]"}
+                Day-Of-Week{"[{0} {1} one]"}
+                Era{"[{0} {1} one]"}
+                Hour{"[{0} ({2}∶ {1}) one]"}
+                Minute{"[{0} ({2}∶ {1}) one]"}
+                Month{"[{0} ({2}∶ {1}) one]"}
+                Quarter{"[{0} ({2}∶ {1}) one]"}
+                Second{"[{0} ({2}∶ {1}) one]"}
+                Timezone{"[{0} {1} one]"}
+                Week{"[{0} ({2}∶ {1}) one]"}
+                Year{"[{0} {1} one]"}
+            }
+            availableFormats{
+                Bh{"[h B]"}
+                Bhm{"[h:mm B]"}
+                Bhms{"[h:mm:ss B]"}
+                E{"[ccc]"}
+                EBhm{"[E h:mm B]"}
+                EBhms{"[E h:mm:ss B]"}
+                EHm{"[E HH:mm]"}
+                EHms{"[E HH:mm:ss]"}
+                Ed{"[d E]"}
+                Ehm{"[E h:mm a]"}
+                Ehms{"[E h:mm:ss a]"}
+                Gy{"[y G]"}
+                GyMMM{"[MMM y G]"}
+                GyMMMEd{"[E, MMM d, y G]"}
+                GyMMMd{"[MMM d, y G]"}
+                H{"[HH]"}
+                Hm{"[HH:mm]"}
+                Hms{"[HH:mm:ss]"}
+                M{"[L]"}
+                MEd{"[E, M/d]"}
+                MMM{"[LLL]"}
+                MMMEd{"[E, MMM d]"}
+                MMMMd{"[MMMM d]"}
+                MMMd{"[MMM d]"}
+                Md{"[M/d]"}
+                d{"[d]"}
+                h{"[h a]"}
+                hm{"[h:mm a]"}
+                hms{"[h:mm:ss a]"}
+                ms{"[mm:ss]"}
+                y{"[y G]"}
+                yyyy{"[y G]"}
+                yyyyM{"[M/y GGGGG]"}
+                yyyyMEd{"[E, M/d/y GGGGG]"}
+                yyyyMMM{"[MMM y G]"}
+                yyyyMMMEd{"[E, MMM d, y G]"}
+                yyyyMMMM{"[MMMM y G]"}
+                yyyyMMMd{"[MMM d, y G]"}
+                yyyyMd{"[M/d/y GGGGG]"}
+                yyyyQQQ{"[QQQ y G]"}
+                yyyyQQQQ{"[QQQQ y G]"}
+            }
+            intervalFormats{
+                Bh{
+                    B{"[h B – h B]"}
+                    h{"[h – h B]"}
+                }
+                Bhm{
+                    B{"[h:mm B – h:mm B]"}
+                    h{"[h:mm – h:mm B]"}
+                    m{"[h:mm – h:mm B]"}
+                }
+                Gy{
+                    G{"[y G – y G]"}
+                    y{"[y – y G]"}
+                }
+                GyM{
+                    G{"[M/y GGGGG – M/y GGGGG]"}
+                    M{"[M/y – M/y GGGGG]"}
+                    y{"[M/y – M/y GGGGG]"}
+                }
+                GyMEd{
+                    G{"[E, M/d/y GGGGG – E, M/d/y GGGGG]"}
+                    M{"[E, M/d/y – E, M/d/y GGGGG]"}
+                    d{"[E, M/d/y – E, M/d/y GGGGG]"}
+                    y{"[E, M/d/y – E, M/d/y GGGGG]"}
+                }
+                GyMMM{
+                    G{"[MMM y G – MMM y G]"}
+                    M{"[MMM – MMM y G]"}
+                    y{"[MMM y – MMM y G]"}
+                }
+                GyMMMEd{
+                    G{"[E, MMM d, y G – E, MMM d, y G]"}
+                    M{"[E, MMM d – E, MMM d, y G]"}
+                    d{"[E, MMM d – E, MMM d, y G]"}
+                    y{"[E, MMM d, y – E, MMM d, y G]"}
+                }
+                GyMMMd{
+                    G{"[MMM d, y G – MMM d, y G]"}
+                    M{"[MMM d – MMM d, y G]"}
+                    d{"[MMM d – d, y G]"}
+                    y{"[MMM d, y – MMM d, y G]"}
+                }
+                GyMd{
+                    G{"[M/d/y GGGGG – M/d/y GGGGG]"}
+                    M{"[M/d/y – M/d/y GGGGG]"}
+                    d{"[M/d/y – M/d/y GGGGG]"}
+                    y{"[M/d/y – M/d/y GGGGG]"}
+                }
+                H{
+                    H{"[HH – HH]"}
+                }
+                Hm{
+                    H{"[HH:mm – HH:mm]"}
+                    m{"[HH:mm – HH:mm]"}
+                }
+                Hmv{
+                    H{"[HH:mm – HH:mm v]"}
+                    m{"[HH:mm – HH:mm v]"}
+                }
+                Hv{
+                    H{"[HH – HH v]"}
+                }
+                M{
+                    M{"[M – M]"}
+                }
+                MEd{
+                    M{"[E, M/d – E, M/d]"}
+                    d{"[E, M/d – E, M/d]"}
+                }
+                MMM{
+                    M{"[MMM – MMM]"}
+                }
+                MMMEd{
+                    M{"[E, MMM d – E, MMM d]"}
+                    d{"[E, MMM d – E, MMM d]"}
+                }
+                MMMd{
+                    M{"[MMM d – MMM d]"}
+                    d{"[MMM d – d]"}
+                }
+                Md{
+                    M{"[M/d – M/d]"}
+                    d{"[M/d – M/d]"}
+                }
+                d{
+                    d{"[d – d]"}
+                }
+                fallback{"[{0} – {1} one]"}
+                h{
+                    a{"[h a – h a]"}
+                    h{"[h – h a]"}
+                }
+                hm{
+                    a{"[h:mm a – h:mm a]"}
+                    h{"[h:mm – h:mm a]"}
+                    m{"[h:mm – h:mm a]"}
+                }
+                hmv{
+                    a{"[h:mm a – h:mm a v]"}
+                    h{"[h:mm – h:mm a v]"}
+                    m{"[h:mm – h:mm a v]"}
+                }
+                hv{
+                    a{"[h a – h a v]"}
+                    h{"[h – h a v]"}
+                }
+                y{
+                    y{"[y – y G]"}
+                }
+                yM{
+                    M{"[M/y – M/y GGGGG]"}
+                    y{"[M/y – M/y GGGGG]"}
+                }
+                yMEd{
+                    M{"[E, M/d/y – E, M/d/y GGGGG]"}
+                    d{"[E, M/d/y – E, M/d/y GGGGG]"}
+                    y{"[E, M/d/y – E, M/d/y GGGGG]"}
+                }
+                yMMM{
+                    M{"[MMM – MMM y G]"}
+                    y{"[MMM y – MMM y G]"}
+                }
+                yMMMEd{
+                    M{"[E, MMM d – E, MMM d, y G]"}
+                    d{"[E, MMM d – E, MMM d, y G]"}
+                    y{"[E, MMM d, y – E, MMM d, y G]"}
+                }
+                yMMMM{
+                    M{"[MMMM – MMMM y G]"}
+                    y{"[MMMM y – MMMM y G]"}
+                }
+                yMMMd{
+                    M{"[MMM d – MMM d, y G]"}
+                    d{"[MMM d – d, y G]"}
+                    y{"[MMM d, y – MMM d, y G]"}
+                }
+                yMd{
+                    M{"[M/d/y – M/d/y GGGGG]"}
+                    d{"[M/d/y – M/d/y GGGGG]"}
+                    y{"[M/d/y – M/d/y GGGGG]"}
+                }
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "[ÅṀ one]",
+                "[ÞṀ one]",
+            }
+            AmPmMarkers%variant{
+                "[åɱ one]",
+                "[þɱ one]",
+            }
+            AmPmMarkersAbbr{
+                "[ÅṀ one]",
+                "[ÞṀ one]",
+            }
+            AmPmMarkersAbbr%variant{
+                "[åɱ one]",
+                "[þɱ one]",
+            }
+            DateTimePatterns{
+                "[h:mm:ss a zzzz]",
+                "[h:mm:ss a z]",
+                "[h:mm:ss a]",
+                "[h:mm a]",
+                "[EEEE, MMMM d, y]",
+                "[MMMM d, y]",
+                "[MMM d, y]",
+                "[M/d/yy]",
+                "[{1}, {0}]",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1}, {0}]",
+                "[{1}, {0}]",
+            }
+            appendItems{
+                Day{"[{0} ({2}∶ {1}) one]"}
+                Day-Of-Week{"[{0} {1} one]"}
+                Era{"[{0} {1} one]"}
+                Hour{"[{0} ({2}∶ {1}) one]"}
+                Minute{"[{0} ({2}∶ {1}) one]"}
+                Month{"[{0} ({2}∶ {1}) one]"}
+                Quarter{"[{0} ({2}∶ {1}) one]"}
+                Second{"[{0} ({2}∶ {1}) one]"}
+                Timezone{"[{0} {1} one]"}
+                Week{"[{0} ({2}∶ {1}) one]"}
+                Year{"[{0} {1} one]"}
+            }
+            availableFormats{
+                Bh{"[h B]"}
+                Bhm{"[h:mm B]"}
+                Bhms{"[h:mm:ss B]"}
+                E{"[ccc]"}
+                EBhm{"[E h:mm B]"}
+                EBhms{"[E h:mm:ss B]"}
+                EHm{"[E HH:mm]"}
+                EHms{"[E HH:mm:ss]"}
+                Ed{"[d E]"}
+                Ehm{"[E h:mm a]"}
+                Ehms{"[E h:mm:ss a]"}
+                Gy{"[y G]"}
+                GyMMM{"[MMM y G]"}
+                GyMMMEd{"[E, MMM d, y G]"}
+                GyMMMd{"[MMM d, y G]"}
+                H{"[HH]"}
+                Hm{"[HH:mm]"}
+                Hms{"[HH:mm:ss]"}
+                Hmsv{"[HH:mm:ss v]"}
+                Hmv{"[HH:mm v]"}
+                M{"[L]"}
+                MEd{"[E, M/d]"}
+                MMM{"[LLL]"}
+                MMMEd{"[E, MMM d]"}
+                MMMMW{
+                    one{"['ŵééķ' W 'öƒ' MMMM 'one' 'two']"}
+                    other{"['ŵééķ' W 'öƒ' MMMM 'one' 'two']"}
+                }
+                MMMMd{"[MMMM d]"}
+                MMMd{"[MMM d]"}
+                Md{"[M/d]"}
+                d{"[d]"}
+                h{"[h a]"}
+                hm{"[h:mm a]"}
+                hms{"[h:mm:ss a]"}
+                hmsv{"[h:mm:ss a v]"}
+                hmv{"[h:mm a v]"}
+                ms{"[mm:ss]"}
+                y{"[y]"}
+                yM{"[M/y]"}
+                yMEd{"[E, M/d/y]"}
+                yMMM{"[MMM y]"}
+                yMMMEd{"[E, MMM d, y]"}
+                yMMMM{"[MMMM y]"}
+                yMMMd{"[MMM d, y]"}
+                yMd{"[M/d/y]"}
+                yQQQ{"[QQQ y]"}
+                yQQQQ{"[QQQQ y]"}
+                yw{
+                    one{"['ŵééķ' w 'öƒ' Y 'one' 'two']"}
+                    other{"['ŵééķ' w 'öƒ' Y 'one' 'two']"}
+                }
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "[Šûñ one]",
+                        "[Ṁöñ one]",
+                        "[Ţûé one]",
+                        "[Ŵéð one]",
+                        "[Ţĥû one]",
+                        "[Ƒŕî one]",
+                        "[Šåţ one]",
+                    }
+                    short{
+                        "[Šû one]",
+                        "[Ṁö one]",
+                        "[Ţû one]",
+                        "[Ŵé one]",
+                        "[Ţĥ one]",
+                        "[Ƒŕ one]",
+                        "[Šå one]",
+                    }
+                    wide{
+                        "[Šûñðåý one]",
+                        "[Ṁöñðåý one]",
+                        "[Ţûéšðåý one]",
+                        "[Ŵéðñéšðåý one two]",
+                        "[Ţĥûŕšðåý one]",
+                        "[Ƒŕîðåý one]",
+                        "[Šåţûŕðåý one]",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    abbreviated{
+                        afternoon1{"[îñ ţĥé åƒţéŕñööñ one two]"}
+                        evening1{"[îñ ţĥé éṽéñîñĝ one two]"}
+                        midnight{"[ɱîðñîĝĥţ one]"}
+                        morning1{"[îñ ţĥé ɱöŕñîñĝ one two]"}
+                        night1{"[åţ ñîĝĥţ one]"}
+                        noon{"[ñööñ one]"}
+                    }
+                    wide{
+                        afternoon1{"[îñ ţĥé åƒţéŕñööñ one two]"}
+                        evening1{"[îñ ţĥé éṽéñîñĝ one two]"}
+                        midnight{"[ɱîðñîĝĥţ one]"}
+                        morning1{"[îñ ţĥé ɱöŕñîñĝ one two]"}
+                        night1{"[åţ ñîĝĥţ one]"}
+                        noon{"[ñööñ one]"}
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        afternoon1{"[åƒţéŕñööñ one two]"}
+                        am{"[ÅṀ one]"}
+                        evening1{"[éṽéñîñĝ one]"}
+                        midnight{"[ɱîðñîĝĥţ one]"}
+                        morning1{"[ɱöŕñîñĝ one]"}
+                        night1{"[ñîĝĥţ one]"}
+                        noon{"[ñööñ one]"}
+                        pm{"[ÞṀ one]"}
+                    }
+                    wide{
+                        afternoon1{"[åƒţéŕñööñ one two]"}
+                        am{"[ÅṀ one]"}
+                        evening1{"[éṽéñîñĝ one]"}
+                        midnight{"[ɱîðñîĝĥţ one]"}
+                        morning1{"[ɱöŕñîñĝ one]"}
+                        night1{"[ñîĝĥţ one]"}
+                        noon{"[ñööñ one]"}
+                        pm{"[ÞṀ one]"}
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "[ƁÇ one]",
+                    "[ÅÐ one]",
+                }
+                abbreviated%variant{
+                    "[ƁÇÉ one]",
+                    "[ÇÉ one]",
+                }
+                narrow{
+                    "[Ɓ one]",
+                    "[Å one]",
+                }
+                wide{
+                    "[Ɓéƒöŕé Çĥŕîšţ one two]",
+                    "[Åññö Ðöɱîñî one two]",
+                }
+                wide%variant{
+                    "[Ɓéƒöŕé Çöɱɱöñ Éŕå one two three]",
+                    "[Çöɱɱöñ Éŕå one two]",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"[h B – h B]"}
+                    h{"[h – h B]"}
+                }
+                Bhm{
+                    B{"[h:mm B – h:mm B]"}
+                    h{"[h:mm – h:mm B]"}
+                    m{"[h:mm – h:mm B]"}
+                }
+                Gy{
+                    G{"[y G – y G]"}
+                    y{"[y – y G]"}
+                }
+                GyM{
+                    G{"[M/y GGGGG – M/y GGGGG]"}
+                    M{"[M/y – M/y GGGGG]"}
+                    y{"[M/y – M/y GGGGG]"}
+                }
+                GyMEd{
+                    G{"[E, M/d/y GGGGG – E, M/d/y GGGGG]"}
+                    M{"[E, M/d/y – E, M/d/y GGGGG]"}
+                    d{"[E, M/d/y – E, M/d/y GGGGG]"}
+                    y{"[E, M/d/y – E, M/d/y GGGGG]"}
+                }
+                GyMMM{
+                    G{"[MMM y G – MMM y G]"}
+                    M{"[MMM – MMM y G]"}
+                    y{"[MMM y – MMM y G]"}
+                }
+                GyMMMEd{
+                    G{"[E, MMM d, y G – E, MMM d, y G]"}
+                    M{"[E, MMM d – E, MMM d, y G]"}
+                    d{"[E, MMM d – E, MMM d, y G]"}
+                    y{"[E, MMM d, y – E, MMM d, y G]"}
+                }
+                GyMMMd{
+                    G{"[MMM d, y G – MMM d, y G]"}
+                    M{"[MMM d – MMM d, y G]"}
+                    d{"[MMM d – d, y G]"}
+                    y{"[MMM d, y – MMM d, y G]"}
+                }
+                GyMd{
+                    G{"[M/d/y GGGGG – M/d/y GGGGG]"}
+                    M{"[M/d/y – M/d/y GGGGG]"}
+                    d{"[M/d/y – M/d/y GGGGG]"}
+                    y{"[M/d/y – M/d/y GGGGG]"}
+                }
+                H{
+                    H{"[HH – HH]"}
+                }
+                Hm{
+                    H{"[HH:mm – HH:mm]"}
+                    m{"[HH:mm – HH:mm]"}
+                }
+                Hmv{
+                    H{"[HH:mm – HH:mm v]"}
+                    m{"[HH:mm – HH:mm v]"}
+                }
+                Hv{
+                    H{"[HH – HH v]"}
+                }
+                M{
+                    M{"[M – M]"}
+                }
+                MEd{
+                    M{"[E, M/d – E, M/d]"}
+                    d{"[E, M/d – E, M/d]"}
+                }
+                MMM{
+                    M{"[MMM – MMM]"}
+                }
+                MMMEd{
+                    M{"[E, MMM d – E, MMM d]"}
+                    d{"[E, MMM d – E, MMM d]"}
+                }
+                MMMd{
+                    M{"[MMM d – MMM d]"}
+                    d{"[MMM d – d]"}
+                }
+                Md{
+                    M{"[M/d – M/d]"}
+                    d{"[M/d – M/d]"}
+                }
+                d{
+                    d{"[d – d]"}
+                }
+                fallback{"[{0} – {1} one]"}
+                h{
+                    a{"[h a – h a]"}
+                    h{"[h – h a]"}
+                }
+                hm{
+                    a{"[h:mm a – h:mm a]"}
+                    h{"[h:mm – h:mm a]"}
+                    m{"[h:mm – h:mm a]"}
+                }
+                hmv{
+                    a{"[h:mm a – h:mm a v]"}
+                    h{"[h:mm – h:mm a v]"}
+                    m{"[h:mm – h:mm a v]"}
+                }
+                hv{
+                    a{"[h a – h a v]"}
+                    h{"[h – h a v]"}
+                }
+                y{
+                    y{"[y – y]"}
+                }
+                yM{
+                    M{"[M/y – M/y]"}
+                    y{"[M/y – M/y]"}
+                }
+                yMEd{
+                    M{"[E, M/d/y – E, M/d/y]"}
+                    d{"[E, M/d/y – E, M/d/y]"}
+                    y{"[E, M/d/y – E, M/d/y]"}
+                }
+                yMMM{
+                    M{"[MMM – MMM y]"}
+                    y{"[MMM y – MMM y]"}
+                }
+                yMMMEd{
+                    M{"[E, MMM d – E, MMM d, y]"}
+                    d{"[E, MMM d – E, MMM d, y]"}
+                    y{"[E, MMM d, y – E, MMM d, y]"}
+                }
+                yMMMM{
+                    M{"[MMMM – MMMM y]"}
+                    y{"[MMMM y – MMMM y]"}
+                }
+                yMMMd{
+                    M{"[MMM d – MMM d, y]"}
+                    d{"[MMM d – d, y]"}
+                    y{"[MMM d, y – MMM d, y]"}
+                }
+                yMd{
+                    M{"[M/d/y – M/d/y]"}
+                    d{"[M/d/y – M/d/y]"}
+                    y{"[M/d/y – M/d/y]"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "[Ĵåñ one]",
+                        "[Ƒéƀ one]",
+                        "[Ṁåŕ one]",
+                        "[Åþŕ one]",
+                        "[Ṁåý one]",
+                        "[Ĵûñ one]",
+                        "[Ĵûļ one]",
+                        "[Åûĝ one]",
+                        "[Šéþ one]",
+                        "[Öçţ one]",
+                        "[Ñöṽ one]",
+                        "[Ðéç one]",
+                    }
+                    wide{
+                        "[Ĵåñûåŕý one]",
+                        "[Ƒéƀŕûåŕý one]",
+                        "[Ṁåŕçĥ one]",
+                        "[Åþŕîļ one]",
+                        "[Ṁåý one]",
+                        "[Ĵûñé one]",
+                        "[Ĵûļý one]",
+                        "[Åûĝûšţ one]",
+                        "[Šéþţéɱƀéŕ one two]",
+                        "[Öçţöƀéŕ one]",
+                        "[Ñöṽéɱƀéŕ one]",
+                        "[Ðéçéɱƀéŕ one]",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "[Ǫ① one]",
+                        "[Ǫ② one]",
+                        "[Ǫ③ one]",
+                        "[Ǫ④ one]",
+                    }
+                    wide{
+                        "[①šţ ǫûåŕţéŕ one two]",
+                        "[②ñð ǫûåŕţéŕ one two]",
+                        "[③ŕð ǫûåŕţéŕ one two]",
+                        "[④ţĥ ǫûåŕţéŕ one two]",
+                    }
+                }
+            }
+        }
+        hebrew{
+            DateTimePatterns{
+                "[h:mm:ss a zzzz]",
+                "[h:mm:ss a z]",
+                "[h:mm:ss a]",
+                "[h:mm a]",
+                "[EEEE, d MMMM y]",
+                "[d MMMM y]",
+                "[d MMM y]",
+                "[d MMM y]",
+                "[{1}, {0}]",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1}, {0}]",
+                "[{1}, {0}]",
+            }
+            availableFormats{
+                Gy{"[y G]"}
+                GyMMM{"[MMM y G]"}
+                GyMMMEd{"[E, d MMM y G]"}
+                GyMMMd{"[d MMM y G]"}
+                M{"[L]"}
+                MEd{"[E, d MMM]"}
+                MMM{"[LLL]"}
+                MMMEd{"[E, d MMM]"}
+                MMMMd{"[d MMMM]"}
+                MMMd{"[d MMM]"}
+                Md{"[d MMM]"}
+                y{"[y]"}
+                yM{"[MMM y]"}
+                yMEd{"[E, d MMM y]"}
+                yMMM{"[MMM y]"}
+                yMMMEd{"[E, d MMM y]"}
+                yMMMM{"[MMMM y]"}
+                yMMMd{"[d MMM y]"}
+                yMd{"[d MMM y]"}
+                yQQQ{"[QQQ y]"}
+                yQQQQ{"[QQQQ y]"}
+            }
+            eras{
+                abbreviated{
+                    "[ÅṀ one]",
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"[MMM – MMM]"}
+                }
+                MEd{
+                    M{"[E, d MMM – E, d MMM]"}
+                    d{"[E, d MMM – E, d MMM]"}
+                }
+                MMM{
+                    M{"[MMM – MMM]"}
+                }
+                MMMEd{
+                    M{"[E, d MMM – E, d MMM]"}
+                    d{"[E, d MMM – E, d MMM]"}
+                }
+                MMMd{
+                    M{"[d MMM – d MMM]"}
+                    d{"[d – d MMM]"}
+                }
+                Md{
+                    M{"[d MMM – d MMM]"}
+                    d{"[d – d MMM]"}
+                }
+                y{
+                    y{"[y – y G]"}
+                }
+                yM{
+                    M{"[MMM – MMM y]"}
+                    y{"[MMM y – MMM y]"}
+                }
+                yMEd{
+                    M{"[E, d MMM – E, d MMM y]"}
+                    d{"[E, d MMM – E, d MMM y]"}
+                    y{"[E, d MMM y – E, d MMM y]"}
+                }
+                yMMM{
+                    M{"[MMM – MMM y]"}
+                    y{"[MMM y – MMM y]"}
+                }
+                yMMMEd{
+                    M{"[E, d MMM – E, d MMM y]"}
+                    d{"[E, d MMM – E, d MMM y]"}
+                    y{"[E, d MMM y – E, d MMM y]"}
+                }
+                yMMMM{
+                    M{"[MMMM – MMMM y]"}
+                    y{"[MMMM y – MMMM y]"}
+                }
+                yMMMd{
+                    M{"[d MMM – d MMM y]"}
+                    d{"[d – d MMM y]"}
+                    y{"[d MMM y – d MMM y]"}
+                }
+                yMd{
+                    M{"[d MMM – d MMM y]"}
+                    d{"[d – d MMM y]"}
+                    y{"[d MMM y – d MMM y]"}
+                }
+            }
+        }
+        islamic{
+            eras{
+                abbreviated{
+                    "[ÅĤ one]",
+                }
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "[h:mm:ss a zzzz]",
+                "[h:mm:ss a z]",
+                "[h:mm:ss a]",
+                "[h:mm a]",
+                "[EEEE, MMMM d, y G]",
+                "[MMMM d, y G]",
+                "[MMM d, y G]",
+                "[M/d/y GGGGG]",
+                "[{1}, {0}]",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1} 'åţ' {0} 'one']",
+                "[{1}, {0}]",
+                "[{1}, {0}]",
+            }
+        }
+        roc{
+            eras{
+                abbreviated{
+                    "[Ɓéƒöŕé Ŕ·Ö·Ç· one two]",
+                    "[Ṁîñĝûö one]",
+                }
+            }
+        }
+    }
+    characterLabel{
+        activities{"[åçţîṽîţý one]"}
+        african_scripts{"[Åƒŕîçåñ šçŕîþţ one two]"}
+        american_scripts{"[Åɱéŕîçåñ šçŕîþţ one two]"}
+        animal{"[åñîɱåļ one]"}
+        animals_nature{"[åñîɱåļ öŕ ñåţûŕé one two]"}
+        arrows{"[åŕŕöŵ one]"}
+        body{"[ƀöðý one]"}
+        box_drawing{"[ƀöẋ ðŕåŵîñĝ one two]"}
+        braille{"[ƀŕåîļļé one]"}
+        building{"[ƀûîļðîñĝ one]"}
+        bullets_stars{"[ƀûļļéţ öŕ šţåŕ one two]"}
+        consonantal_jamo{"[çöñšöñåñţåļ ĵåɱö one two]"}
+        currency_symbols{"[çûŕŕéñçý šýɱƀöļ one two]"}
+        dash_connector{"[ðåšĥ öŕ çöññéçţöŕ one two three]"}
+        digits{"[ðîĝîţ one]"}
+        dingbats{"[ðîñĝƀåţ one]"}
+        divination_symbols{"[ðîṽîñåţîöñ šýɱƀöļ one two three]"}
+        downwards_arrows{"[ðöŵñŵåŕðš åŕŕöŵ one two]"}
+        downwards_upwards_arrows{"[ðöŵñŵåŕðš ûþŵåŕðš åŕŕöŵ one two three]"}
+        east_asian_scripts{"[Éåšţ Åšîåñ šçŕîþţ one two three]"}
+        emoji{"[éɱöĵî one]"}
+        european_scripts{"[Éûŕöþéåñ šçŕîþţ one two]"}
+        female{"[ƒéɱåļé one]"}
+        flag{"[ƒļåĝ one]"}
+        flags{"[ƒļåĝš one]"}
+        food_drink{"[ƒööð ⅋ ðŕîñķ one two]"}
+        format{"[ƒöŕɱåţ one]"}
+        format_whitespace{"[ƒöŕɱåţ ⅋ ŵĥîţéšþåçé one two three]"}
+        full_width_form_variant{"[ƒûļļ‐ŵîðţĥ ṽåŕîåñţ one two three]"}
+        geometric_shapes{"[ĝéöɱéţŕîç šĥåþé one two]"}
+        half_width_form_variant{"[ĥåļƒ‐ŵîðţĥ ṽåŕîåñţ one two three]"}
+        han_characters{"[Ĥåñ çĥåŕåçţéŕ one two]"}
+        han_radicals{"[Ĥåñ ŕåðîçåļ one two]"}
+        hanja{"[ĥåñĵå one]"}
+        hanzi_simplified{"[Ĥåñžî (šîɱþļîƒîéð) one two three]"}
+        hanzi_traditional{"[Ĥåñžî (ţŕåðîţîöñåļ) one two three]"}
+        heart{"[ĥéåŕţ one]"}
+        historic_scripts{"[ĥîšţöŕîç šçŕîþţ one two]"}
+        ideographic_desc_characters{"[îðéöĝŕåþĥîç ðéšç· çĥåŕåçţéŕ one two three]"}
+        japanese_kana{"[Ĵåþåñéšé ķåñå one two]"}
+        kanbun{"[ķåñƀûñ one]"}
+        kanji{"[ķåñĵî one]"}
+        keycap{"[ķéýçåþ one]"}
+        leftwards_arrows{"[ļéƒţŵåŕðš åŕŕöŵ one two]"}
+        leftwards_rightwards_arrows{"[ļéƒţŵåŕðš ŕîĝĥţŵåŕðš åŕŕöŵ one two three]"}
+        letterlike_symbols{"[ļéţţéŕļîķé šýɱƀöļ one two three]"}
+        limited_use{"[ļîɱîţéð‐ûšé one two]"}
+        male{"[ɱåļé one]"}
+        math_symbols{"[ɱåţĥ šýɱƀöļ one two]"}
+        middle_eastern_scripts{"[Ṁîððļé Éåšţéŕñ šçŕîþţ one two three]"}
+        miscellaneous{"[ɱîšçéļļåñéöûš one two]"}
+        modern_scripts{"[ɱöðéŕñ šçŕîþţ one two]"}
+        modifier{"[ɱöðîƒîéŕ one]"}
+        musical_symbols{"[ɱûšîçåļ šýɱƀöļ one two]"}
+        nature{"[ñåţûŕé one]"}
+        nonspacing{"[ñöñšþåçîñĝ one two]"}
+        numbers{"[ñûɱƀéŕš one]"}
+        objects{"[öƀĵéçţ one]"}
+        other{"[öţĥéŕ one]"}
+        paired{"[þåîŕéð one]"}
+        person{"[þéŕšöñ one]"}
+        phonetic_alphabet{"[þĥöñéţîç åļþĥåƀéţ one two three]"}
+        pictographs{"[þîçţöĝŕåþĥ one two]"}
+        place{"[þļåçé one]"}
+        plant{"[þļåñţ one]"}
+        punctuation{"[þûñçţûåţîöñ one two]"}
+        rightwards_arrows{"[ŕîĝĥţŵåŕðš åŕŕöŵ one two]"}
+        sign_standard_symbols{"[šîĝñ öŕ šýɱƀöļ one two]"}
+        small_form_variant{"[šɱåļļ ṽåŕîåñţš one two]"}
+        smiley{"[šɱîļéý one]"}
+        smileys_people{"[šɱîļéý öŕ þéŕšöñ one two]"}
+        south_asian_scripts{"[Šöûţĥ Åšîåñ šçŕîþţ one two three]"}
+        southeast_asian_scripts{"[Šöûţĥéåšţ Åšîåñ šçŕîþţ one two three]"}
+        spacing{"[šþåçîñĝ one]"}
+        sport{"[šþöŕţ one]"}
+        symbols{"[šýɱƀöļ one]"}
+        technical_symbols{"[ţéçĥñîçåļ šýɱƀöļ one two]"}
+        tone_marks{"[ţöñé ɱåŕķ one two]"}
+        travel{"[ţŕåṽéļ one]"}
+        travel_places{"[ţŕåṽéļ öŕ þļåçé one two]"}
+        upwards_arrows{"[ûþŵåŕðš åŕŕöŵš one two]"}
+        variant_forms{"[ṽåŕîåñţ one]"}
+        vocalic_jamo{"[ṽöçåļîç ĵåɱö one two]"}
+        weather{"[ŵéåţĥéŕ one]"}
+        western_asian_scripts{"[Ŵéšţéŕñ Åšîåñ šçŕîþţ one two three]"}
+        whitespace{"[ŵĥîţéšþåçé one two]"}
+    }
+    fields{
+        day{
+            dn{"[ðåý one]"}
+            relative{
+                "-1"{"[ýéšţéŕðåý one two]"}
+                "0"{"[ţöðåý one]"}
+                "1"{"[ţöɱöŕŕöŵ one]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ðåý one]"}
+                    other{"[îñ {0} ðåýš one]"}
+                }
+                past{
+                    one{"[{0} ðåý åĝö one]"}
+                    other{"[{0} ðåýš åĝö one two]"}
+                }
+            }
+        }
+        day-short{
+            dn{"[ðåý one]"}
+            relativeTime{
+                future{
+                    one{"[îñ {0} ðåý one]"}
+                    other{"[îñ {0} ðåýš one]"}
+                }
+                past{
+                    one{"[{0} ðåý åĝö one]"}
+                    other{"[{0} ðåýš åĝö one two]"}
+                }
+            }
+        }
+        dayOfYear{
+            dn{"[ðåý öƒ ýéåŕ one two]"}
+        }
+        dayOfYear-short{
+            dn{"[ðåý öƒ ýŕ· one two]"}
+        }
+        dayperiod{
+            dn{"[ÅṀ⁄ÞṀ one]"}
+            dn%variant{"[åɱ⁄þɱ one]"}
+        }
+        dayperiod-short{
+            dn{"[ÅṀ⁄ÞṀ one]"}
+            dn%variant{"[åɱ⁄þɱ one]"}
+        }
+        era{
+            dn{"[éŕå one]"}
+        }
+        era-short{
+            dn{"[éŕå one]"}
+        }
+        fri{
+            relative{
+                "-1"{"[ļåšţ Ƒŕîðåý one two]"}
+                "0"{"[ţĥîš Ƒŕîðåý one two]"}
+                "1"{"[ñéẋţ Ƒŕîðåý one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ƒŕîðåý one two]"}
+                    other{"[îñ {0} Ƒŕîðåýš one two]"}
+                }
+                past{
+                    one{"[{0} Ƒŕîðåý åĝö one two]"}
+                    other{"[{0} Ƒŕîðåýš åĝö one two]"}
+                }
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"[ļåšţ Ƒŕî· one two]"}
+                "0"{"[ţĥîš Ƒŕî· one two]"}
+                "1"{"[ñéẋţ Ƒŕî· one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ƒŕî· one]"}
+                    other{"[îñ {0} Ƒŕî· one]"}
+                }
+                past{
+                    one{"[{0} Ƒŕî· åĝö one two]"}
+                    other{"[{0} Ƒŕî· åĝö one two]"}
+                }
+            }
+        }
+        hour{
+            dn{"[ĥöûŕ one]"}
+            relative{
+                "0"{"[ţĥîš ĥöûŕ one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ĥöûŕ one]"}
+                    other{"[îñ {0} ĥöûŕš one two]"}
+                }
+                past{
+                    one{"[{0} ĥöûŕ åĝö one two]"}
+                    other{"[{0} ĥöûŕš åĝö one two]"}
+                }
+            }
+        }
+        hour-short{
+            dn{"[ĥŕ· one]"}
+            relativeTime{
+                future{
+                    one{"[îñ {0} ĥŕ· one]"}
+                    other{"[îñ {0} ĥŕ· one]"}
+                }
+                past{
+                    one{"[{0} ĥŕ· åĝö one]"}
+                    other{"[{0} ĥŕ· åĝö one]"}
+                }
+            }
+        }
+        minute{
+            dn{"[ɱîñûţé one]"}
+            relative{
+                "0"{"[ţĥîš ɱîñûţé one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ɱîñûţé one two]"}
+                    other{"[îñ {0} ɱîñûţéš one two]"}
+                }
+                past{
+                    one{"[{0} ɱîñûţé åĝö one two]"}
+                    other{"[{0} ɱîñûţéš åĝö one two]"}
+                }
+            }
+        }
+        minute-short{
+            dn{"[ɱîñ· one]"}
+            relativeTime{
+                future{
+                    one{"[îñ {0} ɱîñ· one]"}
+                    other{"[îñ {0} ɱîñ· one]"}
+                }
+                past{
+                    one{"[{0} ɱîñ· åĝö one two]"}
+                    other{"[{0} ɱîñ· åĝö one two]"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"[ļåšţ Ṁöñðåý one two]"}
+                "0"{"[ţĥîš Ṁöñðåý one two]"}
+                "1"{"[ñéẋţ Ṁöñðåý one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ṁöñðåý one two]"}
+                    other{"[îñ {0} Ṁöñðåýš one two]"}
+                }
+                past{
+                    one{"[{0} Ṁöñðåý åĝö one two]"}
+                    other{"[{0} Ṁöñðåýš åĝö one two]"}
+                }
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"[ļåšţ Ṁöñ· one two]"}
+                "0"{"[ţĥîš Ṁöñ· one two]"}
+                "1"{"[ñéẋţ Ṁöñ· one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ṁöñ· one]"}
+                    other{"[îñ {0} Ṁöñ· one]"}
+                }
+                past{
+                    one{"[{0} Ṁöñ· åĝö one two]"}
+                    other{"[{0} Ṁöñ· åĝö one two]"}
+                }
+            }
+        }
+        month{
+            dn{"[ɱöñţĥ one]"}
+            relative{
+                "-1"{"[ļåšţ ɱöñţĥ one two]"}
+                "0"{"[ţĥîš ɱöñţĥ one two]"}
+                "1"{"[ñéẋţ ɱöñţĥ one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ɱöñţĥ one two]"}
+                    other{"[îñ {0} ɱöñţĥš one two]"}
+                }
+                past{
+                    one{"[{0} ɱöñţĥ åĝö one two]"}
+                    other{"[{0} ɱöñţĥš åĝö one two]"}
+                }
+            }
+        }
+        month-short{
+            dn{"[ɱö· one]"}
+            relative{
+                "-1"{"[ļåšţ ɱö· one]"}
+                "0"{"[ţĥîš ɱö· one]"}
+                "1"{"[ñéẋţ ɱö· one]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ɱö· one]"}
+                    other{"[îñ {0} ɱö· one]"}
+                }
+                past{
+                    one{"[{0} ɱö· åĝö one]"}
+                    other{"[{0} ɱö· åĝö one]"}
+                }
+            }
+        }
+        quarter{
+            dn{"[ǫûåŕţéŕ one]"}
+            relative{
+                "-1"{"[ļåšţ ǫûåŕţéŕ one two]"}
+                "0"{"[ţĥîš ǫûåŕţéŕ one two]"}
+                "1"{"[ñéẋţ ǫûåŕţéŕ one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ǫûåŕţéŕ one two]"}
+                    other{"[îñ {0} ǫûåŕţéŕš one two]"}
+                }
+                past{
+                    one{"[{0} ǫûåŕţéŕ åĝö one two]"}
+                    other{"[{0} ǫûåŕţéŕš åĝö one two]"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"[ǫţŕ· one]"}
+            relative{
+                "-1"{"[ļåšţ ǫţŕ· one two]"}
+                "0"{"[ţĥîš ǫţŕ· one two]"}
+                "1"{"[ñéẋţ ǫţŕ· one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ǫţŕ· one]"}
+                    other{"[îñ {0} ǫţŕš· one two]"}
+                }
+                past{
+                    one{"[{0} ǫţŕ· åĝö one two]"}
+                    other{"[{0} ǫţŕš· åĝö one two]"}
+                }
+            }
+        }
+        sat{
+            relative{
+                "-1"{"[ļåšţ Šåţûŕðåý one two]"}
+                "0"{"[ţĥîš Šåţûŕðåý one two]"}
+                "1"{"[ñéẋţ Šåţûŕðåý one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Šåţûŕðåý one two]"}
+                    other{"[îñ {0} Šåţûŕðåýš one two]"}
+                }
+                past{
+                    one{"[{0} Šåţûŕðåý åĝö one two]"}
+                    other{"[{0} Šåţûŕðåýš åĝö one two]"}
+                }
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"[ļåšţ Šåţ· one two]"}
+                "0"{"[ţĥîš Šåţ· one two]"}
+                "1"{"[ñéẋţ Šåţ· one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Šåţ· one]"}
+                    other{"[îñ {0} Šåţ· one]"}
+                }
+                past{
+                    one{"[{0} Šåţ· åĝö one two]"}
+                    other{"[{0} Šåţ· åĝö one two]"}
+                }
+            }
+        }
+        second{
+            dn{"[šéçöñð one]"}
+            relative{
+                "0"{"[ñöŵ one]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} šéçöñð one two]"}
+                    other{"[îñ {0} šéçöñðš one two]"}
+                }
+                past{
+                    one{"[{0} šéçöñð åĝö one two]"}
+                    other{"[{0} šéçöñðš åĝö one two]"}
+                }
+            }
+        }
+        second-short{
+            dn{"[šéç· one]"}
+            relative{
+                "0"{"[ñöŵ one]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} šéç· one]"}
+                    other{"[îñ {0} šéç· one]"}
+                }
+                past{
+                    one{"[{0} šéç· åĝö one two]"}
+                    other{"[{0} šéç· åĝö one two]"}
+                }
+            }
+        }
+        sun{
+            relative{
+                "-1"{"[ļåšţ Šûñðåý one two]"}
+                "0"{"[ţĥîš Šûñðåý one two]"}
+                "1"{"[ñéẋţ Šûñðåý one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Šûñðåý one two]"}
+                    other{"[îñ {0} Šûñðåýš one two]"}
+                }
+                past{
+                    one{"[{0} Šûñðåý åĝö one two]"}
+                    other{"[{0} Šûñðåýš åĝö one two]"}
+                }
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"[ļåšţ Šûñ· one two]"}
+                "0"{"[ţĥîš Šûñ· one two]"}
+                "1"{"[ñéẋţ Šûñ· one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Šûñ· one]"}
+                    other{"[îñ {0} Šûñ· one]"}
+                }
+                past{
+                    one{"[{0} Šûñ· åĝö one two]"}
+                    other{"[{0} Šûñ· åĝö one two]"}
+                }
+            }
+        }
+        thu{
+            relative{
+                "-1"{"[ļåšţ Ţĥûŕšðåý one two]"}
+                "0"{"[ţĥîš Ţĥûŕšðåý one two]"}
+                "1"{"[ñéẋţ Ţĥûŕšðåý one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ţĥûŕšðåý one two]"}
+                    other{"[îñ {0} Ţĥûŕšðåýš one two]"}
+                }
+                past{
+                    one{"[{0} Ţĥûŕšðåý åĝö one two]"}
+                    other{"[{0} Ţĥûŕšðåýš åĝö one two]"}
+                }
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"[ļåšţ Ţĥû· one two]"}
+                "0"{"[ţĥîš Ţĥû· one two]"}
+                "1"{"[ñéẋţ Ţĥû· one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ţĥû· one]"}
+                    other{"[îñ {0} Ţĥû· one]"}
+                }
+                past{
+                    one{"[{0} Ţĥû· åĝö one two]"}
+                    other{"[{0} Ţĥû· åĝö one two]"}
+                }
+            }
+        }
+        tue{
+            relative{
+                "-1"{"[ļåšţ Ţûéšðåý one two]"}
+                "0"{"[ţĥîš Ţûéšðåý one two]"}
+                "1"{"[ñéẋţ Ţûéšðåý one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ţûéšðåý one two]"}
+                    other{"[îñ {0} Ţûéšðåýš one two]"}
+                }
+                past{
+                    one{"[{0} Ţûéšðåý åĝö one two]"}
+                    other{"[{0} Ţûéšðåýš åĝö one two]"}
+                }
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"[ļåšţ Ţûé· one two]"}
+                "0"{"[ţĥîš Ţûé· one two]"}
+                "1"{"[ñéẋţ Ţûé· one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ţûé· one]"}
+                    other{"[îñ {0} Ţûé· one]"}
+                }
+                past{
+                    one{"[{0} Ţûé· åĝö one two]"}
+                    other{"[{0} Ţûé· åĝö one two]"}
+                }
+            }
+        }
+        wed{
+            relative{
+                "-1"{"[ļåšţ Ŵéðñéšðåý one two]"}
+                "0"{"[ţĥîš Ŵéðñéšðåý one two]"}
+                "1"{"[ñéẋţ Ŵéðñéšðåý one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ŵéðñéšðåý one two]"}
+                    other{"[îñ {0} Ŵéðñéšðåýš one two]"}
+                }
+                past{
+                    one{"[{0} Ŵéðñéšðåý åĝö one two]"}
+                    other{"[{0} Ŵéðñéšðåýš åĝö one two]"}
+                }
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"[ļåšţ Ŵéð· one two]"}
+                "0"{"[ţĥîš Ŵéð· one two]"}
+                "1"{"[ñéẋţ Ŵéð· one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} Ŵéð· one]"}
+                    other{"[îñ {0} Ŵéð· one]"}
+                }
+                past{
+                    one{"[{0} Ŵéð· åĝö one two]"}
+                    other{"[{0} Ŵéð· åĝö one two]"}
+                }
+            }
+        }
+        week{
+            dn{"[ŵééķ one]"}
+            relative{
+                "-1"{"[ļåšţ ŵééķ one two]"}
+                "0"{"[ţĥîš ŵééķ one two]"}
+                "1"{"[ñéẋţ ŵééķ one two]"}
+            }
+            relativePeriod{"[ţĥé ŵééķ öƒ {0} one two]"}
+            relativeTime{
+                future{
+                    one{"[îñ {0} ŵééķ one]"}
+                    other{"[îñ {0} ŵééķš one two]"}
+                }
+                past{
+                    one{"[{0} ŵééķ åĝö one two]"}
+                    other{"[{0} ŵééķš åĝö one two]"}
+                }
+            }
+        }
+        week-short{
+            dn{"[ŵķ· one]"}
+            relative{
+                "-1"{"[ļåšţ ŵķ· one]"}
+                "0"{"[ţĥîš ŵķ· one]"}
+                "1"{"[ñéẋţ ŵķ· one]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ŵķ· one]"}
+                    other{"[îñ {0} ŵķ· one]"}
+                }
+                past{
+                    one{"[{0} ŵķ· åĝö one]"}
+                    other{"[{0} ŵķ· åĝö one]"}
+                }
+            }
+        }
+        weekOfMonth{
+            dn{"[ŵééķ öƒ ɱöñţĥ one two]"}
+        }
+        weekOfMonth-short{
+            dn{"[ŵķ· öƒ ɱö· one two]"}
+        }
+        weekday{
+            dn{"[ðåý öƒ ţĥé ŵééķ one two]"}
+        }
+        weekday-short{
+            dn{"[ðåý öƒ ŵķ· one two]"}
+        }
+        weekdayOfMonth{
+            dn{"[ŵééķðåý öƒ ţĥé ɱöñţĥ one two three]"}
+        }
+        weekdayOfMonth-short{
+            dn{"[ŵķðåý· öƒ ɱö· one two]"}
+        }
+        year{
+            dn{"[ýéåŕ one]"}
+            relative{
+                "-1"{"[ļåšţ ýéåŕ one two]"}
+                "0"{"[ţĥîš ýéåŕ one two]"}
+                "1"{"[ñéẋţ ýéåŕ one two]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ýéåŕ one]"}
+                    other{"[îñ {0} ýéåŕš one two]"}
+                }
+                past{
+                    one{"[{0} ýéåŕ åĝö one two]"}
+                    other{"[{0} ýéåŕš åĝö one two]"}
+                }
+            }
+        }
+        year-short{
+            dn{"[ýŕ· one]"}
+            relative{
+                "-1"{"[ļåšţ ýŕ· one]"}
+                "0"{"[ţĥîš ýŕ· one]"}
+                "1"{"[ñéẋţ ýŕ· one]"}
+            }
+            relativeTime{
+                future{
+                    one{"[îñ {0} ýŕ· one]"}
+                    other{"[îñ {0} ýŕ· one]"}
+                }
+                past{
+                    one{"[{0} ýŕ· åĝö one]"}
+                    other{"[{0} ýŕ· åĝö one]"}
+                }
+            }
+        }
+        zone{
+            dn{"[ţîɱé žöñé one two]"}
+        }
+        zone-short{
+            dn{"[žöñé one]"}
+        }
+    }
+    listPattern{
+        or{
+            2{"[{0} öŕ {1} one]"}
+            end{"[{0}، öŕ {1} one]"}
+            middle{"[{0}، {1} one]"}
+            start{"[{0}، {1} one]"}
+        }
+        standard{
+            2{"[{0} åñð {1} one]"}
+            end{"[{0}، åñð {1} one]"}
+            middle{"[{0}، {1} one]"}
+            start{"[{0}، {1} one]"}
+        }
+        standard-short{
+            2{"[{0} ⅋ {1} one]"}
+            end{"[{0}، ⅋ {1} one]"}
+            middle{"[{0}، {1} one]"}
+            start{"[{0}، {1} one]"}
+        }
+        unit{
+            2{"[{0}، {1} one]"}
+            end{"[{0}، {1} one]"}
+            middle{"[{0}، {1} one]"}
+            start{"[{0}، {1} one]"}
+        }
+        unit-short{
+            2{"[{0}، {1} one]"}
+            end{"[{0}، {1} one]"}
+            middle{"[{0}، {1} one]"}
+            start{"[{0}، {1} one]"}
+        }
+    }
+    measurementSystemNames{
+        UK{"[ÛĶ one]"}
+        US{"[ÛŠ one]"}
+        metric{"[Ṁéţŕîç one]"}
+    }
+}

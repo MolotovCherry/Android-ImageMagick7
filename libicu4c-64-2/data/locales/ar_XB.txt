@@ -1,0 +1,965 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+ar_XB{
+    AuxExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z \u061C \u202E \u202C]"}
+    NumberElements{
+        default{"latn"}
+    }
+    Version{"2.0"}
+    calendar{
+        buddhist{
+            eras{
+                abbreviated{
+                    "؜‮BE‬؜",
+                }
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "r(U) MMMM d, EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "r-MM-dd",
+                "{1} {0}",
+                "{1} '؜‮at‬؜' {0}",
+                "{1} '؜‮at‬؜' {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            cyclicNameSets{
+                zodiacs{
+                    format{
+                        abbreviated{
+                            "؜‮Rat‬؜",
+                            "؜‮Ox‬؜",
+                            "؜‮Tiger‬؜",
+                            "؜‮Rabbit‬؜",
+                            "؜‮Dragon‬؜",
+                            "؜‮Snake‬؜",
+                            "؜‮Horse‬؜",
+                            "؜‮Goat‬؜",
+                            "؜‮Monkey‬؜",
+                            "؜‮Rooster‬؜",
+                            "؜‮Dog‬؜",
+                            "؜‮Pig‬؜",
+                        }
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "؜‮Mo‬؜1",
+                        "؜‮Mo‬؜2",
+                        "؜‮Mo‬؜3",
+                        "؜‮Mo‬؜4",
+                        "؜‮Mo‬؜5",
+                        "؜‮Mo‬؜6",
+                        "؜‮Mo‬؜7",
+                        "؜‮Mo‬؜8",
+                        "؜‮Mo‬؜9",
+                        "؜‮Mo‬؜10",
+                        "؜‮Mo‬؜11",
+                        "؜‮Mo‬؜12",
+                    }
+                    wide{
+                        "؜‮First‬؜ ؜‮Month‬؜",
+                        "؜‮Second‬؜ ؜‮Month‬؜",
+                        "؜‮Third‬؜ ؜‮Month‬؜",
+                        "؜‮Fourth‬؜ ؜‮Month‬؜",
+                        "؜‮Fifth‬؜ ؜‮Month‬؜",
+                        "؜‮Sixth‬؜ ؜‮Month‬؜",
+                        "؜‮Seventh‬؜ ؜‮Month‬؜",
+                        "؜‮Eighth‬؜ ؜‮Month‬؜",
+                        "؜‮Ninth‬؜ ؜‮Month‬؜",
+                        "؜‮Tenth‬؜ ؜‮Month‬؜",
+                        "؜‮Eleventh‬؜ ؜‮Month‬؜",
+                        "؜‮Twelfth‬؜ ؜‮Month‬؜",
+                    }
+                }
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE، d MMMM y G",
+                "d MMMM y G",
+                "dd‏/MM‏/y G",
+                "d‏/M‏/y GGGGG",
+                "{1} {0}",
+                "{1} '؜‮at‬؜' {0}",
+                "{1} '؜‮at‬؜' {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "؜‮AM‬؜",
+                "؜‮PM‬؜",
+            }
+            AmPmMarkers%variant{
+                "؜‮am‬؜",
+                "؜‮pm‬؜",
+            }
+            AmPmMarkersAbbr{
+                "؜‮AM‬؜",
+                "؜‮PM‬؜",
+            }
+            AmPmMarkersAbbr%variant{
+                "؜‮am‬؜",
+                "؜‮pm‬؜",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE، d MMMM y",
+                "d MMMM y",
+                "dd‏/MM‏/y",
+                "d‏/M‏/y",
+                "{1} {0}",
+                "{1} '؜‮at‬؜' {0}",
+                "{1} '؜‮at‬؜' {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMW{
+                    one{"'؜‮week‬؜' W '؜‮of‬؜' MMMM"}
+                    other{"'؜‮week‬؜' W '؜‮of‬؜' MMMM"}
+                }
+                yw{
+                    one{"'؜‮week‬؜' w '؜‮of‬؜' Y"}
+                    other{"'؜‮week‬؜' w '؜‮of‬؜' Y"}
+                }
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "؜‮Sun‬؜",
+                        "؜‮Mon‬؜",
+                        "؜‮Tue‬؜",
+                        "؜‮Wed‬؜",
+                        "؜‮Thu‬؜",
+                        "؜‮Fri‬؜",
+                        "؜‮Sat‬؜",
+                    }
+                    short{
+                        "؜‮Su‬؜",
+                        "؜‮Mo‬؜",
+                        "؜‮Tu‬؜",
+                        "؜‮We‬؜",
+                        "؜‮Th‬؜",
+                        "؜‮Fr‬؜",
+                        "؜‮Sa‬؜",
+                    }
+                    wide{
+                        "؜‮Sunday‬؜",
+                        "؜‮Monday‬؜",
+                        "؜‮Tuesday‬؜",
+                        "؜‮Wednesday‬؜",
+                        "؜‮Thursday‬؜",
+                        "؜‮Friday‬؜",
+                        "؜‮Saturday‬؜",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    abbreviated{
+                        afternoon1{"؜‮in‬؜ ؜‮the‬؜ ؜‮afternoon‬؜"}
+                        evening1{"؜‮in‬؜ ؜‮the‬؜ ؜‮evening‬؜"}
+                        midnight{"؜‮midnight‬؜"}
+                        morning1{"؜‮in‬؜ ؜‮the‬؜ ؜‮morning‬؜"}
+                        night1{"؜‮at‬؜ ؜‮night‬؜"}
+                        noon{"؜‮noon‬؜"}
+                    }
+                    wide{
+                        afternoon1{"؜‮in‬؜ ؜‮the‬؜ ؜‮afternoon‬؜"}
+                        evening1{"؜‮in‬؜ ؜‮the‬؜ ؜‮evening‬؜"}
+                        midnight{"؜‮midnight‬؜"}
+                        morning1{"؜‮in‬؜ ؜‮the‬؜ ؜‮morning‬؜"}
+                        night1{"؜‮at‬؜ ؜‮night‬؜"}
+                        noon{"؜‮noon‬؜"}
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        afternoon1{"؜‮afternoon‬؜"}
+                        am{"؜‮AM‬؜"}
+                        evening1{"؜‮evening‬؜"}
+                        midnight{"؜‮midnight‬؜"}
+                        morning1{"؜‮morning‬؜"}
+                        night1{"؜‮night‬؜"}
+                        noon{"؜‮noon‬؜"}
+                        pm{"؜‮PM‬؜"}
+                    }
+                    wide{
+                        afternoon1{"؜‮afternoon‬؜"}
+                        am{"؜‮AM‬؜"}
+                        evening1{"؜‮evening‬؜"}
+                        midnight{"؜‮midnight‬؜"}
+                        morning1{"؜‮morning‬؜"}
+                        night1{"؜‮night‬؜"}
+                        noon{"؜‮noon‬؜"}
+                        pm{"؜‮PM‬؜"}
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "؜‮BC‬؜",
+                    "؜‮AD‬؜",
+                }
+                abbreviated%variant{
+                    "؜‮BCE‬؜",
+                    "؜‮CE‬؜",
+                }
+                narrow{
+                    "؜‮B‬؜",
+                    "؜‮A‬؜",
+                }
+                wide{
+                    "؜‮Before‬؜ ؜‮Christ‬؜",
+                    "؜‮Anno‬؜ ؜‮Domini‬؜",
+                }
+                wide%variant{
+                    "؜‮Before‬؜ ؜‮Common‬؜ ؜‮Era‬؜",
+                    "؜‮Common‬؜ ؜‮Era‬؜",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "؜‮Jan‬؜",
+                        "؜‮Feb‬؜",
+                        "؜‮Mar‬؜",
+                        "؜‮Apr‬؜",
+                        "؜‮May‬؜",
+                        "؜‮Jun‬؜",
+                        "؜‮Jul‬؜",
+                        "؜‮Aug‬؜",
+                        "؜‮Sep‬؜",
+                        "؜‮Oct‬؜",
+                        "؜‮Nov‬؜",
+                        "؜‮Dec‬؜",
+                    }
+                    wide{
+                        "؜‮January‬؜",
+                        "؜‮February‬؜",
+                        "؜‮March‬؜",
+                        "؜‮April‬؜",
+                        "؜‮May‬؜",
+                        "؜‮June‬؜",
+                        "؜‮July‬؜",
+                        "؜‮August‬؜",
+                        "؜‮September‬؜",
+                        "؜‮October‬؜",
+                        "؜‮November‬؜",
+                        "؜‮December‬؜",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "؜‮Q‬؜1",
+                        "؜‮Q‬؜2",
+                        "؜‮Q‬؜3",
+                        "؜‮Q‬؜4",
+                    }
+                    wide{
+                        "1؜‮st‬؜ ؜‮quarter‬؜",
+                        "2؜‮nd‬؜ ؜‮quarter‬؜",
+                        "3؜‮rd‬؜ ؜‮quarter‬؜",
+                        "4؜‮th‬؜ ؜‮quarter‬؜",
+                    }
+                }
+            }
+        }
+        hebrew{
+            eras{
+                abbreviated{
+                    "؜‮AM‬؜",
+                }
+            }
+        }
+        islamic{
+            eras{
+                abbreviated{
+                    "؜‮AH‬؜",
+                }
+            }
+        }
+        roc{
+            eras{
+                abbreviated{
+                    "؜‮Before‬؜ ؜‮R‬؜.؜‮O‬؜.؜‮C‬؜.",
+                    "؜‮Minguo‬؜",
+                }
+            }
+        }
+    }
+    characterLabel{
+        activities{"؜‮activity‬؜"}
+        african_scripts{"؜‮African‬؜ ؜‮script‬؜"}
+        american_scripts{"؜‮American‬؜ ؜‮script‬؜"}
+        animal{"؜‮animal‬؜"}
+        animals_nature{"؜‮animal‬؜ ؜‮or‬؜ ؜‮nature‬؜"}
+        arrows{"؜‮arrow‬؜"}
+        body{"؜‮body‬؜"}
+        box_drawing{"؜‮box‬؜ ؜‮drawing‬؜"}
+        braille{"؜‮braille‬؜"}
+        building{"؜‮building‬؜"}
+        bullets_stars{"؜‮bullet‬؜ ؜‮or‬؜ ؜‮star‬؜"}
+        consonantal_jamo{"؜‮consonantal‬؜ ؜‮jamo‬؜"}
+        currency_symbols{"؜‮currency‬؜ ؜‮symbol‬؜"}
+        dash_connector{"؜‮dash‬؜ ؜‮or‬؜ ؜‮connector‬؜"}
+        digits{"؜‮digit‬؜"}
+        dingbats{"؜‮dingbat‬؜"}
+        divination_symbols{"؜‮divination‬؜ ؜‮symbol‬؜"}
+        downwards_arrows{"؜‮downwards‬؜ ؜‮arrow‬؜"}
+        downwards_upwards_arrows{"؜‮downwards‬؜ ؜‮upwards‬؜ ؜‮arrow‬؜"}
+        east_asian_scripts{"؜‮East‬؜ ؜‮Asian‬؜ ؜‮script‬؜"}
+        emoji{"؜‮emoji‬؜"}
+        european_scripts{"؜‮European‬؜ ؜‮script‬؜"}
+        female{"؜‮female‬؜"}
+        flag{"؜‮flag‬؜"}
+        flags{"؜‮flags‬؜"}
+        food_drink{"؜‮food‬؜ & ؜‮drink‬؜"}
+        format{"؜‮format‬؜"}
+        format_whitespace{"؜‮format‬؜ & ؜‮whitespace‬؜"}
+        full_width_form_variant{"؜‮full‬؜-؜‮width‬؜ ؜‮variant‬؜"}
+        geometric_shapes{"؜‮geometric‬؜ ؜‮shape‬؜"}
+        half_width_form_variant{"؜‮half‬؜-؜‮width‬؜ ؜‮variant‬؜"}
+        han_characters{"؜‮Han‬؜ ؜‮character‬؜"}
+        han_radicals{"؜‮Han‬؜ ؜‮radical‬؜"}
+        hanja{"؜‮hanja‬؜"}
+        hanzi_simplified{"؜‮Hanzi‬؜ (؜‮simplified‬؜)"}
+        hanzi_traditional{"؜‮Hanzi‬؜ (؜‮traditional‬؜)"}
+        heart{"؜‮heart‬؜"}
+        historic_scripts{"؜‮historic‬؜ ؜‮script‬؜"}
+        ideographic_desc_characters{"؜‮ideographic‬؜ ؜‮desc‬؜. ؜‮character‬؜"}
+        japanese_kana{"؜‮Japanese‬؜ ؜‮kana‬؜"}
+        kanbun{"؜‮kanbun‬؜"}
+        kanji{"؜‮kanji‬؜"}
+        keycap{"؜‮keycap‬؜"}
+        leftwards_arrows{"؜‮leftwards‬؜ ؜‮arrow‬؜"}
+        leftwards_rightwards_arrows{"؜‮leftwards‬؜ ؜‮rightwards‬؜ ؜‮arrow‬؜"}
+        letterlike_symbols{"؜‮letterlike‬؜ ؜‮symbol‬؜"}
+        limited_use{"؜‮limited‬؜-؜‮use‬؜"}
+        male{"؜‮male‬؜"}
+        math_symbols{"؜‮math‬؜ ؜‮symbol‬؜"}
+        middle_eastern_scripts{"؜‮Middle‬؜ ؜‮Eastern‬؜ ؜‮script‬؜"}
+        miscellaneous{"؜‮miscellaneous‬؜"}
+        modern_scripts{"؜‮modern‬؜ ؜‮script‬؜"}
+        modifier{"؜‮modifier‬؜"}
+        musical_symbols{"؜‮musical‬؜ ؜‮symbol‬؜"}
+        nature{"؜‮nature‬؜"}
+        nonspacing{"؜‮nonspacing‬؜"}
+        numbers{"؜‮numbers‬؜"}
+        objects{"؜‮object‬؜"}
+        other{"؜‮other‬؜"}
+        paired{"؜‮paired‬؜"}
+        person{"؜‮person‬؜"}
+        phonetic_alphabet{"؜‮phonetic‬؜ ؜‮alphabet‬؜"}
+        pictographs{"؜‮pictograph‬؜"}
+        place{"؜‮place‬؜"}
+        plant{"؜‮plant‬؜"}
+        punctuation{"؜‮punctuation‬؜"}
+        rightwards_arrows{"؜‮rightwards‬؜ ؜‮arrow‬؜"}
+        sign_standard_symbols{"؜‮sign‬؜ ؜‮or‬؜ ؜‮symbol‬؜"}
+        small_form_variant{"؜‮small‬؜ ؜‮variants‬؜"}
+        smiley{"؜‮smiley‬؜"}
+        smileys_people{"؜‮smiley‬؜ ؜‮or‬؜ ؜‮person‬؜"}
+        south_asian_scripts{"؜‮South‬؜ ؜‮Asian‬؜ ؜‮script‬؜"}
+        southeast_asian_scripts{"؜‮Southeast‬؜ ؜‮Asian‬؜ ؜‮script‬؜"}
+        spacing{"؜‮spacing‬؜"}
+        sport{"؜‮sport‬؜"}
+        symbols{"؜‮symbol‬؜"}
+        technical_symbols{"؜‮technical‬؜ ؜‮symbol‬؜"}
+        tone_marks{"؜‮tone‬؜ ؜‮mark‬؜"}
+        travel{"؜‮travel‬؜"}
+        travel_places{"؜‮travel‬؜ ؜‮or‬؜ ؜‮place‬؜"}
+        upwards_arrows{"؜‮upwards‬؜ ؜‮arrows‬؜"}
+        variant_forms{"؜‮variant‬؜"}
+        vocalic_jamo{"؜‮vocalic‬؜ ؜‮jamo‬؜"}
+        weather{"؜‮weather‬؜"}
+        western_asian_scripts{"؜‮Western‬؜ ؜‮Asian‬؜ ؜‮script‬؜"}
+        whitespace{"؜‮whitespace‬؜"}
+    }
+    fields{
+        day{
+            dn{"؜‮day‬؜"}
+            relative{
+                "-1"{"؜‮yesterday‬؜"}
+                "0"{"؜‮today‬؜"}
+                "1"{"؜‮tomorrow‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮day‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮days‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮day‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮days‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        day-short{
+            dn{"؜‮day‬؜"}
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮day‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮days‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮day‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮days‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        dayOfYear{
+            dn{"؜‮day‬؜ ؜‮of‬؜ ؜‮year‬؜"}
+        }
+        dayOfYear-short{
+            dn{"؜‮day‬؜ ؜‮of‬؜ ؜‮yr‬؜."}
+        }
+        dayperiod{
+            dn{"؜‮AM‬؜/؜‮PM‬؜"}
+            dn%variant{"؜‮am‬؜/؜‮pm‬؜"}
+        }
+        dayperiod-short{
+            dn{"؜‮AM‬؜/؜‮PM‬؜"}
+            dn%variant{"؜‮am‬؜/؜‮pm‬؜"}
+        }
+        era{
+            dn{"؜‮era‬؜"}
+        }
+        era-short{
+            dn{"؜‮era‬؜"}
+        }
+        fri{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Friday‬؜"}
+                "0"{"؜‮this‬؜ ؜‮Friday‬؜"}
+                "1"{"؜‮next‬؜ ؜‮Friday‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Friday‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮Fridays‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮Friday‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮Fridays‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        fri-short{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Fri‬؜."}
+                "0"{"؜‮this‬؜ ؜‮Fri‬؜."}
+                "1"{"؜‮next‬؜ ؜‮Fri‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Fri‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮Fri‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮Fri‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮Fri‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        hour{
+            dn{"؜‮hour‬؜"}
+            relative{
+                "0"{"؜‮this‬؜ ؜‮hour‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮hour‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮hours‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮hour‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮hours‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        hour-short{
+            dn{"؜‮hr‬؜."}
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮hr‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮hr‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮hr‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮hr‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        minute{
+            dn{"؜‮minute‬؜"}
+            relative{
+                "0"{"؜‮this‬؜ ؜‮minute‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮minute‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮minutes‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮minute‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮minutes‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        minute-short{
+            dn{"؜‮min‬؜."}
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮min‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮min‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮min‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮min‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Monday‬؜"}
+                "0"{"؜‮this‬؜ ؜‮Monday‬؜"}
+                "1"{"؜‮next‬؜ ؜‮Monday‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Monday‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮Mondays‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮Monday‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮Mondays‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Mon‬؜."}
+                "0"{"؜‮this‬؜ ؜‮Mon‬؜."}
+                "1"{"؜‮next‬؜ ؜‮Mon‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Mon‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮Mon‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮Mon‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮Mon‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        month{
+            dn{"؜‮month‬؜"}
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮month‬؜"}
+                "0"{"؜‮this‬؜ ؜‮month‬؜"}
+                "1"{"؜‮next‬؜ ؜‮month‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮month‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮months‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮month‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮months‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        month-short{
+            dn{"؜‮mo‬؜."}
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮mo‬؜."}
+                "0"{"؜‮this‬؜ ؜‮mo‬؜."}
+                "1"{"؜‮next‬؜ ؜‮mo‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮mo‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮mo‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮mo‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮mo‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        quarter{
+            dn{"؜‮quarter‬؜"}
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮quarter‬؜"}
+                "0"{"؜‮this‬؜ ؜‮quarter‬؜"}
+                "1"{"؜‮next‬؜ ؜‮quarter‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮quarter‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮quarters‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮quarter‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮quarters‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"؜‮qtr‬؜."}
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮qtr‬؜."}
+                "0"{"؜‮this‬؜ ؜‮qtr‬؜."}
+                "1"{"؜‮next‬؜ ؜‮qtr‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮qtr‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮qtrs‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮qtr‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮qtrs‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        sat{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Saturday‬؜"}
+                "0"{"؜‮this‬؜ ؜‮Saturday‬؜"}
+                "1"{"؜‮next‬؜ ؜‮Saturday‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Saturday‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮Saturdays‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮Saturday‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮Saturdays‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Sat‬؜."}
+                "0"{"؜‮this‬؜ ؜‮Sat‬؜."}
+                "1"{"؜‮next‬؜ ؜‮Sat‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Sat‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮Sat‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮Sat‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮Sat‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        second{
+            dn{"؜‮second‬؜"}
+            relative{
+                "0"{"؜‮now‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮second‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮seconds‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮second‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮seconds‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        second-short{
+            dn{"؜‮sec‬؜."}
+            relative{
+                "0"{"؜‮now‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮sec‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮sec‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮sec‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮sec‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        sun{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Sunday‬؜"}
+                "0"{"؜‮this‬؜ ؜‮Sunday‬؜"}
+                "1"{"؜‮next‬؜ ؜‮Sunday‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Sunday‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮Sundays‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮Sunday‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮Sundays‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Sun‬؜."}
+                "0"{"؜‮this‬؜ ؜‮Sun‬؜."}
+                "1"{"؜‮next‬؜ ؜‮Sun‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Sun‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮Sun‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮Sun‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮Sun‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        thu{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Thursday‬؜"}
+                "0"{"؜‮this‬؜ ؜‮Thursday‬؜"}
+                "1"{"؜‮next‬؜ ؜‮Thursday‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Thursday‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮Thursdays‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮Thursday‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮Thursdays‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        thu-short{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Thu‬؜."}
+                "0"{"؜‮this‬؜ ؜‮Thu‬؜."}
+                "1"{"؜‮next‬؜ ؜‮Thu‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Thu‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮Thu‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮Thu‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮Thu‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        tue{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Tuesday‬؜"}
+                "0"{"؜‮this‬؜ ؜‮Tuesday‬؜"}
+                "1"{"؜‮next‬؜ ؜‮Tuesday‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Tuesday‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮Tuesdays‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮Tuesday‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮Tuesdays‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        tue-short{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Tue‬؜."}
+                "0"{"؜‮this‬؜ ؜‮Tue‬؜."}
+                "1"{"؜‮next‬؜ ؜‮Tue‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Tue‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮Tue‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮Tue‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮Tue‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        wed{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Wednesday‬؜"}
+                "0"{"؜‮this‬؜ ؜‮Wednesday‬؜"}
+                "1"{"؜‮next‬؜ ؜‮Wednesday‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Wednesday‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮Wednesdays‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮Wednesday‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮Wednesdays‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        wed-short{
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮Wed‬؜."}
+                "0"{"؜‮this‬؜ ؜‮Wed‬؜."}
+                "1"{"؜‮next‬؜ ؜‮Wed‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮Wed‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮Wed‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮Wed‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮Wed‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        week{
+            dn{"؜‮week‬؜"}
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮week‬؜"}
+                "0"{"؜‮this‬؜ ؜‮week‬؜"}
+                "1"{"؜‮next‬؜ ؜‮week‬؜"}
+            }
+            relativePeriod{"؜‮the‬؜ ؜‮week‬؜ ؜‮of‬؜ {0}"}
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮week‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮weeks‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮week‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮weeks‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        week-short{
+            dn{"؜‮wk‬؜."}
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮wk‬؜."}
+                "0"{"؜‮this‬؜ ؜‮wk‬؜."}
+                "1"{"؜‮next‬؜ ؜‮wk‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮wk‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮wk‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮wk‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮wk‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        weekOfMonth{
+            dn{"؜‮week‬؜ ؜‮of‬؜ ؜‮month‬؜"}
+        }
+        weekOfMonth-short{
+            dn{"؜‮wk‬؜. ؜‮of‬؜ ؜‮mo‬؜."}
+        }
+        weekday{
+            dn{"؜‮day‬؜ ؜‮of‬؜ ؜‮the‬؜ ؜‮week‬؜"}
+        }
+        weekday-short{
+            dn{"؜‮day‬؜ ؜‮of‬؜ ؜‮wk‬؜."}
+        }
+        weekdayOfMonth{
+            dn{"؜‮weekday‬؜ ؜‮of‬؜ ؜‮the‬؜ ؜‮month‬؜"}
+        }
+        weekdayOfMonth-short{
+            dn{"؜‮wkday‬؜. ؜‮of‬؜ ؜‮mo‬؜."}
+        }
+        year{
+            dn{"؜‮year‬؜"}
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮year‬؜"}
+                "0"{"؜‮this‬؜ ؜‮year‬؜"}
+                "1"{"؜‮next‬؜ ؜‮year‬؜"}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮year‬؜"}
+                    other{"؜‮in‬؜ {0} ؜‮years‬؜"}
+                }
+                past{
+                    one{"{0} ؜‮year‬؜ ؜‮ago‬؜"}
+                    other{"{0} ؜‮years‬؜ ؜‮ago‬؜"}
+                }
+            }
+        }
+        year-short{
+            dn{"؜‮yr‬؜."}
+            relative{
+                "-1"{"؜‮last‬؜ ؜‮yr‬؜."}
+                "0"{"؜‮this‬؜ ؜‮yr‬؜."}
+                "1"{"؜‮next‬؜ ؜‮yr‬؜."}
+            }
+            relativeTime{
+                future{
+                    one{"؜‮in‬؜ {0} ؜‮yr‬؜."}
+                    other{"؜‮in‬؜ {0} ؜‮yr‬؜."}
+                }
+                past{
+                    one{"{0} ؜‮yr‬؜. ؜‮ago‬؜"}
+                    other{"{0} ؜‮yr‬؜. ؜‮ago‬؜"}
+                }
+            }
+        }
+        zone{
+            dn{"؜‮time‬؜ ؜‮zone‬؜"}
+        }
+        zone-short{
+            dn{"؜‮zone‬؜"}
+        }
+    }
+    listPattern{
+        or{
+            2{"{0} ؜‮or‬؜ {1}"}
+            end{"{0}, ؜‮or‬؜ {1}"}
+        }
+        standard{
+            2{"{0} ؜‮and‬؜ {1}"}
+            end{"{0}, ؜‮and‬؜ {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"؜‮UK‬؜"}
+        US{"؜‮US‬؜"}
+        metric{"؜‮Metric‬؜"}
+    }
+}
