@@ -371,9 +371,7 @@
 #endif
 
 /* Define if you have the <lcms2.h> header file. */
-#ifndef HAVE_LCMS2_H
-#define HAVE_LCMS2_H 1
-#endif
+/* #undef HAVE_LCMS2_H */
 
 /* Define if you have the <lcms2/lcms2.h> header file. */
 /* #undef HAVE_LCMS2_LCMS2_H */
