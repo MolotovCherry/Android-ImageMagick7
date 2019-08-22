@@ -25,6 +25,7 @@ LOCAL_C_INCLUDES  := \
     $(XML2_INCLUDE_PATH)/include \
     $(LZMA_LIB_PATH)/liblzma/api \
     $(BZLIB_LIB_PATH) \
+    $(LCMS_LIB_PATH)/include
 
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
@@ -330,6 +331,13 @@ endif
 ifeq ($(LIBBZ2_ENABLED),true)
     LOCAL_CFLAGS += -DMAGICKCORE_BZLIB_DELEGATE=1
     LOCAL_STATIC_LIBRARIES += libbz2
+endif
+
+ifeq ($(LIBLCMS2_ENABLED),true)
+    LOCAL_CFLAGS += \
+        -DMAGICKCORE_HAVE_LCMS2_H=1 \
+        -DMAGICKCORE_LCMS_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += liblcms2
 endif
 
 

@@ -16,6 +16,7 @@ It comes featured with the following delegates:
  - libwebp
  - libxml2
  - liblzma
+ - liblcms2
 
 Also comes with (**but these not delegates, only support libraries**):
 - libicu4c (libicuuc and libicui18n)

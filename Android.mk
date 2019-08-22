@@ -41,7 +41,7 @@ ICU_STUBDATA_PATH  := $(ICU_LIB_PATH)/stubdata
 
 LZMA_LIB_PATH      := $(LOCAL_PATH)/xz-5.2.4
 BZLIB_LIB_PATH     := $(LOCAL_PATH)/bzip-1.0.8
-LCMS_LIB_PATH      := $(LOCAL_PATH)/lcms2-2.9
+LCMS_LIB_PATH      := $(LOCAL_PATH)/liblcms2-2.9
 
 
 #-------------------------------------------------------------
@@ -83,6 +83,9 @@ include $(MAKE_PATH)/libiconv.mk
 
 # libicu4c
 include $(MAKE_PATH)/libicu4c.mk
+
+# liblcms2
+include $(MAKE_PATH)/liblcms2.mk
 
 #-------------------------------------------------------------
 # Magick

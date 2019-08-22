@@ -70,6 +70,7 @@ LIBTIFF_ENABLED       := true
 LIBWEBP_ENABLED       := true
 LIBXML2_ENABLED       := true
 LIBZLIB_ENABLED       := true
+LIBLCMS2_ENABLED      := true
 
 #------------------------------------------
 
