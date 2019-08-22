@@ -65,7 +65,10 @@ ifneq (,$(filter $(TARGET_ARCH_ABI),armeabi-v7a arm64-v8a))
 endif
 
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBPNG_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif
+
 # cpu checks required only with armeabi-v7a
 ifeq ($(TARGET_ARCH_ABI), armeabi-v7a)
     # include cpu features for NEON API check

@@ -11,8 +11,6 @@ LOCAL_CFLAGS := \
     -DLIBXML_FTP_ENABLED=NO \
     -DLIBXML_HTML_ENABLED=NO \
     -DLIBXML_HTTP_ENABLED=NO \
-    -DLIBXML_LZMA_ENABLED=NO \
-    -DLIBXML_ZLIB_ENABLED=NO \
     -Wall \
     -Werror \
     -Wno-error=ignored-attributes \
@@ -22,6 +20,15 @@ LOCAL_CFLAGS := \
     -Wno-tautological-pointer-compare \
     -Wno-unused-function \
     -Wno-unused-parameter \
+
+ifeq ($(LIBLZMA_ENABLED),true)
+    LOCAL_CFLAGS += -DLIBXML_LZMA_ENABLED=NO
+endif
+
+ifeq ($(LIBZLIB_ENABLED),true)
+    LOCAL_CFLAGS += -DLIBXML_ZLIB_ENABLED=NO
+endif
+
 
 ifeq ($(STATIC_BUILD),true)
     LOCAL_CFLAGS += -DSTATIC_LIBXML=1
@@ -104,8 +111,13 @@ LOCAL_SRC_FILES := \
 LOCAL_STATIC_LIBRARIES := \
     libiconv \
     libicuuc \
-    libicui18n \
-    liblzma
+    libicui18n
+
+ifeq ($(LIBLZMA_ENABLED),true)
+    LOCAL_STATIC_LIBRARIES += liblzma
+endif
 
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBXML2_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif

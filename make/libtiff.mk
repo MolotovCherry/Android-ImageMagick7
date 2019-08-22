@@ -9,10 +9,26 @@ LOCAL_ARM_MODE := arm
 LOCAL_C_INCLUDES :=  \
     $(TIFF_LIB_PATH) \
     $(JPEG_LIB_PATH) \
-    $(LZMA_LIB_PATH)/liblzma/api
+    $(LZMA_LIB_PATH)/liblzma/api \
+    $(WEBP_LIB_PATH)/src
 
-LOCAL_CFLAGS := \
-    -DLZMA_SUPPORT=1
+ifeq ($(LIBLZMA_ENABLED),true)
+    LOCAL_CFLAGS += -DLZMA_SUPPORT=1
+endif
+
+ifeq ($(LIBJPEG_TURBO_ENABLED),true)
+    LOCAL_CFLAGS += \
+        -DJPEG_SUPPORT=1 \
+        -DCHECK_JPEG_YCBCR_SUBSAMPLING=1 \
+        -DOJPEG_SUPPORT=1 \
+# Seems to require a special library        
+#       -DJPEG_DUAL_MODE_8_12=1
+endif
+
+ifeq ($(LIBWEBP_ENABLED),true)
+    LOCAL_CFLAGS += -DWEBP_SUPPORT=1
+endif
+
 
 LOCAL_SRC_FILES := \
     $(TIFF_LIB_PATH)/mkg3states.c \
@@ -59,8 +75,19 @@ LOCAL_SRC_FILES := \
     $(TIFF_LIB_PATH)/tif_unix.c \
     $(TIFF_LIB_PATH)/../port/lfind.c
 
+ifeq ($(LIBLZMA_ENABLED),true)
+    LOCAL_STATIC_LIBRARIES += liblzma
+endif
 
-LOCAL_STATIC_LIBRARIES := \
-    liblzma
+ifeq ($(LIBJPEG_TURBO_ENABLED),true)
+    LOCAL_STATIC_LIBRARIES += libjpeg-turbo
+endif
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBWEBP_ENABLED),true)
+    LOCAL_STATIC_LIBRARIES += libwebp libwebpmux
+endif
+
+
+ifeq ($(LIBTIFF_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif

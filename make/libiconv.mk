@@ -27,4 +27,16 @@ LOCAL_SRC_FILES := \
     $(ICONV_LIB_PATH)/lib/relocatable.c \
     $(ICONV_LIB_PATH)/libcharset/lib/localcharset.c
 
-include $(BUILD_STATIC_LIBRARY)
+# multiple dependencies
+BUILD_ICONV := false
+ifeq ($(LIBXML2_ENABLED),true)
+    BUILD_ICONV := true
+endif
+
+ifeq ($(LIBLZMA_ENABLED),true)
+    BUILD_ICONV := true
+endif
+
+ifeq ($(BUILD_ICONV),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif

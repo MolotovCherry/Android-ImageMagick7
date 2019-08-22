@@ -75,4 +75,6 @@ LOCAL_SRC_FILES := \
     $(OPENJPEG_LIB_PATH)/src/lib/openjpip/sock_manager.c \
     $(OPENJPEG_LIB_PATH)/src/lib/openjpip/target_manager.c \
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBOPENJPEG_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif

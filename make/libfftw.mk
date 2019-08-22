@@ -175,5 +175,7 @@ include $(FFTW_LIB_PATH)/rdft/scalar/r2r/sources.mk
 include $(FFTW_LIB_PATH)/reodft/sources.mk
 include $(FFTW_LIB_PATH)/simd-support/sources.mk
 
+ifeq ($(LIBFFTW_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif
 
-include $(BUILD_STATIC_LIBRARY)

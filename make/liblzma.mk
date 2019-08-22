@@ -106,4 +106,6 @@ LOCAL_SRC_FILES := \
 LOCAL_STATIC_LIBRARIES := \
     libiconv
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBLZMA_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif

@@ -24,7 +24,7 @@ LOCAL_C_INCLUDES  := \
     $(XML2_INCLUDE_PATH) \
     $(XML2_INCLUDE_PATH)/include \
     $(LZMA_LIB_PATH)/liblzma/api \
-    $(BZLIB_LIB_PATH)
+    $(BZLIB_LIB_PATH) \
 
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
@@ -275,18 +275,63 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickCore/xml-tree.c \
     $(IMAGE_MAGICK)/MagickCore/xwindow.c \
 
-LOCAL_STATIC_LIBRARIES := \
-    libpng \
-    libjpeg-turbo \
-    libtiff \
-    libfreetype2 \
-    libwebp \
-    libwebpmux \
-    libopenjpeg \
-    libfftw3 \
-    libxml2 \
-    liblzma \
-    libbz2 \
+
+ifeq ($(LIBZLIB_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_ZLIB_DELEGATE=1
+endif
+
+ifeq ($(LIBPNG_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_PNG_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libpng
+endif
+
+ifeq ($(LIBJPEG_TURBO_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_JPEG_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libjpeg-turbo
+endif
+
+ifeq ($(LIBTIFF_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_TIFF_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libtiff
+endif
+
+ifeq ($(LIBFREETYPE2_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_FREETYPE_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libfreetype2
+endif
+
+ifeq ($(LIBWEBP_ENABLED),true)
+    LOCAL_CFLAGS += \
+        -DMAGICKCORE_WEBP_DELEGATE=1 \
+        -DMAGICKCORE_WEBPMUX_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libwebp libwebpmux
+endif
+
+ifeq ($(LIBOPENJPEG_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_OPENJP2_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libopenjpeg
+endif
+
+ifeq ($(LIBFFTW_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_FFTW_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libfftw3
+endif
+
+ifeq ($(LIBXML2_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_XML_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libxml2
+endif
+
+ifeq ($(LIBLZMA_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_LZMA_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += liblzma
+endif
+
+ifeq ($(LIBBZ2_ENABLED),true)
+    LOCAL_CFLAGS += -DMAGICKCORE_BZLIB_DELEGATE=1
+    LOCAL_STATIC_LIBRARIES += libbz2
+endif
+
 
 ifeq ($(STATIC_BUILD),true)
     include $(BUILD_STATIC_LIBRARY)

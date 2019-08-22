@@ -17,4 +17,6 @@ LOCAL_SRC_FILES := \
     $(BZLIB_LIB_PATH)/huffman.c \
     $(BZLIB_LIB_PATH)/randtable.c \
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBBZ2_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif

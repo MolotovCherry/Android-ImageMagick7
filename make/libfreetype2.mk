@@ -46,4 +46,6 @@ ifneq ($(STATIC_BUILD),true)
     LOCAL_LDLIBS := -ldl -llog
 endif
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBFREETYPE2_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif

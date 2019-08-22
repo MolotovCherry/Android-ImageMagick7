@@ -188,7 +188,9 @@ endif
 
 LOCAL_MODULE := webpdecoder_static
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBWEBP_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif
 
 ################################################################################
 
@@ -218,7 +220,9 @@ LOCAL_ARM_MODE := arm
 LOCAL_WHOLE_STATIC_LIBRARIES := webpdecoder_static
 
 
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBWEBP_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif
 
 
 #################################################################################
@@ -244,7 +248,9 @@ LOCAL_ARM_MODE := arm
 LOCAL_MODULE := libwebpmux
 
 LOCAL_STATIC_LIBRARIES := libwebp
-include $(BUILD_STATIC_LIBRARY)
+ifeq ($(LIBWEBP_ENABLED),true)
+    include $(BUILD_STATIC_LIBRARY)
+endif
 
 ################################################################################
 

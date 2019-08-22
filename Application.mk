@@ -55,6 +55,24 @@ STATIC_BUILD := true
 BUILD_MAGICK_BIN := true
 
 
+#------------------------------------------
+# Enable or disable specific delegates here
+#
+
+LIBBZ2_ENABLED        := true
+LIBFFTW_ENABLED       := true
+LIBFREETYPE2_ENABLED  := true
+LIBJPEG_TURBO_ENABLED := true
+LIBLZMA_ENABLED       := true
+LIBOPENJPEG_ENABLED   := true
+LIBPNG_ENABLED        := true
+LIBTIFF_ENABLED       := true
+LIBWEBP_ENABLED       := true
+LIBXML2_ENABLED       := true
+LIBZLIB_ENABLED       := true
+
+#------------------------------------------
+
 # fix long windows paths causing build to fail (too many sources)
 LOCAL_SHORT_COMMANDS := true
 APP_SHORT_COMMANDS := true
