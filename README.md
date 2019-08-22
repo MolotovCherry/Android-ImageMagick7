@@ -31,5 +31,5 @@ Also comes with (**but these not delegates, only support libraries**):
 |--|--|--|
 |`TMPDIR`|Temporary cache directory. Set to a directory writable by your app|`/data/data/com.myapp/files/TMP`|
 |`MAGICK_HOME`|The directory containing imagemagick xml config files. Should be set to the base directory, e.g. `/usr` , with config files being in `/usr/etc`.| `/data/data/com.myapp/files/usr`|
-|`ICU_DATA_DIR`|The directory containing the ICU data file (required by icuuc library)|`/data/data/com.myapp/files/usr/icu`|
+|`ICU_DATA_DIR_PREFIX`|The directory containing the folder named `icu` which contains the ICU data files (required by icuuc library). For example, a path of `/usr` will result in `/usr/icu/icu.dat` being loaded|`/data/data/com.myapp/files/usr`|
 |`LD_LIBRARY_PATH`|Needed in order for the binary to find the `libc++_shared.so` library (or other libraries if you compiled them into shared instead of static libraries)|`/data/data/com.myapp/files/usr/bin/arm64-v8a`|
