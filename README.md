@@ -18,7 +18,7 @@ It comes featured with the following delegates:
  - liblzma
 
 Also comes with (**but these not delegates, only support libraries**):
-- libicu4c
+- libicu4c (libicuuc and libicui18n)
 - libiconv
 
 # How to run the binary
