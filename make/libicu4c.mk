@@ -1,10 +1,3 @@
-LOCAL_PATH := $(call my-dir)
-
-ICU_LIB_PATH      := $(LOCAL_PATH)/libicu4c-64-2
-ICU_COMMON_PATH   := $(ICU_LIB_PATH)/common
-ICU_I18N_PATH     := $(ICU_LIB_PATH)/i18n
-ICU_STUBDATA_PATH := $(ICU_LIB_PATH)/stubdata
-
 #------------
 # start icuuc
 #------------
@@ -213,9 +206,9 @@ c_includes := \
 # We make the ICU data directory relative to $ANDROID_ROOT on Android, so both
 # device and sim builds can use the same codepath, and it's hard to break one
 # without noticing because the other still works.
-local_cflags := '-DICU_DATA_DIR_PREFIX_ENV_VAR="ICU_DATA_DIR"'
+local_cflags := '-DICU_DATA_DIR_PREFIX_ENV_VAR="ICU_DATA_DIR_PREFIX"'
 #local_cflags += '-DICU_DATA_DIR="/data/data/com.sample.app/files/icu"'
-#local_cflags += '-DICU_DATA_DIR="/icu"'
+local_cflags += '-DICU_DATA_DIR="/icu"'
 
 # bionic doesn't have <langinfo.h>.
 local_cflags += -DU_HAVE_NL_LANGINFO_CODESET=0

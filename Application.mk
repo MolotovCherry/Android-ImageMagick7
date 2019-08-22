@@ -1,3 +1,22 @@
+#----------------------------------------------------------------------------#
+#                                  _           _     _                       #
+#                  /\             | |         (_)   | |                      #
+#                 /  \   _ __   __| |_ __ ___  _  __| |                      #
+#                / /\ \ | '_ \ / _` | '__/ _ \| |/ _` |                      #
+#               / ____ \| | | | (_| | | | (_) | | (_| |                      #
+#              /_/    \_\_| |_|\__,_|_|  \___/|_|\__,_|                      #
+#                                                                            #
+#  _____                            __  __             _      _      ______  #
+# |_   _|                          |  \/  |           (_)    | |    |____  | #
+#   | |  _ __ ___   __ _  __ _  ___| \  / | __ _  __ _ _  ___| | __     / /  #
+#   | | | '_ ` _ \ / _` |/ _` |/ _ \ |\/| |/ _` |/ _` | |/ __| |/ /    / /   #
+#  _| |_| | | | | | (_| | (_| |  __/ |  | | (_| | (_| | | (__|   <    / /    #
+# |_____|_| |_| |_|\__,_|\__, |\___|_|  |_|\__,_|\__, |_|\___|_|\_\  /_/     #
+#                         __/ |                   __/ |                      #
+#                        |___/                   |___/                       #
+#                                                                            #
+#----------------------------------------------------------------------------#
+
 # list of supported architectures 
 # https://developer.android.com/ndk/guides/application_mk.html
 
@@ -36,7 +55,6 @@ STATIC_BUILD := true
 BUILD_MAGICK_BIN := true
 
 
-# fix windows paths causing build to fail (too many sources)
-# only affects gradle build (build from cmdline works fine)
+# fix long windows paths causing build to fail (too many sources)
 LOCAL_SHORT_COMMANDS := true
 APP_SHORT_COMMANDS := true
