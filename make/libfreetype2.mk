@@ -42,9 +42,8 @@ LOCAL_SRC_FILES += \
     $(FREETYPE_LIB_PATH)/src/type1/type1.c \
     $(FREETYPE_LIB_PATH)/src/cid/type1cid.c \
 
-ifneq ($(STATIC_BUILD),true)
-    LOCAL_LDLIBS := -ldl -llog
-endif
+# this is always a static build
+#LOCAL_LDLIBS := -ldl -llog
 
 ifeq ($(LIBFREETYPE2_ENABLED),true)
     include $(BUILD_STATIC_LIBRARY)

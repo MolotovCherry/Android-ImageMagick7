@@ -19,34 +19,54 @@
 # Module Vars                                                                #
 #----------------------------------------------------------------------------#
 
-LOCAL_PATH         := $(call my-dir)
+LOCAL_PATH                      := $(call my-dir)
 
-MAKE_PATH          := $(LOCAL_PATH)/make
 
-IMAGE_MAGICK       := $(LOCAL_PATH)/ImageMagick-7.0.8-61
-JPEG_LIB_PATH      := $(LOCAL_PATH)/libjpeg-turbo-2.0.2
-PNG_LIB_PATH       := $(LOCAL_PATH)/libpng-1.6.37
-TIFF_LIB_PATH      := $(LOCAL_PATH)/libtiff-v4.0.10/libtiff
-FREETYPE_LIB_PATH  := $(LOCAL_PATH)/libfreetype2-2.10.1
-WEBP_LIB_PATH      := $(LOCAL_PATH)/libwebp-1.0.3
-OPENJPEG_LIB_PATH  := $(LOCAL_PATH)/libopenjpeg-2.3.1
-FFTW_LIB_PATH      := $(LOCAL_PATH)/libfftw-3.3.8
-XML2_LIB_PATH      := $(LOCAL_PATH)/libxml2-2.9.9
-ICONV_LIB_PATH     := $(LOCAL_PATH)/libiconv-1.16
+MAKE_PATH                       := $(LOCAL_PATH)/make
 
-ICU_LIB_PATH       := $(LOCAL_PATH)/libicu4c-64-2
-ICU_COMMON_PATH    := $(ICU_LIB_PATH)/common
-ICU_I18N_PATH      := $(ICU_LIB_PATH)/i18n
-ICU_STUBDATA_PATH  := $(ICU_LIB_PATH)/stubdata
 
-LZMA_LIB_PATH      := $(LOCAL_PATH)/xz-5.2.4
-BZLIB_LIB_PATH     := $(LOCAL_PATH)/bzip-1.0.8
-LCMS_LIB_PATH      := $(LOCAL_PATH)/liblcms2-2.9
+JMAGICK_DIR_PATH                := $(LOCAL_PATH)/libjmagick-7
+JMAGICK_LIB_PATH                := $(JMAGICK_DIR_PATH)/src
 
+IMAGE_MAGICK_BASEDIR            := ImageMagick-7.0.8-61
+IMAGE_MAGICK_PATCH_PATH         := $(JMAGICK_DIR_PATH)/imagemagick-patches/$(IMAGE_MAGICK_BASEDIR)/MagickCore
+IMAGE_MAGICK_PATCH_INCLUDE_PATH := $(JMAGICK_DIR_PATH)/imagemagick-patches/$(IMAGE_MAGICK_BASEDIR)
+IMAGE_MAGICK                    := $(LOCAL_PATH)/$(IMAGE_MAGICK_BASEDIR)
+
+JPEG_LIB_PATH                   := $(LOCAL_PATH)/libjpeg-turbo-2.0.2
+PNG_LIB_PATH                    := $(LOCAL_PATH)/libpng-1.6.37
+TIFF_LIB_PATH                   := $(LOCAL_PATH)/libtiff-v4.0.10/libtiff
+FREETYPE_LIB_PATH               := $(LOCAL_PATH)/libfreetype2-2.10.1
+WEBP_LIB_PATH                   := $(LOCAL_PATH)/libwebp-1.0.3
+OPENJPEG_LIB_PATH               := $(LOCAL_PATH)/libopenjpeg-2.3.1
+FFTW_LIB_PATH                   := $(LOCAL_PATH)/libfftw-3.3.8
+XML2_LIB_PATH                   := $(LOCAL_PATH)/libxml2-2.9.9
+ICONV_LIB_PATH                  := $(LOCAL_PATH)/libiconv-1.16
+
+ICU_LIB_PATH                    := $(LOCAL_PATH)/libicu4c-64-2
+ICU_COMMON_PATH                 := $(ICU_LIB_PATH)/common
+ICU_I18N_PATH                   := $(ICU_LIB_PATH)/i18n
+ICU_STUBDATA_PATH               := $(ICU_LIB_PATH)/stubdata
+
+LZMA_LIB_PATH                   := $(LOCAL_PATH)/xz-5.2.4
+BZLIB_LIB_PATH                  := $(LOCAL_PATH)/bzip-1.0.8
+LCMS_LIB_PATH                   := $(LOCAL_PATH)/liblcms2-2.9
+
+
+# Force enable shared library building with jmagick
+ifeq ($(JMAGICK_ENABLED),true)
+    ifeq ($(STATIC_BUILD),true)
+        $(info [ JMagick build enabled: Force enabling shared library build ])
+        STATIC_BUILD := false
+    endif
+endif
 
 #-------------------------------------------------------------
 # Include all modules
 #-------------------------------------------------------------
+
+# libjmagick-7
+include $(MAKE_PATH)/libjmagick-7.mk
 
 # libjpeg-turbo
 include $(MAKE_PATH)/libjpeg-turbo.mk

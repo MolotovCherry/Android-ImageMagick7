@@ -8,7 +8,31 @@ LOCAL_MODULE    := libmagickcore-7
 # prefer arm over thumb mode for performance gains
 LOCAL_ARM_MODE := arm
 
-LOCAL_C_INCLUDES  := \
+
+ifeq ($(JMAGICK_ENABLED),true)
+    # patch includes
+    LOCAL_C_INCLUDES := \
+        $(IMAGE_MAGICK_PATCH_INCLUDE_PATH)
+
+    # jmagick c patches
+    LOCAL_SRC_FILES := \
+        $(IMAGE_MAGICK_PATCH_PATH)/cache.c \
+        $(IMAGE_MAGICK_PATCH_PATH)/configure.c \
+        $(IMAGE_MAGICK_PATCH_PATH)/exception.c \
+        $(IMAGE_MAGICK_PATCH_PATH)/log.c \
+        $(IMAGE_MAGICK_PATCH_PATH)/resource.c
+else
+    # vanilla imagemagick c files
+    LOCAL_SRC_FILES := \
+        $(IMAGE_MAGICK)/MagickCore/cache.c \
+        $(IMAGE_MAGICK)/MagickCore/configure.c \
+        $(IMAGE_MAGICK)/MagickCore/exception.c \
+        $(IMAGE_MAGICK)/MagickCore/log.c \
+        $(IMAGE_MAGICK)/MagickCore/resource.c
+endif
+
+
+LOCAL_C_INCLUDES  += \
     $(IMAGE_MAGICK) \
     $(IMAGE_MAGICK)/MagickCore \
     $(PNG_LIB_PATH) \
@@ -52,7 +76,8 @@ ifneq ($(STATIC_BUILD),true)
     LOCAL_LDLIBS    := -L$(SYSROOT)/usr/lib -llog -lz
 endif
 
-LOCAL_SRC_FILES := \
+
+LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/aai.c \
     $(IMAGE_MAGICK)/coders/art.c \
     $(IMAGE_MAGICK)/coders/avs.c \
@@ -188,7 +213,6 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickCore/artifact.c \
     $(IMAGE_MAGICK)/MagickCore/attribute.c \
     $(IMAGE_MAGICK)/MagickCore/blob.c \
-    $(IMAGE_MAGICK)/MagickCore/cache.c \
     $(IMAGE_MAGICK)/MagickCore/cache-view.c \
     $(IMAGE_MAGICK)/MagickCore/channel.c \
     $(IMAGE_MAGICK)/MagickCore/cipher.c \
@@ -200,7 +224,6 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickCore/compare.c \
     $(IMAGE_MAGICK)/MagickCore/composite.c \
     $(IMAGE_MAGICK)/MagickCore/compress.c \
-    $(IMAGE_MAGICK)/MagickCore/configure.c \
     $(IMAGE_MAGICK)/MagickCore/constitute.c \
     $(IMAGE_MAGICK)/MagickCore/decorate.c \
     $(IMAGE_MAGICK)/MagickCore/delegate.c \
@@ -211,7 +234,6 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickCore/draw.c \
     $(IMAGE_MAGICK)/MagickCore/effect.c \
     $(IMAGE_MAGICK)/MagickCore/enhance.c \
-    $(IMAGE_MAGICK)/MagickCore/exception.c \
     $(IMAGE_MAGICK)/MagickCore/feature.c \
     $(IMAGE_MAGICK)/MagickCore/fourier.c \
     $(IMAGE_MAGICK)/MagickCore/fx.c \
@@ -225,7 +247,6 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickCore/linked-list.c \
     $(IMAGE_MAGICK)/MagickCore/list.c \
     $(IMAGE_MAGICK)/MagickCore/locale.c \
-    $(IMAGE_MAGICK)/MagickCore/log.c \
     $(IMAGE_MAGICK)/MagickCore/magic.c \
     $(IMAGE_MAGICK)/MagickCore/magick.c \
     $(IMAGE_MAGICK)/MagickCore/matrix.c \
@@ -253,7 +274,6 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickCore/registry.c \
     $(IMAGE_MAGICK)/MagickCore/resample.c \
     $(IMAGE_MAGICK)/MagickCore/resize.c \
-    $(IMAGE_MAGICK)/MagickCore/resource.c \
     $(IMAGE_MAGICK)/MagickCore/segment.c \
     $(IMAGE_MAGICK)/MagickCore/semaphore.c \
     $(IMAGE_MAGICK)/MagickCore/shear.c \
