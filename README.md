@@ -12,7 +12,7 @@ It comes compiled with the following features:
 - Cipher
 - DPC
 
-Includes the following options for compiling:
+Includes the following optional options for compiling:
 
 - Jmagick support with java source code
 
