@@ -1,0 +1,8 @@
+#!/bin/bash
+
+CURR_DIR=`dirname "$0"`
+
+export LD_LIBRARY_PATH=$CURR_DIR
+export PATH=$PATH:CURR_DIR
+
+$CURR_DIR/iculslocs-bin "$@"
