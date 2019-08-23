@@ -80,7 +80,7 @@ BUILD_MAGICK_BIN := true
 # a shared library build (because it is required)
 #
 
-JMAGICK_ENABLED := true
+JMAGICK_ENABLED := false
 
 
 #------------------------------------------
