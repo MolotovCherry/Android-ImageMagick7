@@ -4,6 +4,18 @@ This is a fully featured imagemagick build compatible with android. All libaries
 
 It can be configured to both build as a binary (with shared libaries or statically linked), or as separate shared libraries (and no binary).
 
+It comes compiled with the following features:
+
+- OpenMP(3.1)
+- HDRI support
+- Q16 Quantum depth
+- Cipher
+- DPC
+
+Includes the following options for compiling:
+
+- Jmagick support with java source code
+
 It comes featured with the following delegates:
 
  - bzlib
