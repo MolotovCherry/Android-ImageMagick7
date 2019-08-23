@@ -23,7 +23,7 @@ LOCAL_PATH         := $(call my-dir)
 
 MAKE_PATH          := $(LOCAL_PATH)/make
 
-IMAGE_MAGICK       := $(LOCAL_PATH)/ImageMagick-7.0.8-60
+IMAGE_MAGICK       := $(LOCAL_PATH)/ImageMagick-7.0.8-61
 JPEG_LIB_PATH      := $(LOCAL_PATH)/libjpeg-turbo-2.0.2
 PNG_LIB_PATH       := $(LOCAL_PATH)/libpng-1.6.37
 TIFF_LIB_PATH      := $(LOCAL_PATH)/libtiff-v4.0.10/libtiff
