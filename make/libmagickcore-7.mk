@@ -21,6 +21,14 @@ ifeq ($(JMAGICK_ENABLED),true)
         $(IMAGE_MAGICK_PATCH_PATH)/exception.c \
         $(IMAGE_MAGICK_PATCH_PATH)/log.c \
         $(IMAGE_MAGICK_PATCH_PATH)/resource.c
+        
+    # informational message
+    $(info )
+    $(info Patching the following imagemagick c files for Android compatibility:)
+    $(foreach file,$(notdir $(LOCAL_SRC_FILES)), \
+        $(info - MagickCore/$(file)) \
+    )
+    $(info )
 else
     # vanilla imagemagick c files
     LOCAL_SRC_FILES := \
