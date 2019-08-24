@@ -45,13 +45,16 @@ public class Magick {
         System.loadLibrary("jmagick-7");
     }
 
-    public static void initialize(String configDir, String cacheDir) {
+    public static void initialize(String configDir, String cacheDir, String ICUDataDir) {
         // set the config data path before library initialization,
         // or it won't have time to propagate and there will be a race condition
         setAppConfigDataDir(configDir);
 
         // set up cache folder
         setCacheDir(cacheDir);
+        
+        // if ICU lib isn't needed, then set the directory path to "", no big deal
+        setICUDataDir(ICUDataDir);
 
         // initialize system
         init();
@@ -98,4 +101,6 @@ public class Magick {
     //
     
     public static native void setAppConfigDataDir(String dir);
+    
+    public static native void setICUDataDir(String dir);
 }

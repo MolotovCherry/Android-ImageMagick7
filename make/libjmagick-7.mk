@@ -3,6 +3,10 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := libjmagick-7
 LOCAL_CFLAGS += -DIMAGEMAGICK_HEADER_STYLE_7 -fopenmp
 
+ifeq ($(LIBXML2_ENABLED),true)
+    LOCAL_CFLAGS += -DJ_ICU4C
+endif
+
 LOCAL_C_INCLUDES  :=  \
     $(IMAGE_MAGICK_PATCH_INCLUDE_PATH) \
     $(IMAGE_MAGICK_PATCH_PATH) \
@@ -10,7 +14,8 @@ LOCAL_C_INCLUDES  :=  \
     $(IMAGE_MAGICK)/MagickCore \
     $(PNG_LIB_PATH) \
     $(JPEG_LIB_PATH) \
-    $(TIFF_LIB_PATH)
+    $(TIFF_LIB_PATH) \
+    $(ICU_LIB_PATH)/common
 
 
 LOCAL_SRC_FILES := \
@@ -26,6 +31,7 @@ LOCAL_SRC_FILES := \
     $(JMAGICK_LIB_PATH)/magick_Cache.c \
     $(JMAGICK_LIB_PATH)/magick_AppDataDir.c \
     $(JMAGICK_LIB_PATH)/magick_Morphology.c \
+    $(JMAGICK_LIB_PATH)/magick_ICUDataDir.c \
     $(JMAGICK_LIB_PATH)/magick_Channel.c \
 
 LOCAL_LDLIBS    := -L$(SYSROOT)/usr/lib -llog

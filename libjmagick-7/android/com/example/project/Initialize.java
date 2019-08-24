@@ -18,7 +18,8 @@ class AppInitializer {
        copyAsset(context, magickConfigDir, assetFolderName);
 
         // initialize Magick
-        Magick.initialize(magickConfigDir, magickCacheDir);
+        // ICU data dir is right beneath the same parent as the asset folder
+        Magick.initialize(magickConfigDir, magickCacheDir, magickConfigDir);
     }
 
     static void copyAssets(Context context, String[] assetFolderNames) {
