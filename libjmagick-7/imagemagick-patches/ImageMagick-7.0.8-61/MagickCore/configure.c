@@ -832,12 +832,12 @@ MagickExport LinkedListInfo *GetConfigurePaths(const char *filename,
           // yourconfigdirectory/locale
           // yourconfigdirectory/etc
       
-          (void) FormatLocaleString(path1,MagickPathExtent,"%s%s", g_pszAppConfigDataDir,
-                  "config/");
-          (void) FormatLocaleString(path2,MagickPathExtent,"%s%s", g_pszAppConfigDataDir,
-                  "locale/");
-          (void) FormatLocaleString(path3,MagickPathExtent,"%s%s", g_pszAppConfigDataDir,
-                  "etc/");
+          (void) FormatLocaleString(path1,MagickPathExtent,"%s/%s/%s/", g_pszAppConfigDataDir,
+                  "config", MAGICKCORE_CONFIGURE_RELATIVE_PATH);
+          (void) FormatLocaleString(path2,MagickPathExtent,"%s/%s/%s/", g_pszAppConfigDataDir,
+                  "locale", MAGICKCORE_CONFIGURE_RELATIVE_PATH);
+          (void) FormatLocaleString(path3,MagickPathExtent,"%s/%s/%s/", g_pszAppConfigDataDir,
+                  "etc", MAGICKCORE_CONFIGURE_RELATIVE_PATH);
           
           // insert Android config data path into function
           (void) AppendValueToLinkedList(paths, ConstantString(path1));
