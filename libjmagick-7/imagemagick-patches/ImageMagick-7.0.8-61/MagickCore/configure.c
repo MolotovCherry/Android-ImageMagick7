@@ -617,7 +617,7 @@ MagickExport char *GetConfigureOption(const char *option)
 #define LOG(a) __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, a);
 #define LOG2(a,b) __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, a, b);
 
-static char *g_pszAppConfigDataDir;
+static char *g_pszAppConfigDataDir = NULL;
 
 MagickExport void SetAppConfigDataDir(char *szAppConfigDataDir)
 {
@@ -747,38 +747,56 @@ MagickExport LinkedListInfo *GetConfigureOptions(const char *filename,
 */
 // neutered the entire method to support only Android..
 // after all, there is only one path we will be using..
+// but we'll fallback to MAGICK_HOME if we have to
 
-MagickExport LinkedListInfo *GetConfigurePaths(const char *filename,
+/*MagickExport LinkedListInfo *GetConfigurePaths(const char *filename,
   ExceptionInfo *exception)
 {
   LinkedListInfo
     *paths;
 
+    char *directory;
+
   paths=NewLinkedList(0);
   
-  char path1[MagickPathExtent];
-  char path2[MagickPathExtent];
-  // find config files under :
-  // yourconfigdirectory/config
-  // yourconfigdirectory/locale
-  (void) FormatLocaleString(path1,MagickPathExtent,"%s%s", g_pszAppConfigDataDir,
-          "config/");
-  (void) FormatLocaleString(path2,MagickPathExtent,"%s%s", g_pszAppConfigDataDir,
-          "locale/");
+
   
-    // insert Android config data path into function
+  // fallback to using MAGICK_HOME
+  // MAYBE we're executing it as a binary instead
+  directory=GetEnvironmentValue("MAGICK_HOME");
+  if(directory != (char *) NULL) {
+    char path1[MagickPathExtent];
+    char path2[MagickPathExtent];
+    char path3[MagickPathExtent];
+    
+    (void) FormatLocaleString(path1,MagickPathExtent,"%s%s", directory,
+              "config/");
+    (void) FormatLocaleString(path2,MagickPathExtent,"%s%s", directory,
+              "etc/");
+    (void) FormatLocaleString(path3,MagickPathExtent,"%s%s", directory,
+              "locale/");
     (void) AppendValueToLinkedList(paths, ConstantString(path1));
     (void) AppendValueToLinkedList(paths, ConstantString(path2));
+    (void) AppendValueToLinkedList(paths, ConstantString(path3));
+    
+    
       LOG2("GetConfigurePaths(): Configure data path set to Android: %s", path1);
       LOG2("GetConfigurePaths(): Configure data path set to Android: %s", path2);
+      LOG2("GetConfigurePaths(): Configure data path set to Android: %s", path3);
+    
+      //RelinquishMagickMemory(path1);
+      //RelinquishMagickMemory(path2);
+      //RelinquishMagickMemory(path3);
+    //directory=DestroyString(directory);
+  }
 
   if (GetNumberOfElementsInLinkedList(paths) == 0)
     (void) ThrowMagickException(exception,GetMagickModule(),ConfigureWarning,
       "no configuration paths found","`%s'",filename);
   return(paths);
-}
+}*/
 
-/*
+
 MagickExport LinkedListInfo *GetConfigurePaths(const char *filename,
   ExceptionInfo *exception)
 {
@@ -797,6 +815,46 @@ MagickExport LinkedListInfo *GetConfigurePaths(const char *filename,
   assert(exception != (ExceptionInfo *) NULL);
   (void) CopyMagickString(path,filename,MagickPathExtent);
   paths=NewLinkedList(0);
+  
+  // ANDROID, add our custom configure path
+  // + /config, /locale, /etc
+  {
+      char
+      *android_path;
+  
+      android_path=g_pszAppConfigDataDir;
+      if (android_path != (char *) NULL) {
+          char path1[MagickPathExtent];
+          char path2[MagickPathExtent];
+          char path3[MagickPathExtent];
+          // find config files under :
+          // yourconfigdirectory/config
+          // yourconfigdirectory/locale
+          // yourconfigdirectory/etc
+      
+          (void) FormatLocaleString(path1,MagickPathExtent,"%s%s", g_pszAppConfigDataDir,
+                  "config/");
+          (void) FormatLocaleString(path2,MagickPathExtent,"%s%s", g_pszAppConfigDataDir,
+                  "locale/");
+          (void) FormatLocaleString(path3,MagickPathExtent,"%s%s", g_pszAppConfigDataDir,
+                  "etc/");
+          
+          // insert Android config data path into function
+          (void) AppendValueToLinkedList(paths, ConstantString(path1));
+          (void) AppendValueToLinkedList(paths, ConstantString(path2));
+          (void) AppendValueToLinkedList(paths, ConstantString(path3));
+          LOG2("GetConfigurePaths(): Configure data path set to Android: %s", path1);
+          LOG2("GetConfigurePaths(): Configure data path set to Android: %s", path2);
+          LOG2("GetConfigurePaths(): Configure data path set to Android: %s", path3);
+          
+          //RelinquishMagickMemory(path1);
+          //RelinquishMagickMemory(path2);
+          //RelinquishMagickMemory(path3);
+          android_path=DestroyString(android_path);
+      }
+  }
+  
+  
   {
     char
       *configure_path;
@@ -990,7 +1048,7 @@ MagickExport LinkedListInfo *GetConfigurePaths(const char *filename,
     (void) ThrowMagickException(exception,GetMagickModule(),ConfigureWarning,
       "no configuration paths found","`%s'",filename);
   return(paths);
-} */
+}
 
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
