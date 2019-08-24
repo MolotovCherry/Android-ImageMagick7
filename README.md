@@ -38,6 +38,7 @@ You can test it with earlier versions, but I offer no support for it.
 
 - Includes optional jmagick support. It will patch imagemagick c files for Android/jmagick compatibility.
 - Includes jmagick java code and fakeawt for your project
+- Also has example android java code interfacing with imagemagick, find it in the `libjmagick-7/android` directory
 - You can choose to disable support for jmagick, and it will compile UNMODIFIED vanilla files (the binary / libraries will still run on Android without any problems whatsoever; android compatibility is merely to allow imagemagick to interface with java code, and also logging support in Android Studio ;) )
 
 # How to run the binary
