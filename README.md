@@ -32,7 +32,7 @@ Also comes with (**but these not delegates, only support libraries**):
 
 # Android support
 
-**Requires > API 24**
+**Requires >= API 24**
 
 You can test it with earlier versions, but I offer no support for it.
 
