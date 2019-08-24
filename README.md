@@ -33,6 +33,7 @@ Also comes with (**but these not delegates, only support libraries**):
 # Android support
 
 **Requires API >= 24 (>= Nougat)**
+
 **Currently, only arm64-v8a is supported**
 
 You can test it with earlier versions, but I offer no support for it.
