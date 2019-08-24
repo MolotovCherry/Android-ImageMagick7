@@ -28,7 +28,7 @@ MAKE_PATH                       := $(LOCAL_PATH)/make
 JMAGICK_DIR_PATH                := $(LOCAL_PATH)/libjmagick-7
 JMAGICK_LIB_PATH                := $(JMAGICK_DIR_PATH)/src
 
-IMAGE_MAGICK_BASEDIR            := ImageMagick-7.0.8-61
+IMAGE_MAGICK_BASEDIR            := ImageMagick-7.0.8-62
 IMAGE_MAGICK_PATCH_PATH         := $(JMAGICK_DIR_PATH)/imagemagick-patches/$(IMAGE_MAGICK_BASEDIR)/MagickCore
 IMAGE_MAGICK_PATCH_INCLUDE_PATH := $(JMAGICK_DIR_PATH)/imagemagick-patches/$(IMAGE_MAGICK_BASEDIR)
 IMAGE_MAGICK                    := $(LOCAL_PATH)/$(IMAGE_MAGICK_BASEDIR)

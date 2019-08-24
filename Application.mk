@@ -22,7 +22,9 @@
 
 # mips32 have a bug with 64bit atomic counter, so if you need 
 # this platform - plz, use gcc build
-# armeabi-v7a
+# DO NOT BUILD MORE THAN ONE AT THE SAME TIME, OR IT WILL FAIL
+# BUILD THEM ONE AT A TIME
+# armeabi-v7a is currently not supported
 APP_ABI := arm64-v8a
 APP_PLATFORM := android-24
 NDK_TOOLCHAIN_VERSION := clang

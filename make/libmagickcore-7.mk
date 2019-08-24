@@ -39,6 +39,25 @@ else
         $(IMAGE_MAGICK)/MagickCore/resource.c
 endif
 
+ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
+    LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm64
+    LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm64
+else ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)  
+    LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm
+    LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm
+else ifeq ($(TARGET_ARCH_ABI),x86)
+    LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/x86
+    LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/x86
+else ifeq ($(TARGET_ARCH_ABI),x86_64)
+    LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/x86-64
+    LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/x86-64
+    
+    ifneq ($(STATIC_BUILD),true)
+        LOCAL_LDFLAGS += -latomic
+    endif
+    
+endif
+
 
 LOCAL_C_INCLUDES  += \
     $(IMAGE_MAGICK) \
@@ -59,25 +78,6 @@ LOCAL_C_INCLUDES  += \
     $(BZLIB_LIB_PATH) \
     $(LCMS_LIB_PATH)/include
 
-
-ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-    LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm64
-    LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm64
-else ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)  
-    LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm
-    LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm
-else ifeq ($(TARGET_ARCH_ABI),x86)
-    LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/x86
-    LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/x86
-else ifeq ($(TARGET_ARCH_ABI),x86_64)
-    LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/x86-64
-    LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/x86-64
-    
-    ifneq ($(STATIC_BUILD),true)
-        LOCAL_LDFLAGS += -latomic
-    endif
-    
-endif
 
 ifneq ($(STATIC_BUILD),true)
 # ignored in static library builds
@@ -300,7 +300,6 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/utility.c \
     $(IMAGE_MAGICK)/MagickCore/version.c \
     $(IMAGE_MAGICK)/MagickCore/vision.c \
-    $(IMAGE_MAGICK)/MagickCore/vms.c \
     $(IMAGE_MAGICK)/MagickCore/widget.c \
     $(IMAGE_MAGICK)/MagickCore/xml-tree.c \
     $(IMAGE_MAGICK)/MagickCore/xwindow.c \
