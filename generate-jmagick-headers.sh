@@ -12,9 +12,9 @@
 # script directory
 SWD=$(dirname $(realpath $0))
 # java magick source code directory
-JMSOURCE=$(realpath $SWD/libjmagick-7/java/magick)
+JMSOURCE=$(realpath $SWD/libjmagick-7/android/magick)
 # fakeawt java source code directory
-FAWTSOURCE=$(realpath $SWD/libjmagick-7/java/fakeawt)
+FAWTSOURCE=$(realpath $SWD/libjmagick-7/android/fakeawt)
 # magick c source code directory
 CSOURCE=$SWD/libjmagick-7/src
 # temporary directory
