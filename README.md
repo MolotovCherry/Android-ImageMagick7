@@ -12,10 +12,6 @@ It comes compiled with the following features:
 - Cipher
 - DPC
 
-Includes the following optional options for compiling:
-
-- Jmagick support with java source code
-
 It comes featured with the following delegates:
 
  - bzlib
@@ -33,6 +29,16 @@ It comes featured with the following delegates:
 Also comes with (**but these not delegates, only support libraries**):
 - libicu4c (libicuuc and libicui18n)
 - libiconv
+
+# Android support
+
+**Requires > API 24**
+
+You can test it with earlier versions, but I offer no support for it.
+
+- Includes optional jmagick support. It will patch imagemagick c files for Android/jmagick compatibility.
+- Includes jmagick java code and fakeawt for your project
+- You can choose to disable support for jmagick, and it will compile UNMODIFIED vanilla files (the binary / libraries will still run on Android without any problems whatsoever; android compatibility is merely to allow imagemagick to interface with java code, and also logging support in Android Studio ;) )
 
 # How to run the binary
 
