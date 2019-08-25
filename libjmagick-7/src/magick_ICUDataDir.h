@@ -9,7 +9,7 @@ extern "C" {
 #endif
 /*
  * Class:     magick_Magick
- * Method:    setAppConfigDataDir
+ * Method:    setICUDataDir
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_magick_Magick_setICUDataDir
