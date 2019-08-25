@@ -66,7 +66,9 @@ APP_LDFLAGS += \
 #
 
 STATIC_BUILD     := true
+# magick bin requires magick wand API
 BUILD_MAGICK_BIN := true
+BUILD_MAGICKWAND := true
 
 
 #------------------------------------------
@@ -80,6 +82,8 @@ BUILD_MAGICK_BIN := true
 #
 # -> If this is enabled, it will force enable
 # a shared library build (because it is required)
+#
+# -> Requires a MagickWand build as well
 #
 
 JMAGICK_ENABLED := false

@@ -1,14 +1,5 @@
 include $(CLEAR_VARS)
 
-# Force enable shared library building with jmagick
-ifeq ($(JMAGICK_ENABLED),true)
-    ifeq ($(STATIC_BUILD),true)
-        $(info [ JMagick build enabled: Force enabling shared library build ])
-        STATIC_BUILD := false
-    endif
-endif
-
-
 LOCAL_MODULE    := libjmagick-7
 LOCAL_CFLAGS += -DIMAGEMAGICK_HEADER_STYLE_7 -fopenmp
 

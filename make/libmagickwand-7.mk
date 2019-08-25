@@ -43,14 +43,16 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickWand/wandcli.c \
     $(IMAGE_MAGICK)/MagickWand/wand-view.c \
 
-ifeq ($(STATIC_BUILD),true)
-    LOCAL_STATIC_LIBRARIES := \
-        libmagickcore-7
-        
-    include $(BUILD_STATIC_LIBRARY)
-else
-    LOCAL_SHARED_LIBRARIES := \
-        libmagickcore-7
-        
-    include $(BUILD_SHARED_LIBRARY)
+ifeq ($(BUILD_MAGICKWAND),true)
+    ifeq ($(STATIC_BUILD),true)
+        LOCAL_STATIC_LIBRARIES := \
+            libmagickcore-7
+            
+        include $(BUILD_STATIC_LIBRARY)
+    else
+        LOCAL_SHARED_LIBRARIES := \
+            libmagickcore-7
+            
+        include $(BUILD_SHARED_LIBRARY)
+    endif
 endif

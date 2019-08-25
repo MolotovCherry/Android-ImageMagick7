@@ -52,6 +52,31 @@ LZMA_LIB_PATH                   := $(LOCAL_PATH)/xz-5.2.4
 BZLIB_LIB_PATH                  := $(LOCAL_PATH)/bzip-1.0.8
 LCMS_LIB_PATH                   := $(LOCAL_PATH)/liblcms2-2.9
 
+
+#-------------------------------------------------------------
+# Force enable shared library building with jmagick
+ifeq ($(JMAGICK_ENABLED),true)
+    ifeq ($(STATIC_BUILD),true)
+        $(info [ JMagick build enabled: Force enabling shared library build ])
+        STATIC_BUILD := false
+    endif
+    
+    ifeq ($(BUILD_MAGICKWAND),false)
+        $(info [ Force enabling MagickWand build - jmagick lib and magick binary require the MagickWand API ])
+        $(info )
+        BUILD_MAGICKWAND := true
+    endif
+endif
+
+# Force enable magickwand build if building magick bin
+ifeq ($(BUILD_MAGICK_BIN),true)
+    ifeq ($(BUILD_MAGICKWAND),false)
+        $(info [ Force enabling MagickWand build - jmagick lib and magick binary require the MagickWand API ])
+        $(info )
+        BUILD_MAGICKWAND := true
+    endif
+endif
+
 #-------------------------------------------------------------
 # Include all modules
 #-------------------------------------------------------------
