@@ -29,7 +29,7 @@ JNIEXPORT void JNICALL Java_magick_Magick_setICUDataDir
     // u_setDataDirectory(const char *directory);
 	dir = (const char *) (*env)->GetStringUTFChars(env, _dir, 0);
 	
-	LOG2("setICUDataDir: setting ICU data directory to %s\n", dir);
+	LOG2("setICUDataDir(): setting Android ICU data directory to %s\n", dir);
 	u_setDataDirectory(dir);
     (*env)->ReleaseStringUTFChars(env, _dir, dir);
 }
@@ -40,7 +40,7 @@ JNIEXPORT void JNICALL Java_magick_Magick_setICUDataDir
 JNIEXPORT void JNICALL Java_magick_Magick_setICUDataDir
   (JNIEnv *env, jobject self, jstring _dir)
 {
-	LOG("setICUDataDir: This is a NO-OP - ICU support is not compiled in\n");
+	LOG("setICUDataDir(): This is a NO-OP - ICU support is not compiled in\n");
 }
 
 #endif
