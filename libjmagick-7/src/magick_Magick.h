@@ -17,6 +17,14 @@ JNIEXPORT void JNICALL Java_magick_Magick_init
 
 /*
  * Class:     magick_Magick
+ * Method:    terminus
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_magick_Magick_terminus
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     magick_Magick
  * Method:    parseImageGeometry
  * Signature: (Ljava/lang/String;Lfakeawt/Rectangle;)I
  */

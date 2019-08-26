@@ -68,6 +68,11 @@ public class Magick {
 
 
     /**
+     * Terminates the ImageMagic system
+     */
+    public static native void terminus();
+
+    /**
      * Parses a geometry specification and returns the
      * width, height, x, and y values in the rectangle.
      * It also returns flags that indicates which of the
