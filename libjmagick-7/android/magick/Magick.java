@@ -22,7 +22,8 @@ public class Magick {
             System.loadLibrary("jmagick-7");
         }
         catch (UnsatisfiedLinkError e) {
-            Log.v(TAG, "Failed to load jmagick-7 library");
+            Log.v(TAG, e.toString());
+            throw e;
         }
     }
 
