@@ -1367,6 +1367,14 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_getImageAlphaChannel
 JNIEXPORT jboolean JNICALL Java_magick_MagickImage_setImageAlphaChannel
   (JNIEnv *, jobject, jint);
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    shaveImage
+ * Signature: (II)Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_shaveImage
+  (JNIEnv *, jobject, jint, jint);
+
 #ifdef __cplusplus
 }
 #endif

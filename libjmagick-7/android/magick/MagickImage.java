@@ -2249,4 +2249,7 @@ public class MagickImage extends Magick {
 
     public native boolean setImageAlphaChannel(int alphaChannelOption)
       throws MagickException;
+      
+    public native MagickImage shaveImage(int column, int row)
+      throws MagickException;
 }

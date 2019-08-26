@@ -6194,3 +6194,53 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_deconstructImages
 
     return newObj;
 }
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    shaveImage
+ * Signature: (II)Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_shaveImage
+  (JNIEnv *env, jobject self, jint columns, jint rows) {
+    Image *image = NULL, *shavedImage = NULL;
+    jobject newObj;
+    ExceptionInfo *exception;
+
+    RectangleInfo
+        shave_info;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+        throwMagickException(env, "Cannot retrieve image handle");
+        return NULL;
+    }
+
+    exception=AcquireExceptionInfo();
+
+    shave_info.width = (const size_t) columns;
+    shave_info.height = (const size_t) rows;
+    shave_info.x = 0;
+    shave_info.y = 0;
+
+    shavedImage = ShaveImage(image, &shave_info, exception);
+
+    if (shavedImage == NULL) {
+        throwMagickApiException(env, "Cannot shave image", exception);
+        DestroyExceptionInfo(exception);
+        return NULL;
+    }
+    DestroyExceptionInfo(exception);
+
+    newObj = newImageObject(env, shavedImage);
+    if (newObj == NULL) {
+#if MagickLibVersion < 0x700
+        DestroyImages(shavedImage);
+#else
+        DestroyImageList(shavedImage);
+#endif
+        throwMagickException(env, "Unable to create shaved image");
+        return NULL;
+    }
+
+    return newObj;
+  }

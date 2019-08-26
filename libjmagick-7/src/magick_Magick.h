@@ -47,6 +47,14 @@ JNIEXPORT void JNICALL Java_magick_Magick_setCacheDir
 JNIEXPORT void JNICALL Java_magick_Magick_setAppConfigDataDir
   (JNIEnv *, jclass, jstring);
 
+/*
+ * Class:     magick_Magick
+ * Method:    setICUDataDir
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_magick_Magick_setICUDataDir
+  (JNIEnv *, jclass, jstring);
+
 #ifdef __cplusplus
 }
 #endif
