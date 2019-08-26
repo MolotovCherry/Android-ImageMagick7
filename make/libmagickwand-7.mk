@@ -43,6 +43,17 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickWand/wandcli.c \
     $(IMAGE_MAGICK)/MagickWand/wand-view.c \
 
+
+# compiling with openCL support
+ifeq ($(OPENCL_BUILD),true)
+    LOCAL_C_INCLUDES += \
+        $(OPENCL_INCLUDE_PATH)
+    LOCAL_CFLAGS += \
+        -DMAGICKCORE_HAVE_CL_CL_H=1 \
+        -DMAGICKCORE__OPENCL=1
+    LOCAL_SHARED_LIBRARIES += libopencl
+endif
+
 ifeq ($(BUILD_MAGICKWAND),true)
     ifeq ($(STATIC_BUILD),true)
         LOCAL_STATIC_LIBRARIES := \

@@ -24,6 +24,11 @@ LOCAL_PATH                      := $(call my-dir)
 
 MAKE_PATH                       := $(LOCAL_PATH)/make
 
+OPENCL_PATH                     := $(LOCAL_PATH)/libopencl
+OPENCL_LIB_PATH                 := $(OPENCL_PATH)/qualcomm/lib
+OPENCL_INCLUDE_PATH             := $(OPENCL_PATH)/qualcomm/include
+
+LTDL_LIB_PATH                   := $(LOCAL_PATH)/libltdl-2.4.6
 
 JMAGICK_DIR_PATH                := $(LOCAL_PATH)/libjmagick-7
 JMAGICK_LIB_PATH                := $(JMAGICK_DIR_PATH)/src
@@ -52,34 +57,15 @@ LZMA_LIB_PATH                   := $(LOCAL_PATH)/xz-5.2.4
 BZLIB_LIB_PATH                  := $(LOCAL_PATH)/bzip-1.0.8
 LCMS_LIB_PATH                   := $(LOCAL_PATH)/liblcms2-2.9
 
-
-#-------------------------------------------------------------
-# Force enable shared library building with jmagick
-ifeq ($(JMAGICK_ENABLED),true)
-    ifeq ($(STATIC_BUILD),true)
-        $(info [ JMagick build enabled: Force enabling shared library build ])
-        STATIC_BUILD := false
-    endif
-    
-    ifeq ($(BUILD_MAGICKWAND),false)
-        $(info [ Force enabling MagickWand build - jmagick lib and magick binary require the MagickWand API ])
-        $(info )
-        BUILD_MAGICKWAND := true
-    endif
-endif
-
-# Force enable magickwand build if building magick bin
-ifeq ($(BUILD_MAGICK_BIN),true)
-    ifeq ($(BUILD_MAGICKWAND),false)
-        $(info [ Force enabling MagickWand build - jmagick lib and magick binary require the MagickWand API ])
-        $(info )
-        BUILD_MAGICKWAND := true
-    endif
-endif
-
 #-------------------------------------------------------------
 # Include all modules
 #-------------------------------------------------------------
+
+# libltdl
+include $(MAKE_PATH)/libltdl.mk
+
+# libopencl
+include $(MAKE_PATH)/libopencl.mk
 
 # libjmagick-7
 include $(MAKE_PATH)/libjmagick-7.mk

@@ -32,6 +32,12 @@ else
         libmagickwand-7
 endif
 
+# compiling with openCL support
+ifeq ($(OPENCL_BUILD),true)
+    # bunch of undefined errors without this..
+    LOCAL_LDLIBS += -fuse-ld=gold
+endif
+
 ifeq ($(BUILD_MAGICK_BIN),true)
     include $(BUILD_EXECUTABLE)
 endif

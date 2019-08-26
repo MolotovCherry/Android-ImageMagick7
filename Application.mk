@@ -38,20 +38,17 @@ NDK_TOOLCHAIN_VERSION := clang
 # A future NDK release will remove the other options.
 APP_STL := c++_shared
 
-APP_CFLAGS += \
-    -DMAGICKCORE_HDRI_ENABLE=1 \
-    -DMAGICKCORE_QUANTUM_DEPTH=16 \
-    -O3 \
-    -fopenmp
+APP_CFLAGS   += -O3
 
-APP_CPPFLAGS += \
-    -DMAGICKCORE_HDRI_ENABLE=1 \
-    -DMAGICKCORE_QUANTUM_DEPTH=16 \
-    -O3 \
-    -fopenmp
+APP_CPPFLAGS += -O3
 
-APP_LDFLAGS += \
-    -fopenmp
+
+#------------------------------------------
+# Magick options
+
+HDRI_ENABLE   := true
+# 8, 16, 32
+QUANTUM_DEPTH := 16
 
 
 #------------------------------------------
@@ -69,6 +66,16 @@ STATIC_BUILD     := true
 # magick bin requires magick wand API
 BUILD_MAGICK_BIN := true
 BUILD_MAGICKWAND := true
+
+
+#------------------------------------------
+# Types of builds available. OpenMP, OpenCL, or neither
+# Neither will do a vanilla build without either feature
+
+# openCL build requires special setup. Check the libopencl
+# directory for more information
+OPENCL_BUILD     := false
+OPENMP_BUILD     := true
 
 
 #------------------------------------------
@@ -111,3 +118,7 @@ LIBLCMS2_ENABLED      := true
 # fix long windows paths causing build to fail (too many sources)
 LOCAL_SHORT_COMMANDS := true
 APP_SHORT_COMMANDS := true
+
+#------------------------------------------
+LOCAL_PATH := $(call my-dir)
+include $(LOCAL_PATH)/make/postconfig.mk

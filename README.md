@@ -6,7 +6,7 @@ It can be configured to both build as a binary (with shared libaries or statical
 
 It comes compiled with the following features:
 
-- OpenMP(3.1)
+- OpenMP(3.1) / OpenCL (Qualcomm)
 - HDRI support
 - Q16 Quantum depth
 - Cipher

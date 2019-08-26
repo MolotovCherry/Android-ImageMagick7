@@ -1,9 +1,6 @@
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libmagickcore-7
-#LOCAL_CFLAGS += -fopenmp
-# ignored in static library builds
-#LOCAL_LDFLAGS += -fopenmp
 
 # prefer arm over thumb mode for performance gains
 LOCAL_ARM_MODE := arm
@@ -11,11 +8,11 @@ LOCAL_ARM_MODE := arm
 
 ifeq ($(JMAGICK_ENABLED),true)
     # patch includes
-    LOCAL_C_INCLUDES := \
+    LOCAL_C_INCLUDES += \
         $(IMAGE_MAGICK_PATCH_INCLUDE_PATH)
 
     # jmagick c patches
-    LOCAL_SRC_FILES := \
+    LOCAL_SRC_FILES += \
         $(IMAGE_MAGICK_PATCH_PATH)/cache.c \
         $(IMAGE_MAGICK_PATCH_PATH)/configure.c \
         $(IMAGE_MAGICK_PATCH_PATH)/exception.c \
@@ -31,7 +28,7 @@ ifeq ($(JMAGICK_ENABLED),true)
     $(info )
 else
     # vanilla imagemagick c files
-    LOCAL_SRC_FILES := \
+    LOCAL_SRC_FILES += \
         $(IMAGE_MAGICK)/MagickCore/cache.c \
         $(IMAGE_MAGICK)/MagickCore/configure.c \
         $(IMAGE_MAGICK)/MagickCore/exception.c \
@@ -304,6 +301,20 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/xml-tree.c \
     $(IMAGE_MAGICK)/MagickCore/xwindow.c \
 
+
+# compiling with openCL support
+ifeq ($(OPENCL_BUILD),true)
+    LOCAL_C_INCLUDES += \
+        $(OPENCL_INCLUDE_PATH) \
+        $(LTDL_LIB_PATH) \
+        $(LTDL_LIB_PATH)/libltdl
+    LOCAL_CFLAGS += \
+        -DMAGICKCORE_HAVE_CL_CL_H=1 \
+        -DMAGICKCORE__OPENCL=1 \
+        -DMAGICKCORE_LTDL_DELEGATE=1
+    LOCAL_SHARED_LIBRARIES += libopencl
+    LOCAL_STATIC_LIBRARIES += libltdl
+endif
 
 ifeq ($(LIBZLIB_ENABLED),true)
     LOCAL_CFLAGS += -DMAGICKCORE_ZLIB_DELEGATE=1
