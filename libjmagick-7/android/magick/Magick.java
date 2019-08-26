@@ -1,6 +1,8 @@
 package magick;
 
 
+import android.util.Log;
+
 import fakeawt.Rectangle;
 
 
@@ -16,33 +18,12 @@ public class Magick {
     final private static String TAG = "Magick";
 
     static {
-        /*String bprop = System.getProperty("jmagick.usingbundledlib");
-        if (!"yes".equalsIgnoreCase(bprop)) {
-            String clprop = System.getProperty("jmagick.systemclassloader");
-            if (clprop == null || clprop.equalsIgnoreCase("yes")) {
-                try {
-                    Magick.class.getClassLoader() // previously: ClassLoader.getSystemClassLoader() - see https://github.com/techblue/jmagick/issues/49
-                        .loadClass("magick.MagickLoader").newInstance();
-                }
-                catch(ClassNotFoundException e) {
-                    throw new RuntimeException("Can't load MagickLoader " +
-                                               "(class not found)");
-                }
-                catch(IllegalAccessException e) {
-                    throw new RuntimeException("Access to SystemClassLoader "+
-                                               "denied (IllegalAccessException)");
-                }
-                catch(InstantiationException e) {
-                    throw new RuntimeException("Can't instantiate MagicLoader " +
-                                               "(InstantiationException)");
-                }
-            }
-            else {
-                System.loadLibrary("JMagick");
-            }
-        }*/
-
-        System.loadLibrary("jmagick-7");
+        try {
+            System.loadLibrary("jmagick-7");
+        }
+        catch (UnsatisfiedLinkError e) {
+            Log.v(TAG, "Failed to load jmagick-7 library");
+        }
     }
 
     public static void initialize(String configDir, String cacheDir, String ICUDataDir) {
