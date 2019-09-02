@@ -181,6 +181,8 @@ static char *g_pszCacheDir = NULL;
 MagickExport void SetCacheDir(char *szCacheDir)
 {
 	LOG2("SetCacheDir: %s", szCacheDir);
+	if (g_pszCacheDir != (char *) NULL)
+        g_pszCacheDir=DestroyString(g_pszCacheDir);
 	g_pszCacheDir = ConstantString(szCacheDir);
 }
 ////////////////////////////////////////////////////////////////////////////////
