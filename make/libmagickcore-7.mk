@@ -297,6 +297,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/utility.c \
     $(IMAGE_MAGICK)/MagickCore/version.c \
     $(IMAGE_MAGICK)/MagickCore/vision.c \
+    $(IMAGE_MAGICK)/MagickCore/vms.c \
     $(IMAGE_MAGICK)/MagickCore/widget.c \
     $(IMAGE_MAGICK)/MagickCore/xml-tree.c \
     $(IMAGE_MAGICK)/MagickCore/xwindow.c \
