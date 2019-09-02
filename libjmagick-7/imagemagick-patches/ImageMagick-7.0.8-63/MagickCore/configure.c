@@ -621,8 +621,10 @@ static char *g_pszAppConfigDataDir = NULL;
 
 MagickExport void SetAppConfigDataDir(char *szAppConfigDataDir)
 {
-	LOG2("SetAppConfigDataDir():  Added Android config data dir:\n%s", szAppConfigDataDir);
-	g_pszAppConfigDataDir = ConstantString(szAppConfigDataDir);
+    LOG2("SetAppConfigDataDir():  Added Android config data dir:\n%s", szAppConfigDataDir);
+    if (g_pszAppConfigDataDir != (char *) NULL)
+        g_pszAppConfigDataDir=DestroyString(g_pszAppConfigDataDir);
+    g_pszAppConfigDataDir = ConstantString(szAppConfigDataDir);
 }
 ////////////////////////////////////////////////////////////////////////////////
 

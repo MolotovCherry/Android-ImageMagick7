@@ -180,8 +180,10 @@ static char *g_pszCacheDir = NULL;
 
 MagickExport void SetCacheDir(char *szCacheDir)
 {
-	LOG2("SetCacheDir: %s", szCacheDir);
-	g_pszCacheDir = ConstantString(szCacheDir);
+    LOG2("SetCacheDir: %s", szCacheDir);
+    if (g_pszCacheDir != (char *) NULL)
+        g_pszCacheDir=DestroyString(g_pszCacheDir);
+    g_pszCacheDir = ConstantString(szCacheDir);
 }
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -516,14 +518,14 @@ MagickExport MagickBooleanType GetPathTemplate(char *path)
   // First check if native cache directory is set:
   directory = g_pszCacheDir;
   if(directory != (char *) NULL){
-	  LOG2("Native cache path found: %s", directory);
+      LOG2("Native cache path found: %s", directory);
   }
   /////////////////////////////////////////////////////
   if(directory == (char *) NULL){
-	  exception=AcquireExceptionInfo();
-	  directory=(char *) GetImageRegistry(StringRegistryType,"temporary-path",
-			  exception);
-	  exception=DestroyExceptionInfo(exception);
+      exception=AcquireExceptionInfo();
+      directory=(char *) GetImageRegistry(StringRegistryType,"temporary-path",
+              exception);
+      exception=DestroyExceptionInfo(exception);
   }
     
   /*
