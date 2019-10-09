@@ -1,0 +1,1 @@
+Put all your jni source code to compile in here. Android.mk, etc.

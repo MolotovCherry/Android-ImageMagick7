@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuremap [
+  <!ELEMENT configuremap (configure)+>
+  <!ATTLIST configuremap xmlns CDATA #FIXED ''>
+  <!ELEMENT configure EMPTY>
+  <!ATTLIST configure xmlns CDATA #FIXED '' name NMTOKEN #REQUIRED
+    value CDATA #REQUIRED>
+]>
+<!--
+  ImageMagick build configuration.
+-->
+<configuremap>
+  <configure name="CC" value="aarch64-linux-android-clang"/>
+  <configure name="CFLAGS" value="-ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/ImageMagick-7.0.8-60/ -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/ImageMagick-7.0.8-60/MagickCore -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/ImageMagick-7.0.8-60/MagickWand -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libpng-1.6.37/ -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libjpeg-turbo-2.0.2/ -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libjpeg-turbo-2.0.2/ -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libwebp-1.0.3/src -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libwebp-1.0.3/ -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libwebp-1.0.3/src -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libwebp-1.0.3/ -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libwebp-1.0.3/src -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/libwebp-1.0.3/ -ID:/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni -DMAGICKCORE_HDRI_ENABLE=1 -DMAGICKCORE_QUANTUM_DEPTH=16 -fopenmp  -DANDROID  -nostdinc++ -Wa,--noexecstack -Wformat -Werror=format-security"/>
+  <configure name="CODER_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/etc/ImageMagick-7/"/>
+  <configure name="CONFIGURE_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/etc/ImageMagick-7/"/>
+  <configure name="CONFIGURE" value=""/>
+  <configure name="COPYRIGHT" value="Copyright (C) 1999-2019 ImageMagick Studio LLC"/>
+  <configure name="CPPFLAGS" value="-I/data/data/com.cherryleafroad.stickerconverter/files/usr/include/ImageMagick-7"/>
+  <configure name="CXXFLAGS" value=" -Oz -fstack-protector-strong -pthread"/>
+  <configure name="CXX" value="aarch64-linux-android-clang++"/>
+  <configure name="DEFS" value="-DHAVE_CONFIG_H"/>
+  <configure name="DELEGATES" value="freetype jng jpeg png tiff webp zlib"/>
+  <configure name="DISTCHECK_CONFIG_FLAGS" value=""/>
+  <configure name="DOCUMENTATION_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/share/doc/ImageMagick-7"/>
+  <configure name="EXEC-PREFIX" value="/data/data/com.cherryleafroad.stickerconverter/files/usr"/>
+  <configure name="EXECUTABLE_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/bin/arm64-v8a"/>
+  <configure name="FEATURES" value="Cipher DPC HDRI OpenMP(3.1)"/>
+  <configure name="FILTER_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/lib/ImageMagick-7.0.8/modules-Q16HDRI/filters"/>
+  <configure name="GIT_REVISION" value="15938:90145fa69:20190727" />
+  <configure name="HOST" value="aarch64-unknown-linux-android"/>
+  <configure name="INCLUDE_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/include/ImageMagick-7"/>
+  <configure name="LDFLAGS" value="-L/usr/lib -llog -lz -lc -lm"/>
+  <configure name="LIBRARY_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/lib/ImageMagick-7.0.8"/>
+  <configure name="LIBS" value="-Wl,-rpath-link=D:/Users/roeja/AppData/Local/Android/android-sdk/ndk-bundle/build//../toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/aarch64-linux-android/24 -Wl,-rpath-link=Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/objs-debug/magick/D_/Users/roeja/AndroidStudioProjects/StickerConverter/app/jni/ImageMagick-7.0.8-60/utilities/magick.o -Wl,--whole-archive Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libwebpdecoder_static.a -Wl,--no-whole-archive Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libmagickwand-7.a Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libmagickcore-7.a Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libpngobj.a Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libjpeg-turbo.a Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libtiffobj.a Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libfreetype2.a Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libwebpmux.a Q:/TEMP/StickerConverter/app/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libwebp.a -lgcc -Wl"/>
+  <configure name="LIB_VERSION_NUMBER" value="7,0,8,60"/>
+  <configure name="LIB_VERSION" value="0x708"/>
+  <configure name="NAME" value="ImageMagick"/>
+  <configure name="PCFLAGS" value="-DMAGICKCORE_HDRI_ENABLE=1 -DMAGICKCORE_QUANTUM_DEPTH=16"/>
+  <configure name="PREFIX" value="/data/data/com.cherryleafroad.stickerconverter/files/usr"/>
+  <configure name="QuantumDepth" value="16"/>
+  <configure name="RELEASE_DATE" value="2019-08-06"/>
+  <configure name="SHAREARCH_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/lib/ImageMagick-7.0.8/config-Q16HDRI"/>
+  <configure name="SHARE_PATH" value="/data/data/com.cherryleafroad.stickerconverter/files/usr/share/ImageMagick-7"/>
+  <configure name="TARGET_CPU" value="aarch64"/>
+  <configure name="TARGET_OS" value="linux-android"/>
+  <configure name="TARGET_VENDOR" value="unknown"/>
+  <configure name="VERSION" value="7.0.8"/>
+  <configure name="WEBSITE" value="https://imagemagick.org"/>
+</configuremap>
