@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+            /* For using the binary:::
+            
+            
          String[] files = {
                     "usr", "tmp"
             };
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
             AppInitializer.setExecutableBit(magickPath);
 
-            /* For using the binary:::
+
             
             String[] symlinks = {
                 "animate", "compare", "composite",
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         // initialize app
         // I didn't make these an absolute path, but you NEED TO
         // getFilesDir().getAbsolutePath()
-        AppInitializer.initialize(this, "usr/ImageMagick-7", "usr/icu");
+        AppInitializer.initialize("usr/ImageMagick-7", "tmp", "usr/icu");
 
         int border = 15;
         int kernelArgs = 4;
