@@ -17,7 +17,7 @@
 %                                 July 1999                                   %
 %                                                                             %
 %                                                                             %
-%  Copyright 1999-2019 ImageMagick Studio LLC, a non-profit organization      %
+%  Copyright 1999-2020 ImageMagick Studio LLC, a non-profit organization      %
 %  dedicated to making software imaging solutions freely available.           %
 %                                                                             %
 %  You may not use this file except in compliance with the License.  You may  %
@@ -1760,10 +1760,9 @@ static Cache GetImagePixelCache(Image *image,const MagickBooleanType clone,
       /*
         Ensure the image matches the pixel cache morphology.
       */
-      if (image->type != UndefinedType)
-        image->type=UndefinedType;
       if (ValidatePixelCacheMorphology(image) == MagickFalse)
         {
+          image->type=UndefinedType;
           status=OpenPixelCache(image,IOMode,exception);
           cache_info=(CacheInfo *) image->cache;
           if (cache_info->file != -1)
@@ -2137,11 +2136,11 @@ MagickExport MagickBooleanType GetOneVirtualPixelInfo(const Image *image,
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%  GetPixelCacheColorspace() returns the class type of the pixel cache.
+%  GetPixelCacheColorspace() returns the colorspace of the pixel cache.
 %
 %  The format of the GetPixelCacheColorspace() method is:
 %
-%      Colorspace GetPixelCacheColorspace(Cache cache)
+%      Colorspace GetPixelCacheColorspace(const Cache cache)
 %
 %  A description of each parameter follows:
 %
@@ -2407,9 +2406,9 @@ MagickPrivate void GetPixelCacheTileSize(const Image *image,size_t *width,
     (void) LogMagickEvent(TraceEvent,GetMagickModule(),"%s",image->filename);
   cache_info=(CacheInfo *) image->cache;
   assert(cache_info->signature == MagickCoreSignature);
-  *width=2048UL/(cache_info->number_channels*sizeof(Quantum));
+  *width=2048UL/(MagickMax(cache_info->number_channels,1)*sizeof(Quantum));
   if (GetImagePixelCacheType(image) == DiskCache)
-    *width=8192UL/(cache_info->number_channels*sizeof(Quantum));
+    *width=8192UL/(MagickMax(cache_info->number_channels,1)*sizeof(Quantum));
   *height=(*width);
 }
 

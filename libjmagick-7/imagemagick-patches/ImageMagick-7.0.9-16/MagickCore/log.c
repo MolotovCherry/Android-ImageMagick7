@@ -17,7 +17,7 @@
 %                                September 2002                               %
 %                                                                             %
 %                                                                             %
-%  Copyright 1999-2019 ImageMagick Studio LLC, a non-profit organization      %
+%  Copyright 1999-2020 ImageMagick Studio LLC, a non-profit organization      %
 %  dedicated to making software imaging solutions freely available.           %
 %                                                                             %
 %  You may not use this file except in compliance with the License.  You may  %
@@ -50,7 +50,6 @@
 #include "MagickCore/log.h"
 #include "MagickCore/log-private.h"
 #include "MagickCore/memory_.h"
-#include "MagickCore/memory-private.h"
 #include "MagickCore/nt-base-private.h"
 #include "MagickCore/option.h"
 #include "MagickCore/semaphore.h"
@@ -237,16 +236,22 @@ static SemaphoreInfo
 /*
   Forward declarations.
 */
+#if !MAGICKCORE_ZERO_CONFIGURATION_SUPPORT
 static LogHandlerType
   ParseLogHandlers(const char *) magick_attribute((__pure__));
+#endif
 
 static LogInfo
   *GetLogInfo(const char *,ExceptionInfo *);
 
 static MagickBooleanType
-  IsLogCacheInstantiated(ExceptionInfo *) magick_attribute((__pure__)),
+  IsLogCacheInstantiated(ExceptionInfo *) magick_attribute((__pure__));
+
+#if !MAGICKCORE_ZERO_CONFIGURATION_SUPPORT
+static MagickBooleanType
   LoadLogCache(LinkedListInfo *,const char *,const char *,const size_t,
     ExceptionInfo *);
+#endif
 
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -291,7 +296,7 @@ static LinkedListInfo *AcquireLogCache(const char *filename,
   */
   cache=NewLinkedList(0);
   status=MagickTrue;
-#if !defined(MAGICKCORE_ZERO_CONFIGURATION_SUPPORT)
+#if !MAGICKCORE_ZERO_CONFIGURATION_SUPPORT
   {
     const StringInfo
       *option;
@@ -839,6 +844,248 @@ MagickExport MagickBooleanType ListLogInfo(FILE *file,ExceptionInfo *exception)
   return(MagickTrue);
 }
 
+#if !MAGICKCORE_ZERO_CONFIGURATION_SUPPORT
+/*
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%                                                                             %
+%                                                                             %
+%   L o a d L o g C a c h e                                                   %
+%                                                                             %
+%                                                                             %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  LoadLogCache() loads the log configurations which provides a
+%  mapping between log attributes and log name.
+%
+%  The format of the LoadLogCache method is:
+%
+%      MagickBooleanType LoadLogCache(LinkedListInfo *cache,const char *xml,
+%        const char *filename,const size_t depth,ExceptionInfo *exception)
+%
+%  A description of each parameter follows:
+%
+%    o xml:  The log list in XML format.
+%
+%    o filename:  The log list filename.
+%
+%    o depth: depth of <include /> statements.
+%
+%    o exception: return any errors or warnings in this structure.
+%
+*/
+static MagickBooleanType LoadLogCache(LinkedListInfo *cache,const char *xml,
+  const char *filename,const size_t depth,ExceptionInfo *exception)
+{
+  char
+    keyword[MagickPathExtent],
+    *token;
+
+  const char
+    *q;
+
+  LogInfo
+    *log_info = (LogInfo *) NULL;
+
+  MagickStatusType
+    status;
+
+  size_t
+    extent;
+
+  /*
+    Load the log map file.
+  */
+  if (xml == (const char *) NULL)
+    return(MagickFalse);
+  status=MagickTrue;
+  token=AcquireString(xml);
+  extent=strlen(token)+MagickPathExtent;
+  for (q=(const char *) xml; *q != '\0'; )
+  {
+    /*
+      Interpret XML.
+    */
+    (void) GetNextToken(q,&q,extent,token);
+    if (*token == '\0')
+      break;
+    (void) CopyMagickString(keyword,token,MagickPathExtent);
+    if (LocaleNCompare(keyword,"<!DOCTYPE",9) == 0)
+      {
+        /*
+          Doctype element.
+        */
+        while ((LocaleNCompare(q,"]>",2) != 0) && (*q != '\0'))
+          (void) GetNextToken(q,&q,extent,token);
+        continue;
+      }
+    if (LocaleNCompare(keyword,"<!--",4) == 0)
+      {
+        /*
+          Comment element.
+        */
+        while ((LocaleNCompare(q,"->",2) != 0) && (*q != '\0'))
+          (void) GetNextToken(q,&q,extent,token);
+        continue;
+      }
+    if (LocaleCompare(keyword,"<include") == 0)
+      {
+        /*
+          Include element.
+        */
+        while (((*token != '/') && (*(token+1) != '>')) && (*q != '\0'))
+        {
+          (void) CopyMagickString(keyword,token,MagickPathExtent);
+          (void) GetNextToken(q,&q,extent,token);
+          if (*token != '=')
+            continue;
+          (void) GetNextToken(q,&q,extent,token);
+          if (LocaleCompare(keyword,"file") == 0)
+            {
+              if (depth > MagickMaxRecursionDepth)
+                (void) ThrowMagickException(exception,GetMagickModule(),
+                  ConfigureError,"IncludeElementNestedTooDeeply","`%s'",token);
+              else
+                {
+                  char
+                    path[MagickPathExtent],
+                    *file_xml;
+
+                  GetPathComponent(filename,HeadPath,path);
+                  if (*path != '\0')
+                    (void) ConcatenateMagickString(path,DirectorySeparator,
+                      MagickPathExtent);
+                  if (*token == *DirectorySeparator)
+                    (void) CopyMagickString(path,token,MagickPathExtent);
+                  else
+                    (void) ConcatenateMagickString(path,token,MagickPathExtent);
+                  file_xml=FileToXML(path,~0UL);
+                  if (file_xml != (char *) NULL)
+                    {
+                      status&=LoadLogCache(cache,file_xml,path,depth+1,
+                        exception);
+                      file_xml=DestroyString(file_xml);
+                    }
+                }
+            }
+        }
+        continue;
+      }
+    if (LocaleCompare(keyword,"<logmap>") == 0)
+      {
+        /*
+          Allocate memory for the log list.
+        */
+        log_info=(LogInfo *) AcquireCriticalMemory(sizeof(*log_info));
+        (void) memset(log_info,0,sizeof(*log_info));
+        log_info->path=ConstantString(filename);
+        GetTimerInfo((TimerInfo *) &log_info->timer);
+        log_info->signature=MagickCoreSignature;
+        continue;
+      }
+    if (log_info == (LogInfo *) NULL)
+      continue;
+    if (LocaleCompare(keyword,"</logmap>") == 0)
+      {
+        status=AppendValueToLinkedList(cache,log_info);
+        if (status == MagickFalse)
+          (void) ThrowMagickException(exception,GetMagickModule(),
+            ResourceLimitError,"MemoryAllocationFailed","`%s'",filename);
+        log_info=(LogInfo *) NULL;
+        continue;
+      }
+    (void) GetNextToken(q,(const char **) NULL,extent,token);
+    if (*token != '=')
+      continue;
+    (void) GetNextToken(q,&q,extent,token);
+    (void) GetNextToken(q,&q,extent,token);
+    switch (*keyword)
+    {
+      case 'E':
+      case 'e':
+      {
+        if (LocaleCompare((char *) keyword,"events") == 0)
+          {
+            log_info->event_mask=(LogEventType) (log_info->event_mask |
+              ParseCommandOption(MagickLogEventOptions,MagickTrue,token));
+            break;
+          }
+        break;
+      }
+      case 'F':
+      case 'f':
+      {
+        if (LocaleCompare((char *) keyword,"filename") == 0)
+          {
+            if (log_info->filename != (char *) NULL)
+              log_info->filename=(char *)
+                RelinquishMagickMemory(log_info->filename);
+            log_info->filename=ConstantString(token);
+            break;
+          }
+        if (LocaleCompare((char *) keyword,"format") == 0)
+          {
+            if (log_info->format != (char *) NULL)
+              log_info->format=(char *)
+                RelinquishMagickMemory(log_info->format);
+            log_info->format=ConstantString(token);
+            break;
+          }
+        break;
+      }
+      case 'G':
+      case 'g':
+      {
+        if (LocaleCompare((char *) keyword,"generations") == 0)
+          {
+            if (LocaleCompare(token,"unlimited") == 0)
+              {
+                log_info->generations=(~0UL);
+                break;
+              }
+            log_info->generations=StringToUnsignedLong(token);
+            break;
+          }
+        break;
+      }
+      case 'L':
+      case 'l':
+      {
+        if (LocaleCompare((char *) keyword,"limit") == 0)
+          {
+            if (LocaleCompare(token,"unlimited") == 0)
+              {
+                log_info->limit=(~0UL);
+                break;
+              }
+            log_info->limit=StringToUnsignedLong(token);
+            break;
+          }
+        break;
+      }
+      case 'O':
+      case 'o':
+      {
+        if (LocaleCompare((char *) keyword,"output") == 0)
+          {
+            log_info->handler_mask=(LogHandlerType)
+              (log_info->handler_mask | ParseLogHandlers(token));
+            break;
+          }
+        break;
+      }
+      default:
+        break;
+    }
+  }
+  token=DestroyString(token);
+  if (cache == (LinkedListInfo *) NULL)
+    return(MagickFalse);
+  return(status != 0 ? MagickTrue : MagickFalse);
+}
+#endif
+
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -1008,7 +1255,7 @@ static char *TranslateEvent(const char *module,const char *function,
       (void) FormatLocaleString(text,extent,
         "<entry>\n"
         "  <timestamp>%s</timestamp>\n"
-        "  <elapsed-time>%lu:%02lu.%03lu</elapsed-time>\n"
+        "  <elapsed-time>%lu:%02lu.%06lu</elapsed-time>\n"
         "  <user-time>%0.3f</user-time>\n"
         "  <process-id>%.20g</process-id>\n"
         "  <thread-id>%.20g</thread-id>\n"
@@ -1019,7 +1266,7 @@ static char *TranslateEvent(const char *module,const char *function,
         "  <event>%s</event>\n"
         "</entry>",timestamp,(unsigned long) (elapsed_time/60.0),
         (unsigned long) floor(fmod(elapsed_time,60.0)),(unsigned long)
-        (1000.0*(elapsed_time-floor(elapsed_time))+0.5),user_time,
+        (1000000.0*(elapsed_time-floor(elapsed_time))+0.5),user_time,
         (double) getpid(),(double) GetMagickThreadSignature(),module,function,
         (double) line,domain,event);
       return(text);
@@ -1452,255 +1699,16 @@ MagickExport MagickBooleanType LogMagickEvent(const LogEventType type,
   return(MagickTrue);
 #else
   return(MagickFalse);
-#endif 
+#endif
 }
 
+#if !MAGICKCORE_ZERO_CONFIGURATION_SUPPORT
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %                                                                             %
 %                                                                             %
-+   L o a d L o g C a c h e                                                   %
-%                                                                             %
-%                                                                             %
-%                                                                             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%  LoadLogCache() loads the log configurations which provides a
-%  mapping between log attributes and log name.
-%
-%  The format of the LoadLogCache method is:
-%
-%      MagickBooleanType LoadLogCache(LinkedListInfo *cache,const char *xml,
-%        const char *filename,const size_t depth,ExceptionInfo *exception)
-%
-%  A description of each parameter follows:
-%
-%    o xml:  The log list in XML format.
-%
-%    o filename:  The log list filename.
-%
-%    o depth: depth of <include /> statements.
-%
-%    o exception: return any errors or warnings in this structure.
-%
-*/
-static MagickBooleanType LoadLogCache(LinkedListInfo *cache,const char *xml,
-  const char *filename,const size_t depth,ExceptionInfo *exception)
-{
-  char
-    keyword[MagickPathExtent],
-    *token;
-
-  const char
-    *q;
-
-  LogInfo
-    *log_info = (LogInfo *) NULL;
-
-  MagickStatusType
-    status;
-
-  size_t
-    extent;
-
-  /*
-    Load the log map file.
-  */
-  if (xml == (const char *) NULL)
-    return(MagickFalse);
-  status=MagickTrue;
-  token=AcquireString(xml);
-  extent=strlen(token)+MagickPathExtent;
-  for (q=(const char *) xml; *q != '\0'; )
-  {
-    /*
-      Interpret XML.
-    */
-    (void) GetNextToken(q,&q,extent,token);
-    if (*token == '\0')
-      break;
-    (void) CopyMagickString(keyword,token,MagickPathExtent);
-    if (LocaleNCompare(keyword,"<!DOCTYPE",9) == 0)
-      {
-        /*
-          Doctype element.
-        */
-        while ((LocaleNCompare(q,"]>",2) != 0) && (*q != '\0'))
-          (void) GetNextToken(q,&q,extent,token);
-        continue;
-      }
-    if (LocaleNCompare(keyword,"<!--",4) == 0)
-      {
-        /*
-          Comment element.
-        */
-        while ((LocaleNCompare(q,"->",2) != 0) && (*q != '\0'))
-          (void) GetNextToken(q,&q,extent,token);
-        continue;
-      }
-    if (LocaleCompare(keyword,"<include") == 0)
-      {
-        /*
-          Include element.
-        */
-        while (((*token != '/') && (*(token+1) != '>')) && (*q != '\0'))
-        {
-          (void) CopyMagickString(keyword,token,MagickPathExtent);
-          (void) GetNextToken(q,&q,extent,token);
-          if (*token != '=')
-            continue;
-          (void) GetNextToken(q,&q,extent,token);
-          if (LocaleCompare(keyword,"file") == 0)
-            {
-              if (depth > MagickMaxRecursionDepth)
-                (void) ThrowMagickException(exception,GetMagickModule(),
-                  ConfigureError,"IncludeElementNestedTooDeeply","`%s'",token);
-              else
-                {
-                  char
-                    path[MagickPathExtent],
-                    *file_xml;
-
-                  GetPathComponent(filename,HeadPath,path);
-                  if (*path != '\0')
-                    (void) ConcatenateMagickString(path,DirectorySeparator,
-                      MagickPathExtent);
-                  if (*token == *DirectorySeparator)
-                    (void) CopyMagickString(path,token,MagickPathExtent);
-                  else
-                    (void) ConcatenateMagickString(path,token,MagickPathExtent);
-                  file_xml=FileToXML(path,~0UL);
-                  if (file_xml != (char *) NULL)
-                    {
-                      status&=LoadLogCache(cache,file_xml,path,depth+1,
-                        exception);
-                      file_xml=DestroyString(file_xml);
-                    }
-                }
-            }
-        }
-        continue;
-      }
-    if (LocaleCompare(keyword,"<logmap>") == 0)
-      {
-        /*
-          Allocate memory for the log list.
-        */
-        log_info=(LogInfo *) AcquireCriticalMemory(sizeof(*log_info));
-        (void) memset(log_info,0,sizeof(*log_info));
-        log_info->path=ConstantString(filename);
-        GetTimerInfo((TimerInfo *) &log_info->timer);
-        log_info->signature=MagickCoreSignature;
-        continue;
-      }
-    if (log_info == (LogInfo *) NULL)
-      continue;
-    if (LocaleCompare(keyword,"</logmap>") == 0)
-      {
-        status=AppendValueToLinkedList(cache,log_info);
-        if (status == MagickFalse)
-          (void) ThrowMagickException(exception,GetMagickModule(),
-            ResourceLimitError,"MemoryAllocationFailed","`%s'",filename);
-        log_info=(LogInfo *) NULL;
-        continue;
-      }
-    (void) GetNextToken(q,(const char **) NULL,extent,token);
-    if (*token != '=')
-      continue;
-    (void) GetNextToken(q,&q,extent,token);
-    (void) GetNextToken(q,&q,extent,token);
-    switch (*keyword)
-    {
-      case 'E':
-      case 'e':
-      {
-        if (LocaleCompare((char *) keyword,"events") == 0)
-          {
-            log_info->event_mask=(LogEventType) (log_info->event_mask |
-              ParseCommandOption(MagickLogEventOptions,MagickTrue,token));
-            break;
-          }
-        break;
-      }
-      case 'F':
-      case 'f':
-      {
-        if (LocaleCompare((char *) keyword,"filename") == 0)
-          {
-            if (log_info->filename != (char *) NULL)
-              log_info->filename=(char *)
-                RelinquishMagickMemory(log_info->filename);
-            log_info->filename=ConstantString(token);
-            break;
-          }
-        if (LocaleCompare((char *) keyword,"format") == 0)
-          {
-            if (log_info->format != (char *) NULL)
-              log_info->format=(char *)
-                RelinquishMagickMemory(log_info->format);
-            log_info->format=ConstantString(token);
-            break;
-          }
-        break;
-      }
-      case 'G':
-      case 'g':
-      {
-        if (LocaleCompare((char *) keyword,"generations") == 0)
-          {
-            if (LocaleCompare(token,"unlimited") == 0)
-              {
-                log_info->generations=(~0UL);
-                break;
-              }
-            log_info->generations=StringToUnsignedLong(token);
-            break;
-          }
-        break;
-      }
-      case 'L':
-      case 'l':
-      {
-        if (LocaleCompare((char *) keyword,"limit") == 0)
-          {
-            if (LocaleCompare(token,"unlimited") == 0)
-              {
-                log_info->limit=(~0UL);
-                break;
-              }
-            log_info->limit=StringToUnsignedLong(token);
-            break;
-          }
-        break;
-      }
-      case 'O':
-      case 'o':
-      {
-        if (LocaleCompare((char *) keyword,"output") == 0)
-          {
-            log_info->handler_mask=(LogHandlerType)
-              (log_info->handler_mask | ParseLogHandlers(token));
-            break;
-          }
-        break;
-      }
-      default:
-        break;
-    }
-  }
-  token=DestroyString(token);
-  if (cache == (LinkedListInfo *) NULL)
-    return(MagickFalse);
-  return(status != 0 ? MagickTrue : MagickFalse);
-}
-
-/*
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                             %
-%                                                                             %
-%                                                                             %
-+   P a r s e L o g H a n d l e r s                                           %
+%   P a r s e L o g H a n d l e r s                                           %
 %                                                                             %
 %                                                                             %
 %                                                                             %
@@ -1752,6 +1760,7 @@ static LogHandlerType ParseLogHandlers(const char *handlers)
   }
   return(handler_mask);
 }
+#endif
 
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
