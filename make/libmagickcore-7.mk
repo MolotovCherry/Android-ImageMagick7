@@ -127,6 +127,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/jbig.c \
     $(IMAGE_MAGICK)/coders/jp2.c \
     $(IMAGE_MAGICK)/coders/jpeg.c \
+    $(IMAGE_MAGICK)/coders/jxl.c \
     $(IMAGE_MAGICK)/coders/label.c \
     $(IMAGE_MAGICK)/coders/mac.c \
     $(IMAGE_MAGICK)/coders/magick.c \
@@ -297,6 +298,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/utility.c \
     $(IMAGE_MAGICK)/MagickCore/version.c \
     $(IMAGE_MAGICK)/MagickCore/vision.c \
+    $(IMAGE_MAGICK)/MagickCore/visual-effects.c \
     $(IMAGE_MAGICK)/MagickCore/vms.c \
     $(IMAGE_MAGICK)/MagickCore/widget.c \
     $(IMAGE_MAGICK)/MagickCore/xml-tree.c \

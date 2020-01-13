@@ -1371,6 +1371,11 @@
 #define MAGICKCORE_SIZEOF_UNSIGNED_LONG_LONG 8
 #endif
 
+/* The size of `void *', as computed by sizeof. */
+#ifndef MAGICKCORE_SIZEOF_VOID_P
+#define MAGICKCORE_SIZEOF_VOID_P 8
+#endif
+
 /* The size of `unsigned short', as computed by sizeof. */
 #ifndef MAGICKCORE_SIZEOF_UNSIGNED_SHORT
 #define MAGICKCORE_SIZEOF_UNSIGNED_SHORT 2
