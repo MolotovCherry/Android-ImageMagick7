@@ -232,7 +232,9 @@ endif
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := $(mux_srcs)
+LOCAL_SRC_FILES := \
+    $(mux_srcs) \
+    $(demux_srcs)
 
 LOCAL_CFLAGS := $(WEBP_CFLAGS)
 LOCAL_EXPORT_C_INCLUDES := \
