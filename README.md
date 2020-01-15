@@ -72,6 +72,7 @@ You can test it with earlier versions, but I offer no support for it.
 # FAQ
 
 **What is the recommended way to build/run this?**
+
 Build it with OpenCL support, statically linked, as a binary. HDRI on, quantum depth at 16. Do not enable jmagick support. As far as I am concerned, jmagick is outdated, EVEN though I will keep the patches up to date with the lastest version, and you CAN build it if you desire to. Make sure to use an AsyncTask to run it. Running it on your main thread WILL lock up your main UI.
 
 **Why can't it find `libjmagick-7.so`?**
