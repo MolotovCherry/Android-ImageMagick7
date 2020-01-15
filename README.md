@@ -95,6 +95,9 @@ You'll have to figure that out, but check out the Quick Setup Instructions part 
 
 Create a tmpdir in your assets folder (same level as `usr` folder), and call it `tmp` (or something similar). Point to it using the `TMPDIR` environment variable listed in the documentation.
 
+**It won't build on Linux!!**
+Only Windows is supported by the build system. The make files assume you have Windows. Use Windows. Or, you could also contribute to testing and fixing the makefile code that only supports Windows. If you want to help with Linux build support, then make a issue and I'll tell you where the code is.
+
 **But please!! I don't want to build it. Can you please provide a prebuilt version?**
 
 If you want to help me setup travis ci, or whatever other service can auto build projects, then great. I look forward to your contributions to the project!
