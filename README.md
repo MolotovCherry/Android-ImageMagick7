@@ -95,6 +95,10 @@ You'll have to figure that out, but check out the Quick Setup Instructions part 
 
 Create a tmpdir in your assets folder (same level as `usr` folder), and call it `tmp` (or something similar). Point to it using the `TMPDIR` environment variable listed in the documentation.
 
+**Why do you only support arm64-v8a?**
+
+I didn't have time to test x86, x64, mips, armv7. There are a lot of specific configurations that need to take place such as ssize and so on that are specific to the different architectures. I don't know their required values. I'd also need to overhaul the make system to use different versions of these files in order for it to build properly. *I'd love some contributions to this so we can get more archs working!!*
+
 **It won't build on Linux!!**
 
 Only Windows is supported by the build system. The make files assume you have Windows. Use Windows. Or, you could also contribute to testing and fixing the makefile code that only supports Windows. If you want to help with Linux build support, then make a issue and I'll tell you where the code is.
