@@ -1,0 +1,1 @@
+This is the imagemagick tmp folder. It is required for imagemagick to write temporary files on jobs it's working on. You can delete this text file.
