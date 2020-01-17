@@ -81,7 +81,7 @@ Yes you can. Just go to [Application.mk](https://github.com/cherryleafroad/Andro
 
 ### Why can't it find `libjmagick-7.so`?
 
-I do not build `libjmagick`. The reason is that I consider jmagick to be old, so I do not support it and any problems you encounter trying to use it. It will -probably- work, but you must build it yourself. I repeat, jmagick is not maintained by the author, and is just a bit obsolete, EVEN if it works (I've added many patches to make it work, but I can only do so much. It needs a full rewrite). Secondly, see the "Why am I getting linking errors" entry below.
+I do not build `libjmagick`. The reason is that I consider jmagick to be old, so I do not support it and any problems you encounter trying to use it. It will -probably- work, but you must build it yourself. I repeat, jmagick is not maintained by the author, and is just a bit obsolete, EVEN if it works (I've added many patches to make it work, but I can only do so much. It needs a full rewrite). If you want them to fix all the problems, please consider contributing to [their project](https://github.com/techblue/jmagick). Secondly, see the "Why am I getting linking errors" entry below.
 
 ### Why is the prebuilt version in the releases section / in the source code old?
 
