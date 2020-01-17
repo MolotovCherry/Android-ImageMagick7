@@ -36,7 +36,7 @@ Also comes with (**but these not delegates, only support libraries**):
 
 **Currently, only arm64-v8a is supported**
 
-You can test it with earlier versions, but I offer no support for it.
+You can test it with earlier versions, but I offer no support for it. If you're using only the binary, you almost certainly can compile for earlier versions. The API limit pertains mostly to the Java code, however nothing is stopping you from theoterically making it compatible with earlier Android versions too. If you get it working for earlier versions, let me know
 
 - Includes optional jmagick support. It will patch imagemagick c files for Android/jmagick compatibility.
 - Includes jmagick java code and fakeawt for your project
