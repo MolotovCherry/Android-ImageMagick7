@@ -26,14 +26,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-            /* For using the binary:::
+        /* CODE FOR SETTING UP BINARY USAGE
+           Obviously you will need to check whether you already set this up or not
+           You don't want to run this every time you start your app
+           You can use Android SharedPrefs to keep track of it
             
             
-         String[] files = {
+            String[] files = {
                     "usr", "tmp"
             };
 
-            // check for and copy assets
+            // check for and copy over assets
             AppInitializer.copyAssets(this, files);
 
             // make sure executable bit is set
@@ -44,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
             AppInitializer.setExecutableBit(magickPath);
 
 
-            
+            // create magick symlinks. Used for different functions in magick
+            // check imagemagick docs for more info
             String[] symlinks = {
                 "animate", "compare", "composite",
                 "conjure", "convert", "display",
@@ -75,15 +79,19 @@ public class MainActivity extends AppCompatActivity {
                     Toasty.error(this, msgs, Toast.LENGTH_LONG).show();
                 
                 }
+            }
                 
-                Intent intent = getIntent();
-                Uri uri = intent.getParcelableExtra("EXTRA_STREAM");
-                INTENT_ACTION = intent.getAction();
+            // get some uri file stream from an intent, send it to AsyncTask for further processing
+            Intent intent = getIntent();
+            Uri uri = intent.getParcelableExtra("EXTRA_STREAM");
+            INTENT_ACTION = intent.getAction();
 
-                ProcessImageTask processTask = new ProcessImageTask(this);
-                processTask.execute(uri);
-                */
-                
+            ProcessImageTask processTask = new ProcessImageTask(this);
+            processTask.execute(uri);
+            */
+              
+        // FOLLOWING CODE EXAMPLE BELOW IS FOR JMAGICK ONLY. IF YOU DON'T USE JMAGICK, 
+        // USE THE BINARY CODE ABOVE ONLY
         // initialize app
         // I didn't make these an absolute path, but you NEED TO
         // getFilesDir().getAbsolutePath()
@@ -199,10 +207,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Log.v("onCreate","message success");
+        
+    /// END JMAGICK SECTION
     }
     
     
-    /* AsyncTask for using binary
+    /* AsyncTask example code used for executing the binary
+       If you don't run the binary on a separate thread, your UI will freeze
+       Adapt it to your needs
     
         private static class ProcessImageTask extends AsyncTask<Uri, String, String> {
         final String TOAST_LONG  = "tl-";
