@@ -60,7 +60,7 @@ You can test it with earlier versions, but I offer no support for it.
 2. Add environment variables before you run the binary.
 3. Execute binary with args.
 
-- All example code and setup to do this is can be found in the [example android app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android).
+- All example code and setup to do this is can be found in the [example android app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app).
 
 | ENV Variable | Description | Example Value |
 |--|--|--|
@@ -89,15 +89,15 @@ I don't have time to build the library/binary due to its multitude of possible c
 
 ### Why am I getting linking errors?
 
-You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn't know where to find any required libraries. Either that, or you don't have any libraries in your project at all. In the case of jmagick, I do not build jmagick, you will need to build from source to get it. (Also, any other precompiled binaries are *old*, so please build it yourself to get the latest features). Check out the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android) for where to put your libs. Hint: put it in the `libs` folder. And MAKE sure you went through the example android app and are using the supporting gradle / java code. It's all there.
+You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn't know where to find any required libraries. Either that, or you don't have any libraries in your project at all. In the case of jmagick, I do not build jmagick, you will need to build from source to get it. (Also, any other precompiled binaries are *old*, so please build it yourself to get the latest features). Check out the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app) for where to put your libs. Hint: put it in the `libs` folder. And MAKE sure you went through the example android app and are using the supporting gradle / java code. It's all there.
 
 ### Why won't the binary execute properly?
 
-Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. See the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android). Everything you need is here.
+Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. See the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app). Everything you need is here.
 
 ### How to build using NDK..? I'm so confused
 
-You'll have to figure that out, but check out the Quick Setup Instructions part above. I detail it all there. Supporting code, gradle files for building, is all there in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android).
+You'll have to figure that out, but check out the Quick Setup Instructions part above. I detail it all there. Supporting code, gradle files for building, is all there in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app).
 
 ### I'm getting some errors about not being able to write TMP files..?
 
