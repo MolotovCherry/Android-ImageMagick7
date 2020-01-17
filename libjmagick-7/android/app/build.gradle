@@ -47,6 +47,7 @@ android {
     // ndk build is great, but the files aren't getting put in the lib folders....
     // DO NOT, I REPEAT, DO NOT USE NDK BUILD IN GRADLE -> THIS IS COMMENTED FOR A REASON
     // IT WILL COMPILE EVERY TIME YOU BUILD YOUR APK AND WASTE CPU / DISK SPACE
+    // USE build-release.bat ON THE COMMANDLINE WHENEVER YOU NEED TO NDK BUILD
     // If you know a solution to this problem, let me know
     /*ndk {
         abiFilters 'arm64-v8a'//, 'armeabi-v7a'
