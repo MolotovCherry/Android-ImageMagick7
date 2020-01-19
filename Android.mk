@@ -33,7 +33,7 @@ LTDL_LIB_PATH                   := $(LOCAL_PATH)/libltdl-2.4.6
 JMAGICK_DIR_PATH                := $(LOCAL_PATH)/libjmagick-7
 JMAGICK_LIB_PATH                := $(JMAGICK_DIR_PATH)/src
 
-IMAGE_MAGICK_BASEDIR            := ImageMagick-7.0.9-16
+IMAGE_MAGICK_BASEDIR            := ImageMagick-7.0.9-17
 IMAGE_MAGICK_PATCH_PATH         := $(JMAGICK_DIR_PATH)/imagemagick-patches/$(IMAGE_MAGICK_BASEDIR)/MagickCore
 IMAGE_MAGICK_PATCH_INCLUDE_PATH := $(JMAGICK_DIR_PATH)/imagemagick-patches/$(IMAGE_MAGICK_BASEDIR)
 IMAGE_MAGICK                    := $(LOCAL_PATH)/$(IMAGE_MAGICK_BASEDIR)
