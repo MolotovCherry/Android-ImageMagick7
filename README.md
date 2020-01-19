@@ -36,7 +36,7 @@ Also comes with (**but these not delegates, only support libraries**):
 
 **Currently, only arm64-v8a is supported**
 
-You can test it with earlier versions, but I offer no support for it.
+You can test it with earlier versions, but I offer no support for it. If you're using only the binary, you almost certainly can compile for earlier versions. The API limit pertains mostly to the Java code, however nothing is stopping you from theoterically making it compatible with earlier Android versions too. If you get it working for earlier versions, let me know
 
 - Includes optional jmagick support. It will patch imagemagick c files for Android/jmagick compatibility.
 - Includes jmagick java code and fakeawt for your project
@@ -44,8 +44,8 @@ You can test it with earlier versions, but I offer no support for it.
 
 # Quick Setup Instructions
 
-- Android app setup code, including gradle files, assets, binary / jmagick interface java code, etc, can all be found under the [`libjmagick-7/android`](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android) folder.
-- In order to understand how to build the project, please [install](https://developer.android.com/studio/projects/install-ndk) and [setup NDK](https://developer.android.com/ndk/guides) as per Google's instructions. Make sure you read how NDK works as it is important to getting your build successfully compiling. The required gradle files for building are under [`libjmagick-7/android`](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android).
+- Android app setup code, including gradle files, assets, binary / jmagick interface java code, etc, can all be found under the [app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app). This is not a 100% complete Android app, but rather it contains all the code examples needed for you to adapt it to your own project. Just copy / rewrite / delete code you want / don't need and combine it with your Android Studio project.
+- In order to understand how to build the project, please [install](https://developer.android.com/studio/projects/install-ndk) and [setup NDK](https://developer.android.com/ndk/guides) as per Google's instructions. Make sure you read how NDK works as it is important to getting your build successfully compiling. The required gradle files for building inside the [app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app).
 - Place your libs under the [libs/arch](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app/libs/arm64-v8a) folder. It's already setup to be noticed when your APK is built.
 - Edit your build configuration under [`Application.mk`](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) to your liking, then (next step below)
 - Use your CMD in the root and execute `build-release.bat`. Sorry, the build only currently works on Windows because I didn't have time to test the make files under Linux. Contributions are welcome.
@@ -60,7 +60,7 @@ You can test it with earlier versions, but I offer no support for it.
 2. Add environment variables before you run the binary.
 3. Execute binary with args.
 
-- All example code and setup to do this is can be found in the [example android app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android).
+- All example code and setup to do this is can be found in the [example android app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app).
 
 | ENV Variable | Description | Example Value |
 |--|--|--|
@@ -71,38 +71,46 @@ You can test it with earlier versions, but I offer no support for it.
 
 # FAQ
 
-**Why can't it find `libjmagick-7.so`?**
+### What is the recommended way to build/run this?
 
-I do not build `libjmagick`. The reason is that I consider jmagick to be old, so I do not support it and any problems you encounter trying to use it. It will -probably- work, but you must build it yourself. I repeat, jmagick is not maintained by the author, and is just a bit obsolete, EVEN if it works (I've added many patches to make it work, but I can only do so much. It needs a full rewrite). Secondly, see the "Why am I getting linking errors" entry below.
+Build it with OpenCL support, statically linked, as a binary. HDRI on, quantum depth at 16. Do not enable jmagick support. As far as I am concerned, jmagick is outdated, EVEN though I will keep the patches up to date with the lastest version, and you CAN build it if you desire to. Make sure to use an AsyncTask to run it. Running it on your main thread WILL lock up your main UI.
 
-**Why is the prebuilt version in the releases section / in the source code old?**
+### Can I customize the build features?
+
+Yes you can. Just go to [Application.mk](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) in the root directory and alter the variables inside to your desired configuration. Build configuration has been made very simple! Piece of cake!
+
+### Why can't it find `libjmagick-7.so`?
+
+I do not build `libjmagick`. The reason is that I consider jmagick to be old, so I do not support it and any problems you encounter trying to use it. It will -probably- work, but you must build it yourself. I repeat, jmagick is not maintained by the author, and is just a bit obsolete, EVEN if it works (I've added many patches to make it work, but I can only do so much. It needs a full rewrite). If you want them to fix all the problems, please consider contributing to [their project](https://github.com/techblue/jmagick). Secondly, see the "Why am I getting linking errors" entry below.
+
+### Why is the prebuilt version in the releases section / in the source code old?
 
 I don't have time to build the library/binary due to its multitude of possible configurations. DEBUG vs RELEASE, jmagick vs no jmagick, openCL vs openMP. Please build it yourself. I've provided the proper supporting gradle files for NDK, links to guides for setup, project structure, and source code to do so.
 
-**Why am I getting linking errors?**
+### Why am I getting linking errors?
 
-You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn't know where to find any required libraries. Either that, or you don't have any libraries in your project at all. In the case of jmagick, I do not build jmagick, you will need to build from source to get it. (Also, any other precompiled binaries are *old*, so please build it yourself to get the latest features). Check out the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android) for where to put your libs. Hint: put it in the `libs` folder. And MAKE sure you went through the example android app and are using the supporting gradle / java code. It's all there.
+You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn't know where to find any required libraries. Either that, or you don't have any libraries in your project at all. In the case of jmagick, I do not build jmagick, you will need to build from source to get it. (Also, any other precompiled binaries are *old*, so please build it yourself to get the latest features). Check out the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app) for where to put your libs. Hint: put it in the `libs` folder. And MAKE sure you went through the example android app and are using the supporting gradle / java code. It's all there.
 
-**Why won't the binary execute properly?**
+### Why won't the binary execute properly?
 
-Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. See the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android). Everything you need is here.
+Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. See the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app). Everything you need is here.
 
-**How to build using NDK..? I'm so confused**
+### How to build using NDK..? I'm so confused
 
-You'll have to figure that out, but check out the Quick Setup Instructions part above. I detail it all there. Supporting code, gradle files for building, is all there in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android).
+You'll have to figure that out, but check out the Quick Setup Instructions part above. I detail it all there. Supporting code, gradle files for building, is all there in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app).
 
-**I'm getting some errors about not being able to write TMP files..?**
+### I'm getting some errors about not being able to write TMP files..?
 
 Create a tmpdir in your assets folder (same level as `usr` folder), and call it `tmp` (or something similar). Point to it using the `TMPDIR` environment variable listed in the documentation.
 
-**Why do you only support arm64-v8a?**
+### Why do you only support arm64-v8a?
 
 I didn't have time to test x86, x64, mips, armv7. There are a lot of specific configurations that need to take place such as ssize and so on that are specific to the different architectures. I don't know their required values. I'd also need to overhaul the make system to use different versions of these files in order for it to build properly. *I'd love some contributions to this so we can get more archs working!!*
 
-**It won't build on Linux!!**
+### It won't build on Linux!!
 
 Only Windows is supported by the build system. The make files assume you have Windows. Use Windows. Or, you could also contribute to testing and fixing the makefile code that only supports Windows. If you want to help with Linux build support, then make a issue and I'll tell you where the code is.
 
-**But please!! I don't want to build it. Can you please provide a prebuilt version?**
+### But please!! I don't want to build it. Can you please provide a prebuilt version?
 
 If you want to help me setup travis ci, or whatever other service can auto build projects, then great. I look forward to your contributions to the project!
