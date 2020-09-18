@@ -26,9 +26,10 @@ It comes featured with the following delegates:
  - liblzma
  - liblcms2
 
-Also comes with (**but these not delegates, only support libraries**):
+Also comes with (**but these are not delegates, only support libraries**):
 - libicu4c (libicuuc and libicui18n)
 - libiconv
+- libltdl (required for libOpenCL)
 
 # Android support
 
