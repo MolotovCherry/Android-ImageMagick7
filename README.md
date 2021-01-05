@@ -115,3 +115,8 @@ Only Windows is supported by the build system. The make files assume you have Wi
 ### But please!! I don't want to build it. Can you please provide a prebuilt version?
 
 If you want to help me setup travis ci, or whatever other service can auto build projects, then great. I look forward to your contributions to the project!
+
+### Do you have any examples? / Where are the examples?
+You can see all the example code you need for running jmagic or the binary in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app). It also has an entire sample project setup to get you started quick.
+
+Note: This is not a "copy all the files"-"change nothing"-"run it directly without figuring it out"-solution, but rather an example template to help you get yours right with copyable code examples. This won't work directly out of the box. But it is also generally complete, more than enough to even copy over and fix whatever needs fixing if you wanted to. That being said, I would recommend you copy what needs to be copied over to your project rather than using this example project as the foundation for your app.
