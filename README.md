@@ -120,3 +120,7 @@ If you want to help me setup travis ci, or whatever other service can auto build
 You can see all the example code you need for running jmagic or the binary in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libjmagick-7/android/app). It also has an entire sample project setup to get you started quick.
 
 Note: This is not a "copy all the files"-"change nothing"-"run it directly without figuring it out"-solution, but rather an example template to help you get yours right with copyable code examples. This won't work directly out of the box. But it is also generally complete, more than enough to even copy over and fix whatever needs fixing if you wanted to. That being said, I would recommend you copy what needs to be copied over to your project rather than using this example project as the foundation for your app.
+
+### I did everything correctly and it failed ??
+
+If you are using NDK 22+, this seems to have several incompatibilities. Try the steps in this [issue](https://github.com/cherryleafroad/Android-ImageMagick7/issues/9#issuecomment-748531617), and failing that, it \*should\* work on an earlier NDK version (21 I think). If you find/know the steps to make the build work with NDK 22+, PLEASE send a pull request!!! Thanks!
