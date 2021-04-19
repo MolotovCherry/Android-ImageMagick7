@@ -13,7 +13,7 @@ jobs:
       - uses: nttld/setup-ndk@v1
         with:
           ndk-version: r22b
-      - run: build-release.bat
+      - run: .\build-release.bat
       - uses: actions/upload-artifact@v2
         with:
           name: imagemagick-7-android-staticlib
