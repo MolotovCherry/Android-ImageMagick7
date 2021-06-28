@@ -124,3 +124,6 @@ Note: This is not a "copy all the files"-"change nothing"-"run it directly witho
 ### I did everything correctly and it failed ??
 
 If you are using NDK 22+, this seems to have several incompatibilities. Try the steps in this [issue](https://github.com/cherryleafroad/Android-ImageMagick7/issues/9#issuecomment-748531617), and failing that, it \*should\* work on an earlier NDK version (21 I think). If you find/know the steps to make the build work with NDK 22+, PLEASE send a pull request!!! Thanks!
+
+### jmagick is too old / missing features
+The [official jmagick library](https://github.com/techblue/jmagick) is old, out of date, and largely unmaintained. Considering what a huge work it would be for me to port ALL of imagemagick to java just for Android, I haven't been able to do it (it requires well over 10,000 lines of c code). This is why I suggest to never use jmagick, as any problems you encounter, missing features, will have no support (and you're likely to encounter them).
