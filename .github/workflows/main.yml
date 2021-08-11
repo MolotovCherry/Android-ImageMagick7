@@ -1,0 +1,20 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r22b
+      - run: .\build-release.bat
+      - uses: actions/upload-artifact@v2
+        with:
+          name: imagemagick-7-android-staticlib
+          path: jniLibs

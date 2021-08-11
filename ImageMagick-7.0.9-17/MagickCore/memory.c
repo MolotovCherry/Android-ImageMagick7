@@ -259,7 +259,7 @@ static inline void *AcquireAlignedMemory_STDC(const size_t size)
       errno=ENOMEM;
       return(NULL);
     }
-  return(aligned_alloc(CACHE_LINE_SIZE,extent));
+  void *ptr = NULL; posix_memalign(&ptr,CACHE_LINE_SIZE,extent); return ptr;
 }
 #elif defined(MAGICKCORE_HAVE_POSIX_MEMALIGN)
 #define AcquireAlignedMemory_Actual AcquireAlignedMemory_POSIX
