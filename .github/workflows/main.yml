@@ -1,8 +1,11 @@
-name: Release
+name: Build
 
 on:
   workflow_dispatch:
-    branches: [ master ]
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
 
 jobs:
   build:
@@ -16,5 +19,5 @@ jobs:
       - run: .\build-release.bat
       - uses: actions/upload-artifact@v2
         with:
-          name: imagemagick-7-android-staticlib
+          name: imagemagick-7-android-static
           path: jniLibs
