@@ -13,6 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - uses: nttld/setup-ndk@v1
         with:
           ndk-version: r22b
