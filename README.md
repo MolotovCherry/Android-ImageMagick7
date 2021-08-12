@@ -115,3 +115,11 @@ Only Windows is supported by the build system. The make files assume you have Wi
 You can see all the example code you need for running the binary in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). It also has an entire sample project setup to get you started quick.
 
 Note: This is not a "copy all the files"-"change nothing"-"run it directly without figuring it out"-solution, but rather an example template to help you get yours right with copyable code examples. This won't work directly out of the box. But it is also generally complete, more than enough to even copy over and fix whatever needs fixing if you wanted to. So, you should be using your own project, then just gut out the example project into yours as needed.
+
+# Did this library help you?
+
+![Donate](./readme_files/donate.svg)
+
+If this library helped you, please consider showing appreciation and donating. It'll help this project continue to be updated timely and supported for longer. :)
+bitcoin: bc1qe5wu3w7zdz9zev3kw6epytqlnadwc04fk9txuv
+
