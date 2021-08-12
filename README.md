@@ -74,7 +74,7 @@ Check out the release page for the [latest built binaries](https://github.com/ch
 - Edit your build configuration under [`Application.mk`](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) to your liking, then (next step below)
 - Use your CMD in the root and execute `build-release.bat`. Sorry, the build only currently works on Windows because I didn't have time to test the make files under Linux. Contributions are welcome.
 
-- Want an easy way to build the project with minimal work? Fork the repo, change the config file, then use github actions to build it, and download the build artifacts. Pretty much almost no setup required to change the config. :)
+- Want an easy way to build the project with minimal work? Fork the repo, change the config file, then use github actions to build it, and download the build artifacts. Pretty much almost no setup required in order to build. :)
 
 # FAQ
 
