@@ -120,6 +120,7 @@ Note: This is not a "copy all the files"-"change nothing"-"run it directly witho
 
 ![Donate](./readme_files/donate.svg)
 
-If this library helped you, please consider showing appreciation and donating. It'll help this project continue to be updated timely and supported for longer. :)
+If this library helped you, please consider showing appreciation and donating. It'll help this project continue live another day (and be updated more frequently and supported for longer). :)
+
 bitcoin: bc1qe5wu3w7zdz9zev3kw6epytqlnadwc04fk9txuv
 
