@@ -6,36 +6,6 @@ LOCAL_MODULE    := libmagickcore-7
 LOCAL_ARM_MODE := arm
 
 
-ifeq ($(JMAGICK_ENABLED),true)
-    # patch includes
-    LOCAL_C_INCLUDES += \
-        $(IMAGE_MAGICK_PATCH_INCLUDE_PATH)
-
-    # jmagick c patches
-    LOCAL_SRC_FILES += \
-        $(IMAGE_MAGICK_PATCH_PATH)/cache.c \
-        $(IMAGE_MAGICK_PATCH_PATH)/configure.c \
-        $(IMAGE_MAGICK_PATCH_PATH)/exception.c \
-        $(IMAGE_MAGICK_PATCH_PATH)/log.c \
-        $(IMAGE_MAGICK_PATCH_PATH)/resource.c
-        
-    # informational message
-    $(info )
-    $(info Patching the following imagemagick c files for Android compatibility:)
-    $(foreach file,$(notdir $(LOCAL_SRC_FILES)), \
-        $(info - MagickCore/$(file)) \
-    )
-    $(info )
-else
-    # vanilla imagemagick c files
-    LOCAL_SRC_FILES += \
-        $(IMAGE_MAGICK)/MagickCore/cache.c \
-        $(IMAGE_MAGICK)/MagickCore/configure.c \
-        $(IMAGE_MAGICK)/MagickCore/exception.c \
-        $(IMAGE_MAGICK)/MagickCore/log.c \
-        $(IMAGE_MAGICK)/MagickCore/resource.c
-endif
-
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
     LOCAL_EXPORT_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm64
     LOCAL_C_INCLUDES += $(IMAGE_MAGICK)/configs/arm64
@@ -85,6 +55,7 @@ endif
 LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/aai.c \
     $(IMAGE_MAGICK)/coders/art.c \
+    $(IMAGE_MAGICK)/coders/ashlar.c \
     $(IMAGE_MAGICK)/coders/avs.c \
     $(IMAGE_MAGICK)/coders/bgr.c \
     $(IMAGE_MAGICK)/coders/bmp.c \
@@ -102,14 +73,19 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/dds.c \
     $(IMAGE_MAGICK)/coders/debug.c \
     $(IMAGE_MAGICK)/coders/dib.c \
+    $(IMAGE_MAGICK)/coders/djvu.c \
     $(IMAGE_MAGICK)/coders/dng.c \
+    $(IMAGE_MAGICK)/coders/dot.c \
     $(IMAGE_MAGICK)/coders/dps.c \
     $(IMAGE_MAGICK)/coders/dpx.c \
     $(IMAGE_MAGICK)/coders/emf.c \
     $(IMAGE_MAGICK)/coders/ept.c \
     $(IMAGE_MAGICK)/coders/exr.c \
+    $(IMAGE_MAGICK)/coders/farbfeld.c \
     $(IMAGE_MAGICK)/coders/fax.c \
     $(IMAGE_MAGICK)/coders/fits.c \
+    $(IMAGE_MAGICK)/coders/fl32.c \
+    $(IMAGE_MAGICK)/coders/flif.c \
     $(IMAGE_MAGICK)/coders/fpx.c \
     $(IMAGE_MAGICK)/coders/gif.c \
     $(IMAGE_MAGICK)/coders/gradient.c \
@@ -125,26 +101,32 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/inline.c \
     $(IMAGE_MAGICK)/coders/ipl.c \
     $(IMAGE_MAGICK)/coders/jbig.c \
+    $(IMAGE_MAGICK)/coders/jnx.c \
     $(IMAGE_MAGICK)/coders/jp2.c \
     $(IMAGE_MAGICK)/coders/jpeg.c \
+    $(IMAGE_MAGICK)/coders/json.c \
     $(IMAGE_MAGICK)/coders/jxl.c \
+    $(IMAGE_MAGICK)/coders/kernel.c \
     $(IMAGE_MAGICK)/coders/label.c \
     $(IMAGE_MAGICK)/coders/mac.c \
     $(IMAGE_MAGICK)/coders/magick.c \
     $(IMAGE_MAGICK)/coders/map.c \
+    $(IMAGE_MAGICK)/coders/mask.c \
     $(IMAGE_MAGICK)/coders/mat.c \
     $(IMAGE_MAGICK)/coders/matte.c \
     $(IMAGE_MAGICK)/coders/meta.c \
+    $(IMAGE_MAGICK)/coders/miff.c \
     $(IMAGE_MAGICK)/coders/mono.c \
     $(IMAGE_MAGICK)/coders/mpc.c \
-    $(IMAGE_MAGICK)/coders/mpeg.c \
     $(IMAGE_MAGICK)/coders/mpr.c \
     $(IMAGE_MAGICK)/coders/msl.c \
     $(IMAGE_MAGICK)/coders/mtv.c \
     $(IMAGE_MAGICK)/coders/mvg.c \
     $(IMAGE_MAGICK)/coders/null.c \
+    $(IMAGE_MAGICK)/coders/ora.c \
     $(IMAGE_MAGICK)/coders/otb.c \
     $(IMAGE_MAGICK)/coders/palm.c \
+    $(IMAGE_MAGICK)/coders/pango.c \
     $(IMAGE_MAGICK)/coders/pattern.c \
     $(IMAGE_MAGICK)/coders/pcd.c \
     $(IMAGE_MAGICK)/coders/pcl.c \
@@ -152,6 +134,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/pdb.c \
     $(IMAGE_MAGICK)/coders/pdf.c \
     $(IMAGE_MAGICK)/coders/pes.c \
+    $(IMAGE_MAGICK)/coders/pgx.c \
     $(IMAGE_MAGICK)/coders/pict.c \
     $(IMAGE_MAGICK)/coders/pix.c \
     $(IMAGE_MAGICK)/coders/plasma.c \
@@ -164,12 +147,15 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/pwp.c \
     $(IMAGE_MAGICK)/coders/raw.c \
     $(IMAGE_MAGICK)/coders/rgb.c \
+    $(IMAGE_MAGICK)/coders/rgf.c \
     $(IMAGE_MAGICK)/coders/rla.c \
     $(IMAGE_MAGICK)/coders/rle.c \
     $(IMAGE_MAGICK)/coders/scr.c \
+    $(IMAGE_MAGICK)/coders/screenshot.c \
     $(IMAGE_MAGICK)/coders/sct.c \
     $(IMAGE_MAGICK)/coders/sfw.c \
     $(IMAGE_MAGICK)/coders/sgi.c \
+    $(IMAGE_MAGICK)/coders/sixel.c \
     $(IMAGE_MAGICK)/coders/stegano.c \
     $(IMAGE_MAGICK)/coders/sun.c \
     $(IMAGE_MAGICK)/coders/svg.c \
@@ -182,12 +168,13 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/ttf.c \
     $(IMAGE_MAGICK)/coders/txt.c \
     $(IMAGE_MAGICK)/coders/uil.c \
-    $(IMAGE_MAGICK)/coders/xtrn.c \
     $(IMAGE_MAGICK)/coders/url.c \
     $(IMAGE_MAGICK)/coders/uyvy.c \
     $(IMAGE_MAGICK)/coders/vicar.c \
     $(IMAGE_MAGICK)/coders/vid.c \
+    $(IMAGE_MAGICK)/coders/video.c \
     $(IMAGE_MAGICK)/coders/viff.c \
+    $(IMAGE_MAGICK)/coders/vips.c \
     $(IMAGE_MAGICK)/coders/wbmp.c \
     $(IMAGE_MAGICK)/coders/webp.c \
     $(IMAGE_MAGICK)/coders/wmf.c \
@@ -198,20 +185,11 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/xcf.c \
     $(IMAGE_MAGICK)/coders/xpm.c \
     $(IMAGE_MAGICK)/coders/xps.c \
+    $(IMAGE_MAGICK)/coders/xtrn.c \
     $(IMAGE_MAGICK)/coders/xwd.c \
+    $(IMAGE_MAGICK)/coders/yaml.c \
     $(IMAGE_MAGICK)/coders/ycbcr.c \
     $(IMAGE_MAGICK)/coders/yuv.c \
-    $(IMAGE_MAGICK)/coders/djvu.c \
-    $(IMAGE_MAGICK)/coders/jnx.c \
-    $(IMAGE_MAGICK)/coders/json.c \
-    $(IMAGE_MAGICK)/coders/mask.c \
-    $(IMAGE_MAGICK)/coders/miff.c \
-    $(IMAGE_MAGICK)/coders/pango.c \
-    $(IMAGE_MAGICK)/coders/rgf.c \
-    $(IMAGE_MAGICK)/coders/screenshot.c \
-    $(IMAGE_MAGICK)/coders/sixel.c \
-    $(IMAGE_MAGICK)/coders/vips.c \
-    $(IMAGE_MAGICK)/coders/pgx.c \
     $(IMAGE_MAGICK)/filters/analyze.c \
     $(IMAGE_MAGICK)/MagickCore/accelerate.c \
     $(IMAGE_MAGICK)/MagickCore/animate.c \
@@ -219,6 +197,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/artifact.c \
     $(IMAGE_MAGICK)/MagickCore/attribute.c \
     $(IMAGE_MAGICK)/MagickCore/blob.c \
+    $(IMAGE_MAGICK)/MagickCore/cache.c \
     $(IMAGE_MAGICK)/MagickCore/cache-view.c \
     $(IMAGE_MAGICK)/MagickCore/channel.c \
     $(IMAGE_MAGICK)/MagickCore/cipher.c \
@@ -230,6 +209,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/compare.c \
     $(IMAGE_MAGICK)/MagickCore/composite.c \
     $(IMAGE_MAGICK)/MagickCore/compress.c \
+    $(IMAGE_MAGICK)/MagickCore/configure.c \
     $(IMAGE_MAGICK)/MagickCore/constitute.c \
     $(IMAGE_MAGICK)/MagickCore/decorate.c \
     $(IMAGE_MAGICK)/MagickCore/delegate.c \
@@ -240,6 +220,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/draw.c \
     $(IMAGE_MAGICK)/MagickCore/effect.c \
     $(IMAGE_MAGICK)/MagickCore/enhance.c \
+    $(IMAGE_MAGICK)/MagickCore/exception.c \
     $(IMAGE_MAGICK)/MagickCore/feature.c \
     $(IMAGE_MAGICK)/MagickCore/fourier.c \
     $(IMAGE_MAGICK)/MagickCore/fx.c \
@@ -253,6 +234,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/linked-list.c \
     $(IMAGE_MAGICK)/MagickCore/list.c \
     $(IMAGE_MAGICK)/MagickCore/locale.c \
+    $(IMAGE_MAGICK)/MagickCore/log.c \
     $(IMAGE_MAGICK)/MagickCore/magic.c \
     $(IMAGE_MAGICK)/MagickCore/magick.c \
     $(IMAGE_MAGICK)/MagickCore/matrix.c \
@@ -280,6 +262,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/registry.c \
     $(IMAGE_MAGICK)/MagickCore/resample.c \
     $(IMAGE_MAGICK)/MagickCore/resize.c \
+    $(IMAGE_MAGICK)/MagickCore/resource.c \
     $(IMAGE_MAGICK)/MagickCore/segment.c \
     $(IMAGE_MAGICK)/MagickCore/semaphore.c \
     $(IMAGE_MAGICK)/MagickCore/shear.c \

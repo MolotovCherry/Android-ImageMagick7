@@ -53,13 +53,10 @@ QUANTUM_DEPTH := 16
 
 #------------------------------------------
 # Whether to do a static or shared library
-# build. Shared library builds are mandatory
-# for jmagick builds.
+# build.
 #
 # You can also choose to build a magick
-# binary (NOT recommended to build a magick)
-# binary when using jmagick. Because special
-# paths must be set via code
+# binary.
 #
 
 STATIC_BUILD     := true
@@ -76,24 +73,6 @@ BUILD_MAGICKWAND := true
 # directory for more information
 OPENCL_BUILD     := false
 OPENMP_BUILD     := true
-
-
-#------------------------------------------
-# Enable or disable jmagick build
-#
-# - Enabling this will patch imagemagick for
-# jmagick and android compatibility
-#
-# - Disabling this will compile the vanilla
-# (unmodified) imagemagick source code
-#
-# -> If this is enabled, it will force enable
-# a shared library build (because it is required)
-#
-# -> Requires a MagickWand build as well
-#
-
-JMAGICK_ENABLED := false
 
 
 #------------------------------------------
