@@ -1,7 +1,7 @@
 
 # Android ImageMagick 7.1.0-4
 
-[![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/main.yml/badge.svg?event=push)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/main.yml)
+[![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/main.yml/badge.svg)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/main.yml)
 
 This is a fully featured imagemagick build compatible with android. All libaries used are the absolute latest versions with the latest and greatest features.
 
