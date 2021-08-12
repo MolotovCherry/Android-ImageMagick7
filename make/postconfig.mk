@@ -39,29 +39,12 @@ else
     $(info )
 endif
 
-# Force enable shared library building with jmagick
-ifeq ($(JMAGICK_ENABLED),true)
-    $(info [ Building jmagick ])
-    $(info )
-    ifeq ($(STATIC_BUILD),true)
-        $(info [ JMagick build enabled: Force enabling shared library build ])
-        $(info )
-        STATIC_BUILD := false
-    endif
-    
-    ifeq ($(BUILD_MAGICKWAND),false)
-        $(info [ Force enabling MagickWand build - jmagick lib and magick binary require the MagickWand API ])
-        $(info )
-        BUILD_MAGICKWAND := true
-    endif
-endif
-
 # Force enable magickwand build if building magick bin
 ifeq ($(BUILD_MAGICK_BIN),true)
     $(info [ Building Magick binary ])
     $(info )
     ifeq ($(BUILD_MAGICKWAND),false)
-        $(info [ Force enabling MagickWand build - jmagick lib and magick binary require the MagickWand API ])
+        $(info [ Force enabling MagickWand build - magick binary requires the MagickWand API ])
         $(info )
         BUILD_MAGICKWAND := true
     endif
