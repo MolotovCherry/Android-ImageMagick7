@@ -46,7 +46,7 @@ You can test it with earlier versions, but I offer no support for it. If you're 
 
 Check out the release page for the [latest built binaries](https://github.com/cherryleafroad/Android-ImageMagick7/releases). This is built using the [default configuration](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk). If you need a special configuration (for example OpenCL), you will need to build it for yourself from source.
 
-- OpenCL support is available for Qualcomm. OpenCL is recommended over OpenMP. Please [go here](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libopencl/qualcomm/lib) in order to learn how to setup OpenCL build for the project. You only need to find your own `libOpenCL.so` file and copy it over for your project. I can't host it here due to copyrights. **For OpenCL support, you need to build the library yourself because of copyright issues (I can't host the OpenCL lib here, so GitHub can't build it for me)**
+- OpenCL support is available for Qualcomm. OpenCL is recommended over OpenMP. Please [go here](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libopencl/qualcomm/lib) in order to learn how to setup OpenCL build for the project. You only need to find your own `libOpenCL.so` file and copy it over for your project. I can't host it here due to copyrights. **For OpenCL support, you need to build the library yourself because of copyright issues (I can't host the OpenCL lib here, so GitHub can't build it for me)**. >Btw, Github Actions can do the build for you too, change the config file, and manually run the action.<
 
 # Quick Setup Instructions
 
@@ -70,11 +70,11 @@ Check out the release page for the [latest built binaries](https://github.com/ch
 
 # Building from Source
 
+- Want an easy way to build the project with minimal work? Fork the repo, change the config file, then use github actions to build it, and download the build artifacts. Pretty much almost no setup required in order to build. :)
+
 - In order to understand how to build the project, please [install](https://developer.android.com/studio/projects/install-ndk) and [setup NDK](https://developer.android.com/ndk/guides) as per Google's instructions. Make sure you read how NDK works as it is important to getting your build successfully compiling. The required gradle files for building inside the [app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app).
 - Edit your build configuration under [`Application.mk`](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) to your liking, then (next step below)
 - Use your CMD in the root and execute `build-release.bat`. Sorry, the build only currently works on Windows because I didn't have time to test the make files under Linux. Contributions are welcome.
-
-- Want an easy way to build the project with minimal work? Fork the repo, change the config file, then use github actions to build it, and download the build artifacts. Pretty much almost no setup required in order to build. :)
 
 # FAQ
 
@@ -86,6 +86,14 @@ Build it with OpenCL support, statically linked, as a binary. HDRI on, quantum d
 
 Yes you can. Just go to [Application.mk](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) in the root directory and alter the variables inside to your desired configuration. Build configuration has been made very simple! Piece of cake!
 
+### How to build using NDK..? I'm so confused
+
+Check out the Building from Source part above. Also, make sure you thoroughly read the [Google NDK docs](https://developer.android.com/studio/projects/install-ndk). Supporting code, gradle files for building, is all in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). P.S. if it's too confusing, you COULD just fork the repo and use the same Github Action I use to auto-build it.
+
+### Is there an easier way to build this without so much work?
+
+Actually there is! Fork my repo, change the config to what you want, then use Github Actions to build it. Since I already have the build scripts configured, it's minimal work for you. In the case of wanting to do a openCL build, just follow the openCl instructions, change the config, then use Github Actions like before.
+
 ### Why am I getting linking errors?
 
 You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn't know where to find any required libraries. Either that, or you don't have any libraries in your project at all. Check out the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app) for where to put your libs. Hint: put it in the `libs` folder. And MAKE sure you went through the example android app and are using the supporting gradle / java code. It's all there.
@@ -93,10 +101,6 @@ You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn'
 ### Why won't the binary execute properly?
 
 Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. See the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). Everything you need is here.
-
-### How to build using NDK..? I'm so confused
-
-Check out the Building from Source part above. Also, make sure you thoroughly read the [Google NDK docs](https://developer.android.com/studio/projects/install-ndk). Supporting code, gradle files for building, is all in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app).
 
 ### I'm getting some errors about not being able to write TMP files..?
 
