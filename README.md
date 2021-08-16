@@ -1,7 +1,7 @@
 
 # Android ImageMagick 7.1.0-4
 
-[![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/main.yml/badge.svg?branch=master&event=push)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/main.yml) [![CodeQL](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml)
+[![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml)
 
 This is a fully featured imagemagick build compatible with android. All libaries used are the absolute latest versions with the latest and greatest features.
 
