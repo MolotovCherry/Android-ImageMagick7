@@ -13,11 +13,24 @@ jobs:
       - uses: nttld/setup-ndk@v1
         with:
           ndk-version: r22b
-      - run: .\build-release.bat
+      - name: Static binary build
+        run: .\build-release.bat
       - uses: actions/upload-artifact@v2
         with:
           name: imagemagick-7-android-static
           path: jniLibs
+      - name: Alter config to shared lib build
+        run: |
+          rm -r jniLibs
+          sed -i 's/STATIC_BUILD     := true/STATIC_BUILD     := false/g' Application.mk
+          sed -i 's/BUILD_MAGICK_BIN := true/BUILD_MAGICK_BIN := false/g' Application.mk
+      - name: Shared lib build
+        run: .\build-release.bat
+      - uses: actions/upload-artifact@v2
+        with:
+          name: imagemagick-7-android-shared-lib
+          path: jniLibs
+
   generate:
     name: Create release-artifacts
     runs-on: ubuntu-latest
@@ -29,9 +42,16 @@ jobs:
           name: imagemagick-7-android-static
       - name: Zip up files
         run: zip -r -9 imagemagick-7-android-static.zip arm64-v8a
+      - run: rm -r arm64-v8a
+      - name: Download build artifacts 2
+        uses: actions/download-artifact@v2
+        with:
+          name: imagemagick-7-android-shared-lib
+      - name: Zip up files
+        run: zip -r -9 imagemagick-7-android-shared-lib.zip arm64-v8a
       - name: Upload the artifacts
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: 'imagemagick-7-android-static.zip'
+          args: 'imagemagick-7-android-*.zip'
