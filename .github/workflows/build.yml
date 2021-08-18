@@ -12,7 +12,7 @@ jobs:
           persist-credentials: false
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r22b
+          ndk-version: r23
       - run: .\build-release.bat
       - uses: actions/upload-artifact@v2
         with:

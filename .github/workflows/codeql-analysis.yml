@@ -53,7 +53,7 @@ jobs:
     - name: Setup NDK
       uses: nttld/setup-ndk@v1
       with:
-        ndk-version: r22b
+        ndk-version: r23
     - name: Build
       run: .\build-release.bat
 
