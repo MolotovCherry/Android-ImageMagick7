@@ -148,13 +148,14 @@ Note: This is not a "copy all the files"-"change nothing"-"run it directly witho
 If you found this library useful, please consider showing appreciation and sending a donation my way (maybe for a cup of coffee or a donut).
 I don't always have the time nor mental energy to keep this updated for free, so any donations will help this project continue to be supported for longer and get more frequent updates! Thanks for your support! <3
 
-| Place         | Donation Address                                                                                        |
-|---------------|---------------------------------------------------------------------------------------------------------|
-| PayPal        | [![Donate](https://img.shields.io/badge/Donate-PayPal-green)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BKDN933UM444J) |
-| Bitcoin       | 19bQFL3y8jz1ssCovPDQ23KyfPDVG9rWSf                                                                      |
-| Etherium      | 0x7612A7D726be1c91f7082B554a4dAbE5Fb54AB06                                                              |
-| Tether        | 0x7612A7D726be1c91f7082B554a4dAbE5Fb54AB06                                                              |
-| Dogecoin      | DRLMnDHmFNB6s8aLEZhHhbh7Sn5hXyRCyJ                                                                      |
-| Binance Coin  | bnb15xhakyzlatd22tw9cacaj30jq57cvx2ef75uy3                                                              |
-| Cardano       | addr1q9sy3nt9eu5fsen0w0ynja20rknrvqyhq24mv8s3dskv20ycl9amw6ehfapvkywzn9fu58edh3n279vhjqxln3p6f3jqalq0nt |
-
+| Place                   | Donation Address                                                                                        |
+|-------------------------|---------------------------------------------------------------------------------------------------------|
+| PayPal                  | [![Donate](https://img.shields.io/badge/Donate-PayPal-green)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BKDN933UM444J) |
+| Bitcoin (BTC)           | 19bQFL3y8jz1ssCovPDQ23KyfPDVG9rWSf                                                                      |
+| Etherium (ETH)          | 0x7612A7D726be1c91f7082B554a4dAbE5Fb54AB06                                                              |
+| Tether (USDT)           | 0x7612A7D726be1c91f7082B554a4dAbE5Fb54AB06                                                              |
+| Dogecoin (DOGE)         | DRLMnDHmFNB6s8aLEZhHhbh7Sn5hXyRCyJ                                                                      |
+| Binance Coin (BNB)      | bnb15xhakyzlatd22tw9cacaj30jq57cvx2ef75uy3                                                              |
+| Hedera Hashgraph (HBAR) | 0.0.397814                                                                                              |
+| Cardano (ADA)           | addr1q9sy3nt9eu5fsen0w0ynja20rknrvqyhq24mv8s3dskv20ycl9amw6ehfapvkywzn9fu58edh3n279vhjqxln3p6f3jqalq0nt |
+| Polkadot (DOT)          | 14GB7xwxMT95cSfb5o3okdEJNXfdPFYBZe15JKfcdNCgT3Av                                                        |
