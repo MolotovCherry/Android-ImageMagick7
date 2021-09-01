@@ -10,42 +10,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
       - uses: nttld/setup-ndk@v1
         with:
           ndk-version: r23
-          
-      - name: backup config
-        run: cp Application.mk Application.mk.bak
-        
       - name: Static binary build
         run: .\build-release.bat
       - uses: actions/upload-artifact@v2
         with:
           name: imagemagick-7-android-static
           path: jniLibs
-          
       - name: Alter config to shared lib build
         run: |
           rm -r jniLibs
-          sed -ri "s/STATIC_BUILD\s+:=\s+true/STATIC_BUILD := false/g" Application.mk
+          sed -i 's/STATIC_BUILD     := true/STATIC_BUILD     := false/g' Application.mk
       - name: Shared lib build
         run: .\build-release.bat
       - uses: actions/upload-artifact@v2
         with:
           name: imagemagick-7-android-shared-lib
-          path: jniLibs
-          
-      - name: Alter config to static lib build
-        run: |
-          rm -r jniLibs
-          cp Application.mk.bak Application.mk
-          sed -ri "s/BUILD_MAGICK_BIN\s+:=\s+true/BUILD_MAGICK_BIN := false/g" Application.mk
-      - name: Static lib build
-        run: .\build-release.bat
-      - uses: actions/upload-artifact@v2
-        with:
-          name: imagemagick-7-android-static-lib
           path: jniLibs
 
   generate:
@@ -60,22 +42,12 @@ jobs:
       - name: Zip up files
         run: zip -r -9 imagemagick-7-android-static.zip arm64-v8a
       - run: rm -r arm64-v8a
-      
       - name: Download build artifacts 2
         uses: actions/download-artifact@v2
         with:
           name: imagemagick-7-android-shared-lib
       - name: Zip up files
         run: zip -r -9 imagemagick-7-android-shared-lib.zip arm64-v8a
-      - run: rm -r arm64-v8a
-        
-      - name: Download build artifacts 3
-        uses: actions/download-artifact@v2
-        with:
-          name: imagemagick-7-android-static-lib
-      - name: Zip up files
-        run: zip -r -9 imagemagick-7-android-static-lib.zip arm64-v8a
-        
       - name: Upload the artifacts
         uses: skx/github-action-publish-binaries@master
         env:
