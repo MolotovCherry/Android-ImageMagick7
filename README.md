@@ -102,6 +102,27 @@ You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn'
 
 Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. See the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). Everything you need is here.
 
+### On API >= 29, I am getting permission denied errors!
+
+[Starting with API 29, Android disallows binary execution in the home directory](https://developer.android.com/about/versions/10/behavior-changes-10#execute-permission). The only remaining location for executable code is the native lib directory.
+
+There are 2 solutions for you on Android 10+:
+
+#### Solution 1 - run the ELF binary from the native libs directory
+1. rename your binary file to something like `libmagick.so` and place it in the `jniLibs` folder.
+2. Make sure you have `android:extractNativeLibs=true` in your manifest.
+3. After this, you can make a bunch of symlinks to the `libmagick.so` binary in your native lib folder from your apps data homedirectory (e.g. `magick`, `convert`, etc). The symlinks allow you to act like you're using the normal `magick` binary.
+4. As usual, make sure that your `libmagick.so` has the executable bit set on it `chmod +x`. (This might or might not be the case by default)
+
+Note: This `libmagick.so` is NOT a real shared library. It is the ELF `magick` binary with a different filename, that's all. The naming allows us to copy the binary over with the other real libs.
+
+#### Solution 2 - use this project to create your own JNI lib which links against/integrates with the native imagemagick lib
+1. [Read Oracle's documentation for how JNI works](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/jniTOC.html).
+2. [Read the official Android mk guide](https://developer.android.com/ndk/guides/android_mk). You can also study the make file setup I already have going. Specifically `Android.mk`, `Application.mk`, and the files under the `make` directory. After you're familiar enough with how it works, you can create your own `mk` file and integrate it into the project and tell it to build and link/integrate your own JNI lib against the real `libmagick.so` lib. You can do a static or shared library build (static meaning that there will be only 1 lib, which is yours, and all other libs like imagemagick will be inside it). Building a native imagemagick lib (shared or static) is already supported with a switch in the settings, so it will take minimal effort for you to integrate your build into it.
+3. Program all your C code / Rust code. I STRONGLY recommend using Rust as it's a better and much safer low level language compared to C. It has JNI bindings support already, although you'll still need to interoperate with imagemagick's C code. I STRONGLY recommend you use the [imagemagick magic wand API](https://imagemagick.org/script/magick-wand.php) instead of the other ones since it's much easier to do what you want using it.
+4. Do a bunch of Googling for any JNI, make file, imagemagick wand API, or C / Rust errors errors you encounter (as is always the case with programming!)
+5. Profit!
+
 ### I'm getting some errors about not being able to write TMP files..?
 
 Create a tmpdir in your assets folder (same level as `usr` folder), and call it `tmp` (or something similar). Point to it using the `TMPDIR` environment variable listed in the documentation.
