@@ -100,7 +100,7 @@ You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn'
 
 ### Why won't the binary execute properly?
 
-Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. See the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). Everything you need is here.
+Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. Please make sure all the files in the assets are there and you're using the env variables properly. Please also see the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). Everything you need is here. In the case of API >= 29, see the below answer.
 
 ### On API >= 29, I am getting permission denied errors!
 
