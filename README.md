@@ -70,25 +70,37 @@ Check out the release page for the [latest built binaries](https://github.com/ch
 
 # Building from Source
 
-- Want an easy way to build the project with minimal work? Fork the repo, change the config file, then use github actions to build it, and download the build artifacts. Pretty much almost no setup required in order to build. :)
-
 - In order to understand how to build the project, please [install](https://developer.android.com/studio/projects/install-ndk) and [setup NDK](https://developer.android.com/ndk/guides) as per Google's instructions. Make sure you read how NDK works as it is important to getting your build successfully compiling. The required gradle files for building inside the [app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app).
 - Edit your build configuration under [`Application.mk`](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) to your liking, then (next step below)
 - Use your CMD in the root and execute `build-release.bat`. Sorry, the build only currently works on Windows because I didn't have time to test the make files under Linux. Contributions are welcome.
+
+# Building with Docker
+
+- Install Docker
+- Run the build-with-docker script :)
+
+Use `-r` for release, or `-d` for debug build. No arguments means release mode
+
+Docker image:
+https://hub.docker.com/repository/docker/cherryleafroad/imbuild
+
+The script will ask you to download or build it yourself. It may be faster for you to build the image (cause there's less to download)
+
+No Linux shell script currently exists, but there's nothing stopping you from setting it up yourself (just read the build-with-docker file).
+
+# Building with Github
+
+- Fork the repo, change the config file (if you want), then use github actions to build it, and download the build artifacts. Pretty much almost no setup required in order to build. :)
 
 # FAQ
 
 ### What is the recommended way to build/run this?
 
-Build it with OpenCL support, statically linked, as a binary. HDRI on, quantum depth at 16. Make sure to use an AsyncTask to run it. Running it on your main thread WILL lock up your main UI. I can't host an OpenCL build here because I can't put the OpenCL lib here for an automatic build. So, only OpenMP builds are released.
+Build it with OpenCL support (note, probably not all devices support OpenCL), statically linked, as a binary. HDRI on, quantum depth at 16. Make sure to use an AsyncTask to run it. Running it on your main thread WILL lock up your main UI. I can't host an OpenCL build here because I can't put the OpenCL lib here for an automatic build. So, only OpenMP builds are released.
 
 ### Can I customize the build features?
 
 Yes you can. Just go to [Application.mk](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) in the root directory and alter the variables inside to your desired configuration. Build configuration has been made very simple! Piece of cake!
-
-### How to build using NDK..? I'm so confused
-
-Check out the Building from Source part above. Also, make sure you thoroughly read the [Google NDK docs](https://developer.android.com/studio/projects/install-ndk). Supporting code, gradle files for building, is all in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). P.S. if it's too confusing, you COULD just fork the repo and use the same Github Action I use to auto-build it.
 
 ### Is there an easier way to build this without so much work?
 

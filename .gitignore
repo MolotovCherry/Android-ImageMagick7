@@ -1,0 +1,4 @@
+build
+jniLibs
+libopencl/qualcomm/lib/64
+libopencl/qualcomm/lib/32
