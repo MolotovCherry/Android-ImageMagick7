@@ -2,12 +2,12 @@
 
 cd C:/data
 
-if "%1%"=="-r" (
+if "%1"=="-r" (
   build-release
   goto End
 )
 
-if "%1%"=="-d" (
+if "%1"=="-d" (
   build-debug
   goto End
 )
