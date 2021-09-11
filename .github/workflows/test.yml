@@ -1,3 +1,5 @@
+name: dump
+
 on: pull_request
 
 jobs:

@@ -41,6 +41,8 @@ jobs:
             I just found an upstream ImageMagick update and made the source code changes for you.
             
             ImageMagick in this project has been updated from ${{ steps.imupdater.outputs.result }}
+            
+            If the build succeeds, I'll just auto-merge it for you :wink:
           labels: |
             update
             automated pr
