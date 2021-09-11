@@ -1,0 +1,59 @@
+# This is a basic workflow to help you get started with Actions
+
+name: ImageMagick Updater Bot
+
+# Controls when the workflow will run
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  createPullRequest:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Make changes to pull request
+        id: imupdater
+        uses: Amadevus/pwsh-script@v2
+        with:
+          script: ./.github-deps/imupdate/update-magick.ps1
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: Update ImageMagick ${{ steps.imupdater.outputs.result }}
+          committer: GitHub <noreply@github.com>
+          author: GitHub <noreply@github.com>
+          signoff: false
+          branch: imupdate
+          delete-branch: true
+          title: 'Update ImageMagick ${{ steps.imupdater.outputs.result }}'
+          body: |
+            Hey there!
+            
+            I just found an upstream ImageMagick update and made the source code changes for you.
+            
+            ImageMagick in this project has been updated from ${{ steps.imupdater.outputs.result }}
+          labels: |
+            update
+            automated pr
+          assignees: cherryleafroad
+          reviewers: cherryleafroad
+          draft: false
+
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v1
+        with:
+          token: ${{ secrets.PAT }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
