@@ -150,8 +150,7 @@ Remove-Item -Path "$TmpPath" -Force -Recurse
 
 # now update version files
 $file = "$newIm\configs\arm64\MagickCore\magick-baseconfig.h"
-$content = Get-Content -Path $file | foreach-object {$_ -replace "$version", "$tag" }
-$content | Set-Content $file
+(Get-Content -Path $file) -replace "$version", "$tag" | Set-Content $file
 
 $file = "$newIm\configs\arm64\MagickCore\version.h"
 $content = Get-Content -Path $file
@@ -171,8 +170,11 @@ $content = $content -replace "#define MagickppLibMinInterface\s+[^\s]+", "#defin
 $content = $content -replace "#define MagickReleaseDate\s+[^\s]+", "#define MagickReleaseDate  `"$magick_release_date`""
 $content | Set-Content $file
 
-Write-Host Update done!
+Write-Host Updating README
 
-Set-Location -Path "$Proot"
+$file = "$PRoot\README.md"
+(Get-Content -Path $file) -replace "$version", "$tag" | Set-Content $file
+
+Write-Host Update done!
 
 return "$version -> $tag"
