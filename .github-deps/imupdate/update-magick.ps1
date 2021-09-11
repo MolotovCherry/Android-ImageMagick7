@@ -173,4 +173,6 @@ $content | Set-Content $file
 
 Write-Host Update done!
 
+Set-Location -Path "$Proot"
+
 return "$version -> $tag"
