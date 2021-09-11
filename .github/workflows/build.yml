@@ -5,6 +5,8 @@ on:
   push:
   pull_request:
     types: [opened, auto_merge_enabled]
+    branches:
+      - master
 
 jobs:
   build:
