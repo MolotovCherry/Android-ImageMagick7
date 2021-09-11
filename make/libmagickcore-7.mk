@@ -67,8 +67,8 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/clip.c \
     $(IMAGE_MAGICK)/coders/clipboard.c \
     $(IMAGE_MAGICK)/coders/cmyk.c \
-    $(IMAGE_MAGICK)/coders/cut.c \
     $(IMAGE_MAGICK)/coders/cube.c \
+    $(IMAGE_MAGICK)/coders/cut.c \
     $(IMAGE_MAGICK)/coders/dcm.c \
     $(IMAGE_MAGICK)/coders/dds.c \
     $(IMAGE_MAGICK)/coders/debug.c \
