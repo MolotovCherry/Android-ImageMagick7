@@ -33,7 +33,7 @@ Write-Host Cloning latest imagemagick...`n
 Set-Location -Path "$PRoot"
 
 # clone the latest changes (yes, overkill on the null, because the messages just wouldn't go away)
-git clone --quiet --depth 1 -b $tag https://github.com/ImageMagick/ImageMagick "$TmpPath" 2>&1 | Out-Null
+git clone --quiet --depth 1 -b $tag https://github.com/ImageMagick/ImageMagick "$TmpPath"
 
 Set-Location -Path "$TmpPath"
 
