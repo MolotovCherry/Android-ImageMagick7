@@ -27,7 +27,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Update ImageMagick ${{ steps.imupdater.outputs.result }}
           committer: GitHub <noreply@github.com>
           author: GitHub <noreply@github.com>
