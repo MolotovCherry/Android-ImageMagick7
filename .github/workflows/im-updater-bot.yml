@@ -45,7 +45,6 @@ jobs:
             update
             automated pr
           assignees: cherryleafroad
-          reviewers: cherryleafroad
           draft: false
 
       - name: Check outputs
