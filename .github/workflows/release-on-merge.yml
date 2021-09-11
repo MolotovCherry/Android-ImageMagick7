@@ -1,0 +1,31 @@
+name: IM Bot Release New Update
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [ closed ]
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true && github.actor == 'github-actions' && github.head_ref == 'imupdate'
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Get latest release tag
+        id: tag
+        run: |
+          echo "::set-output name=TAG::$(echo ImageMagick-* | cut -c13-)"
+        
+      - uses: ncipollo/release-action@v1
+        with:
+          name: Android ImageMagick ${{ steps.tag.outputs.TAG }}
+          body: |
+            Library built using default config.
+
+            If you need a different config than default, please follow compilation instructions on main page to manually build it (or, fork the project, change the config file, and use github actions to build it)
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ github.sha }}
+          tag: ${{ steps.tag.outputs.TAG }}
