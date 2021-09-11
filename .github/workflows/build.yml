@@ -1,6 +1,10 @@
 name: Build
 
-on: [workflow_dispatch, push, pull_request]
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+    types: [opened, auto_merge_enabled]
 
 jobs:
   build:
