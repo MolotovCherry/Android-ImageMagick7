@@ -1,6 +1,11 @@
 name: dump
 
-on: pull_request
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, auto_merge_enabled]
+    branches:
+      - master
 
 jobs:
   one:
