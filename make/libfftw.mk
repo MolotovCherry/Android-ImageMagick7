@@ -166,14 +166,6 @@ include $(FFTW_LIB_PATH)/dft/sources.mk
 include $(FFTW_LIB_PATH)/dft/scalar/sources.mk
 include $(FFTW_LIB_PATH)/dft/scalar/codelets/sources.mk
 include $(FFTW_LIB_PATH)/kernel/sources.mk
-include $(FFTW_LIB_PATH)/libbench2/sources.mk
-include $(FFTW_LIB_PATH)/rdft/sources.mk
-include $(FFTW_LIB_PATH)/rdft/scalar/sources.mk
-include $(FFTW_LIB_PATH)/rdft/scalar/r2cb/sources.mk
-include $(FFTW_LIB_PATH)/rdft/scalar/r2cf/sources.mk
-include $(FFTW_LIB_PATH)/rdft/scalar/r2r/sources.mk
-include $(FFTW_LIB_PATH)/reodft/sources.mk
-include $(FFTW_LIB_PATH)/simd-support/sources.mk
 
 ifeq ($(LIBFFTW_ENABLED),true)
     include $(BUILD_STATIC_LIBRARY)
