@@ -77,12 +77,13 @@ Get-ChildItem -File | Foreach-Object {Remove-Item $_.FullName}
 
 $DelDirs = @(
     ".git", ".github", "api_examples", "app-image", "config",
-    "images", "m4", "Magick++", "PerlMagick", "scripts", "tests",
-    "www", "MagickWand\tests"
+    "images", "m4", "PerlMagick", "scripts", "tests",
+    "www", "MagickWand\tests", "Magick++\bin", "Magick++\demo",
+    "Magick++\tests", "Magick++\fuzz"
 )
 
 $ExcludeFileTypes = @(
-    "*.c", ".h"
+    "*.c", "*.h", "*.cpp"
 )
 
 ForEach ($d in $DelDirs) {
@@ -90,7 +91,7 @@ ForEach ($d in $DelDirs) {
 }
 
 # remove all non c or non h files
-$items = Get-ChildItem -File -Path "$TmpPath" -Exclude "*.c","*.h" -Recurse
+$items = Get-ChildItem -File -Path "$TmpPath" -Exclude $ExcludeFileTypes -Recurse
 ForEach ($i in $items) {
     Remove-Item -Path "$i" -Force
 }
@@ -101,9 +102,11 @@ $coders = Get-ChildItem -File -Recurse -Path "$TmpPath\coders" -Include "*.c"
 $filters = Get-ChildItem -File -Recurse -Path "$TmpPath\filters" -Include "*.c"
 $magickCore = Get-ChildItem -File -Recurse -Path "$TmpPath\MagickCore" -Include "*.c"
 $magickWand = Get-ChildItem -File -Recurse -Path "$TmpPath\MagickWand" -Include "*.c"
+$magickpp = Get-ChildItem -File -Recurse -Path "$TmpPath\Magick++" -Include "*.cpp"
 
 $magickCoreText = ""
 $magickWandText = ""
+$magickppText = ""
 
 
 ForEach ($coder in $coders) {
@@ -122,6 +125,10 @@ ForEach ($wand in $magickWand) {
     $file = [System.IO.Path]::GetFileName($wand)
     $magickWandText += "    `$(IMAGE_MAGICK)/MagickWand/$file \`r`n"
 }
+ForEach ($pp in $magickpp) {
+    $file = [System.IO.Path]::GetFileName($pp)
+    $magickppText += "    `$(IMAGE_MAGICK)/Magick++/lib/$file \`r`n"
+}
 
 
 $file = "$PSScriptRoot\mk\libmagickcore-7.mk"
@@ -131,6 +138,10 @@ $destination = "$PRoot\make\libmagickcore-7.mk"
 $file = "$PSScriptRoot\mk\libmagickwand-7.mk"
 $destination = "$PRoot\make\libmagickwand-7.mk"
 (Get-Content $file) -replace '<!MAGICKWAND!>', $magickWandText | Set-Content $destination
+
+$file = "$PSScriptRoot\mk\libmagick++-7.mk"
+$destination = "$PRoot\make\libmagick++-7.mk"
+(Get-Content $file) -replace '<!MAGICK\+\+!>', $magickppText | Set-Content $destination
 
 $file = "$PRoot\Android.mk"
 (Get-Content $file) -replace 'ImageMagick-(.*)', "ImageMagick-$tag" | Set-Content $file
@@ -174,7 +185,7 @@ $content = $content -replace "#define MagickppLibMinInterface\s+[^\s]+", "#defin
 $content = $content -replace "#define MagickReleaseDate\s+[^\s]+", "#define MagickReleaseDate  `"$magick_release_date`""
 $content | Set-Content $file
 
-Write-Host Updating README
+Write-Host Updating README`n
 
 $file = "$PRoot\README.md"
 (Get-Content -Path $file) -replace "$version", "$tag" | Set-Content $file

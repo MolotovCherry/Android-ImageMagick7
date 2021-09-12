@@ -22,7 +22,7 @@ jobs:
       - name: Alter config to shared lib build
         run: |
           rm -r jniLibs
-          sed -i 's/STATIC_BUILD     := true/STATIC_BUILD     := false/g' Application.mk
+          ./.github-deps/change-to-shared-lib.ps1
       - name: Shared lib build
         run: .\build-release.bat
       - uses: actions/upload-artifact@v2

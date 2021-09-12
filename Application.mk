@@ -63,6 +63,8 @@ STATIC_BUILD     := true
 # magick bin requires magick wand API
 BUILD_MAGICK_BIN := true
 BUILD_MAGICKWAND := true
+# requires magickwand
+BUILD_MAGICKPP   := false
 
 
 #------------------------------------------
@@ -96,7 +98,7 @@ LIBLCMS2_ENABLED      := true
 
 # fix long windows paths causing build to fail (too many sources)
 LOCAL_SHORT_COMMANDS := true
-APP_SHORT_COMMANDS := true
+APP_SHORT_COMMANDS   := true
 
 #------------------------------------------
 LOCAL_PATH := $(call my-dir)

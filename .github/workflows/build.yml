@@ -20,6 +20,10 @@ jobs:
         with:
           ndk-version: r23
 
+      # so we can build all the libraries and test building on them all
+      - name: Alter config to shared lib build
+        run: ./.github-deps/change-to-shared-lib.ps1
+
       # This must be run as cmd /c to redirect output properly
       # because powershell considers stderr an error and doesn't
       # log it into the output properly
@@ -41,7 +45,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         if: steps.build.outcome == 'success'
         with:
-          name: imagemagick-7-android-static
+          name: imagemagick-7-android
           path: jniLibs
       
       - uses: mshick/add-pr-comment@v1

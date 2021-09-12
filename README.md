@@ -7,6 +7,8 @@ This is a fully featured imagemagick build compatible with android. All libaries
 
 It can be configured to both build as a binary (with shared libaries or statically linked), or as separate shared libraries (and no binary).
 
+MagickWand and Magick++ are both available for compilation as well.
+
 It comes compiled with the following features:
 
 - OpenMP(3.1) / OpenCL (Qualcomm)

@@ -50,4 +50,15 @@ ifeq ($(BUILD_MAGICK_BIN),true)
     endif
 endif
 
+# Force enable magickpp build's magickwand
+ifeq ($(BUILD_MAGICKPP),true)
+    $(info [ Building Magick++ ])
+    $(info )
+    ifeq ($(BUILD_MAGICKWAND),false)
+        $(info [ Force enabling MagickWand build - magick++ requires the MagickWand API ])
+        $(info )
+        BUILD_MAGICKWAND := true
+    endif
+endif
+
 
