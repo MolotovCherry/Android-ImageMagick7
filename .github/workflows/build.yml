@@ -27,22 +27,12 @@ jobs:
 
       - name: save error log to var
         uses: actions/github-script@v4
-        id: log
+        id: error-log
         if: steps.build.outcome != 'success'
         with:
           script: |
             const fs = require('fs');
-            fs.readFile('errors.txt', 'utf8' , (err, data) => {
-              if (err) {
-                core.setOutput('stderr', '');
-                console.error(err);
-                return;
-              }
-              console.error(data);
-              core.setOutput('stderr', data);
-            })
-            return '';
-            
+            return fs.readFileSync('errors.txt','utf8');
           result-encoding: string
 
       - uses: actions/upload-artifact@v2
@@ -60,7 +50,7 @@ jobs:
           message: |
             The build just failed compilation :weary:
             
-            Here is the error log from the build :confused:. Please check it and fix any problems in your code :open_mouth:
+            Here is the error log from the build :confused: Please check it and fix any problems in your code :open_mouth:
             
             <details>
             <summary>
@@ -68,7 +58,7 @@ jobs:
             </summary>
 
             ```
-            ${{ steps.log.outputs.stderr }}
+            ${{ steps.error-log.outputs.result }}
             ```
 
             </details>
@@ -76,5 +66,5 @@ jobs:
       - name: Fail build and print
         if: steps.build.outcome != 'success'
         run: |
-          echo ${{ steps.log.outputs.stderr }}
+          echo ${{ steps.error-log.outputs.result }}
           exit 1
