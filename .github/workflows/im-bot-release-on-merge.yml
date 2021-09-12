@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    if: github.event.pull_request.merged == true && github.actor == 'github-actions[bot]' && github.head_ref == 'imupdate'
+    if: github.event.pull_request.merged == true && github.actor == 'cherryleafroad' && github.head_ref == 'imupdate'
     runs-on: ubuntu-latest
     
     steps:
