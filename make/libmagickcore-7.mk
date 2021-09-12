@@ -66,6 +66,48 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/cip.c \
     $(IMAGE_MAGICK)/coders/clip.c \
     $(IMAGE_MAGICK)/coders/clipboard.c \
+    $(IMAGE_MAGICK)/coders/cmyk.c \
+    $(IMAGE_MAGICK)/coders/cube.c \
+    $(IMAGE_MAGICK)/coders/cut.c \
+    $(IMAGE_MAGICK)/coders/dcm.c \
+    $(IMAGE_MAGICK)/coders/dds.c \
+    $(IMAGE_MAGICK)/coders/debug.c \
+    $(IMAGE_MAGICK)/coders/dib.c \
+    $(IMAGE_MAGICK)/coders/djvu.c \
+    $(IMAGE_MAGICK)/coders/dng.c \
+    $(IMAGE_MAGICK)/coders/dot.c \
+    $(IMAGE_MAGICK)/coders/dps.c \
+    $(IMAGE_MAGICK)/coders/dpx.c \
+    $(IMAGE_MAGICK)/coders/emf.c \
+    $(IMAGE_MAGICK)/coders/ept.c \
+    $(IMAGE_MAGICK)/coders/exr.c \
+    $(IMAGE_MAGICK)/coders/farbfeld.c \
+    $(IMAGE_MAGICK)/coders/fax.c \
+    $(IMAGE_MAGICK)/coders/fits.c \
+    $(IMAGE_MAGICK)/coders/fl32.c \
+    $(IMAGE_MAGICK)/coders/flif.c \
+    $(IMAGE_MAGICK)/coders/fpx.c \
+    $(IMAGE_MAGICK)/coders/gif.c \
+    $(IMAGE_MAGICK)/coders/gradient.c \
+    $(IMAGE_MAGICK)/coders/gray.c \
+    $(IMAGE_MAGICK)/coders/hald.c \
+    $(IMAGE_MAGICK)/coders/hdr.c \
+    $(IMAGE_MAGICK)/coders/heic.c \
+    $(IMAGE_MAGICK)/coders/histogram.c \
+    $(IMAGE_MAGICK)/coders/hrz.c \
+    $(IMAGE_MAGICK)/coders/html.c \
+    $(IMAGE_MAGICK)/coders/icon.c \
+    $(IMAGE_MAGICK)/coders/info.c \
+    $(IMAGE_MAGICK)/coders/inline.c \
+    $(IMAGE_MAGICK)/coders/ipl.c \
+    $(IMAGE_MAGICK)/coders/jbig.c \
+    $(IMAGE_MAGICK)/coders/jnx.c \
+    $(IMAGE_MAGICK)/coders/jp2.c \
+    $(IMAGE_MAGICK)/coders/jpeg.c \
+    $(IMAGE_MAGICK)/coders/json.c \
+    $(IMAGE_MAGICK)/coders/jxl.c \
+    $(IMAGE_MAGICK)/coders/kernel.c \
+    $(IMAGE_MAGICK)/coders/label.c \
     $(IMAGE_MAGICK)/coders/mac.c \
     $(IMAGE_MAGICK)/coders/magick.c \
     $(IMAGE_MAGICK)/coders/map.c \
@@ -106,6 +148,28 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/raw.c \
     $(IMAGE_MAGICK)/coders/rgb.c \
     $(IMAGE_MAGICK)/coders/rgf.c \
+    $(IMAGE_MAGICK)/coders/rla.c \
+    $(IMAGE_MAGICK)/coders/rle.c \
+    $(IMAGE_MAGICK)/coders/scr.c \
+    $(IMAGE_MAGICK)/coders/screenshot.c \
+    $(IMAGE_MAGICK)/coders/sct.c \
+    $(IMAGE_MAGICK)/coders/sfw.c \
+    $(IMAGE_MAGICK)/coders/sgi.c \
+    $(IMAGE_MAGICK)/coders/sixel.c \
+    $(IMAGE_MAGICK)/coders/stegano.c \
+    $(IMAGE_MAGICK)/coders/sun.c \
+    $(IMAGE_MAGICK)/coders/svg.c \
+    $(IMAGE_MAGICK)/coders/tga.c \
+    $(IMAGE_MAGICK)/coders/thumbnail.c \
+    $(IMAGE_MAGICK)/coders/tiff.c \
+    $(IMAGE_MAGICK)/coders/tile.c \
+    $(IMAGE_MAGICK)/coders/tim.c \
+    $(IMAGE_MAGICK)/coders/tim2.c \
+    $(IMAGE_MAGICK)/coders/ttf.c \
+    $(IMAGE_MAGICK)/coders/txt.c \
+    $(IMAGE_MAGICK)/coders/uil.c \
+    $(IMAGE_MAGICK)/coders/url.c \
+    $(IMAGE_MAGICK)/coders/uyvy.c \
     $(IMAGE_MAGICK)/coders/vicar.c \
     $(IMAGE_MAGICK)/coders/vid.c \
     $(IMAGE_MAGICK)/coders/video.c \
@@ -142,6 +206,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/color.c \
     $(IMAGE_MAGICK)/MagickCore/colormap.c \
     $(IMAGE_MAGICK)/MagickCore/colorspace.c \
+    $(IMAGE_MAGICK)/MagickCore/compare.c \
     $(IMAGE_MAGICK)/MagickCore/composite.c \
     $(IMAGE_MAGICK)/MagickCore/compress.c \
     $(IMAGE_MAGICK)/MagickCore/configure.c \
@@ -162,6 +227,52 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/gem.c \
     $(IMAGE_MAGICK)/MagickCore/geometry.c \
     $(IMAGE_MAGICK)/MagickCore/histogram.c \
+    $(IMAGE_MAGICK)/MagickCore/identify.c \
+    $(IMAGE_MAGICK)/MagickCore/image.c \
+    $(IMAGE_MAGICK)/MagickCore/image-view.c \
+    $(IMAGE_MAGICK)/MagickCore/layer.c \
+    $(IMAGE_MAGICK)/MagickCore/linked-list.c \
+    $(IMAGE_MAGICK)/MagickCore/list.c \
+    $(IMAGE_MAGICK)/MagickCore/locale.c \
+    $(IMAGE_MAGICK)/MagickCore/log.c \
+    $(IMAGE_MAGICK)/MagickCore/magic.c \
+    $(IMAGE_MAGICK)/MagickCore/magick.c \
+    $(IMAGE_MAGICK)/MagickCore/matrix.c \
+    $(IMAGE_MAGICK)/MagickCore/memory.c \
+    $(IMAGE_MAGICK)/MagickCore/mime.c \
+    $(IMAGE_MAGICK)/MagickCore/module.c \
+    $(IMAGE_MAGICK)/MagickCore/monitor.c \
+    $(IMAGE_MAGICK)/MagickCore/montage.c \
+    $(IMAGE_MAGICK)/MagickCore/morphology.c \
+    $(IMAGE_MAGICK)/MagickCore/nt-base.c \
+    $(IMAGE_MAGICK)/MagickCore/nt-feature.c \
+    $(IMAGE_MAGICK)/MagickCore/opencl.c \
+    $(IMAGE_MAGICK)/MagickCore/option.c \
+    $(IMAGE_MAGICK)/MagickCore/paint.c \
+    $(IMAGE_MAGICK)/MagickCore/pixel.c \
+    $(IMAGE_MAGICK)/MagickCore/policy.c \
+    $(IMAGE_MAGICK)/MagickCore/prepress.c \
+    $(IMAGE_MAGICK)/MagickCore/profile.c \
+    $(IMAGE_MAGICK)/MagickCore/property.c \
+    $(IMAGE_MAGICK)/MagickCore/quantize.c \
+    $(IMAGE_MAGICK)/MagickCore/quantum.c \
+    $(IMAGE_MAGICK)/MagickCore/quantum-export.c \
+    $(IMAGE_MAGICK)/MagickCore/quantum-import.c \
+    $(IMAGE_MAGICK)/MagickCore/random.c \
+    $(IMAGE_MAGICK)/MagickCore/registry.c \
+    $(IMAGE_MAGICK)/MagickCore/resample.c \
+    $(IMAGE_MAGICK)/MagickCore/resize.c \
+    $(IMAGE_MAGICK)/MagickCore/resource.c \
+    $(IMAGE_MAGICK)/MagickCore/segment.c \
+    $(IMAGE_MAGICK)/MagickCore/semaphore.c \
+    $(IMAGE_MAGICK)/MagickCore/shear.c \
+    $(IMAGE_MAGICK)/MagickCore/signature.c \
+    $(IMAGE_MAGICK)/MagickCore/splay-tree.c \
+    $(IMAGE_MAGICK)/MagickCore/static.c \
+    $(IMAGE_MAGICK)/MagickCore/statistic.c \
+    $(IMAGE_MAGICK)/MagickCore/stream.c \
+    $(IMAGE_MAGICK)/MagickCore/string.c \
+    $(IMAGE_MAGICK)/MagickCore/thread.c \
     $(IMAGE_MAGICK)/MagickCore/threshold.c \
     $(IMAGE_MAGICK)/MagickCore/timer.c \
     $(IMAGE_MAGICK)/MagickCore/token.c \

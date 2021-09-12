@@ -179,6 +179,31 @@ LOCAL_SRC_FILES += \
     $(JPEG_LIB_PATH)/jddctmgr.c \
     $(JPEG_LIB_PATH)/jdhuff.c \
     $(JPEG_LIB_PATH)/jdicc.c \
+    $(JPEG_LIB_PATH)/jdinput.c \
+    $(JPEG_LIB_PATH)/jdmainct.c \
+    $(JPEG_LIB_PATH)/jdmarker.c \
+    $(JPEG_LIB_PATH)/jdmaster.c \
+    $(JPEG_LIB_PATH)/jdmerge.c \
+    $(JPEG_LIB_PATH)/jdphuff.c \
+    $(JPEG_LIB_PATH)/jdpostct.c \
+    $(JPEG_LIB_PATH)/jdsample.c \
+    $(JPEG_LIB_PATH)/jdtrans.c \
+    $(JPEG_LIB_PATH)/jerror.c \
+    $(JPEG_LIB_PATH)/jfdctflt.c \
+    $(JPEG_LIB_PATH)/jfdctfst.c \
+    $(JPEG_LIB_PATH)/jfdctint.c \
+    $(JPEG_LIB_PATH)/jidctflt.c \
+    $(JPEG_LIB_PATH)/jidctfst.c \
+    $(JPEG_LIB_PATH)/jidctint.c \
+    $(JPEG_LIB_PATH)/jidctred.c \
+    $(JPEG_LIB_PATH)/jquant1.c \
+    $(JPEG_LIB_PATH)/jquant2.c \
+    $(JPEG_LIB_PATH)/jutils.c \
+    $(JPEG_LIB_PATH)/jmemmgr.c \
+    $(JPEG_LIB_PATH)/jmemnobs.c \
+    $(JPEG_LIB_PATH)/jaricom.c \
+    $(JPEG_LIB_PATH)/jcarith.c \
+    $(JPEG_LIB_PATH)/jdarith.c \
     $(JPEG_LIB_PATH)/turbojpeg.c \
     $(JPEG_LIB_PATH)/transupp.c \
     $(JPEG_LIB_PATH)/jdatadst-tj.c \
