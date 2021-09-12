@@ -15,11 +15,58 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
+
       - uses: nttld/setup-ndk@v1
         with:
           ndk-version: r23
-      - run: .\build-release.bat
+
+      - name: run build
+        id: build
+        continue-on-error: true
+        run: .\build-release.bat 2> errors.txt
+
+      - name: save error log to var
+        uses: actions/github-script@v4
+        id: log
+        if: steps.build.outcome != 'success'
+        with:
+          script: |
+            const fs = require('fs');
+            fs.readFile('error.txt', 'utf8' , (err, data) => {
+              if (err) {
+                console.error(err);
+              }
+              console.error(data);
+              core.setOutput('stderr', data);
+            })
+            return '';
+            
+          result-encoding: string
+
       - uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request' && steps.build.outcome == 'success'
         with:
           name: imagemagick-7-android-static
           path: jniLibs
+      
+      - uses: mshick/add-pr-comment@v1
+        name: Add error log to PR
+        if: github.event_name == 'pull_request' && steps.build.outcome != 'success'
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          allow-repeats: true
+          message: |
+            The build just failed compilation :weary:
+            
+            Here is the error log from the build :confused:. Please check it and fix any problems in your code :open_mouth:
+            
+            <details>
+            <summary>
+            Expand Stderr Log
+            </summary>
+
+            ```
+            ${{ steps.log.outputs.stderr }}
+            ```
+
+            </details>
