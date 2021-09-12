@@ -32,9 +32,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            var out = fs.readFileSync('errors.txt','utf8');
-            console.error(out);
-            return out;
+            return 'test';
           result-encoding: string
 
       - uses: actions/upload-artifact@v2
