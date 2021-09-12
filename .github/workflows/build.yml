@@ -23,7 +23,7 @@ jobs:
       - name: run build
         id: build
         continue-on-error: true
-        run: .\build-release.bat 2> errors.txt
+        run: cmd /c "build-release.bat 2> errors.txt"
 
       - name: save error log to var
         uses: actions/github-script@v4
