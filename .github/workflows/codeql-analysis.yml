@@ -29,7 +29,7 @@ jobs:
       contents: read
       security-events: write
 
-    if: (github.event_name == 'pull_request' && github.actor != 'cherryleafroad') || github.event_name == 'push'
+    if: (github.event_name == 'pull_request' && github.actor == 'cherryleafroad' && github.head_ref != 'imupdate') || github.event_name == 'push'
 
     strategy:
       fail-fast: false
