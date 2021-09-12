@@ -70,3 +70,7 @@ jobs:
             ```
 
             </details>
+
+      - name: Fail build
+        if: steps.build.outcome != 'success'
+        run: exit 1
