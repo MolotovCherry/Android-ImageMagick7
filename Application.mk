@@ -79,18 +79,18 @@ OPENMP_BUILD     := true
 # Enable or disable specific delegates here
 #
 
-LIBBZ2_ENABLED        := true
-LIBFFTW_ENABLED       := true
-LIBFREETYPE2_ENABLED  := true
-LIBJPEG_TURBO_ENABLED := true
-LIBLZMA_ENABLED       := true
-LIBOPENJPEG_ENABLED   := true
-LIBPNG_ENABLED        := true
-LIBTIFF_ENABLED       := true
-LIBWEBP_ENABLED       := true
-LIBXML2_ENABLED       := true
-LIBZLIB_ENABLED       := true
-LIBLCMS2_ENABLED      := true
+LIBBZ2_ENABLED        := false
+LIBFFTW_ENABLED       := false
+LIBFREETYPE2_ENABLED  := false
+LIBJPEG_TURBO_ENABLED := false
+LIBLZMA_ENABLED       := false
+LIBOPENJPEG_ENABLED   := false
+LIBPNG_ENABLED        := false
+LIBTIFF_ENABLED       := false
+LIBWEBP_ENABLED       := false
+LIBXML2_ENABLED       := false
+LIBZLIB_ENABLED       := false
+LIBLCMS2_ENABLED      := false
 
 #------------------------------------------
 
