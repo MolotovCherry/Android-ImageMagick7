@@ -17,6 +17,9 @@ Write-Host Searching for latest version...`n
 # get latest tag
 $tag = (git ls-remote --tags --refs --sort="v:refname" https://github.com/ImageMagick/ImageMagick "*.*.*-*" | Select-Object -Last 1).substring(51)
 
+Set-ActionOutput -Name "NewVersion" -Value "$tag"
+Set-ActionOutput -Name "OldVersion" -Value "$version"
+
 Write-Host Found latest version: $tag
 
 # updates only go up ^, so -ne basically means we're outdated
@@ -24,7 +27,8 @@ if ($version -ne $tag) {
     Write-Host Updating $version -> $tag`n
 } else {
     Write-Host Local version $version is the same as remote $tag
-    Write-Host No update needed!
+    Write-Host No update found!
+    Set-ActionFailed -Message "No update found"
     Exit 1
 }
 
@@ -176,5 +180,3 @@ $file = "$PRoot\README.md"
 (Get-Content -Path $file) -replace "$version", "$tag" | Set-Content $file
 
 Write-Host Update done!
-
-return "$version -> $tag"

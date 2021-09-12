@@ -39,7 +39,7 @@ jobs:
           result-encoding: string
 
       - uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request' && steps.build.outcome == 'success'
+        if: steps.build.outcome == 'success'
         with:
           name: imagemagick-7-android-static
           path: jniLibs
@@ -68,6 +68,9 @@ jobs:
 
       - name: Show build errors
         if: steps.build.outcome != 'success'
-        run: |
-          type errors.txt
-          exit 1
+        uses: actions/github-script@v4
+        with:
+          script: |
+              const fs = require('fs');
+              console.log(fs.readFileSync('errors.txt','utf8').toString());
+              core.setFailed('Build failed');
