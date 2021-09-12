@@ -26,6 +26,6 @@ jobs:
             Library built using default config.
 
             If you need a different config than default, please follow compilation instructions on main page to manually build it (or, fork the project, change the config file, and use github actions to build it)
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
           commit: ${{ github.sha }}
           tag: ${{ steps.tag.outputs.TAG }}
