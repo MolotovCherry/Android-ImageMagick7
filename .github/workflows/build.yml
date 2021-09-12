@@ -32,9 +32,11 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            fs.readFile('error.txt', 'utf8' , (err, data) => {
+            fs.readFile('errors.txt', 'utf8' , (err, data) => {
               if (err) {
+                core.setOutput('stderr', '');
                 console.error(err);
+                return;
               }
               console.error(data);
               core.setOutput('stderr', data);
@@ -71,6 +73,8 @@ jobs:
 
             </details>
 
-      - name: Fail build
+      - name: Fail build and print
         if: steps.build.outcome != 'success'
-        run: exit 1
+        run: |
+          echo ${{ steps.log.outputs.stderr }}
+          exit 1
