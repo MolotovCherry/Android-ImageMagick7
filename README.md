@@ -3,7 +3,7 @@
 
 [![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml)
 
-This is a fully featured imagemagick build compatible with android. All libaries used are the absolute latest versions with the latest and greatest features.
+This is a fully featured imagemagick build compatible with android. All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
 
 It can be configured to both build as a binary (with shared libaries or statically linked), or as separate shared libraries (and no binary).
 
@@ -95,6 +95,14 @@ No Linux shell script currently exists, but there's nothing stopping you from se
 - Fork the repo, change the config file (if you want), then use github actions to build it, and download the build artifacts. Pretty much almost no setup required in order to build. :)
 
 # FAQ
+
+### Always latest builds? Are you serious?
+
+Indeed I am!! I just took a bunch of time to write a program that automatically edits my source code, updates imagemagick, builds it, merges it into the main branch, and creates an automated release WITH updated binaries! All without any input from me at all! Unless the bot breaks and I have to take time to fix it*, ___this repo will automatically update itself!___ 
+
+The bot checks for updates every day on the 0, 6, 12, and 18'th hour UTC time, so if there's a new update, you can expect it to take maybe 30 minutes or so to automatically compile everything.
+
+\* that's unlikely to happen for a long time, and even if it does, it won't be hard to fix
 
 ### What is the recommended way to build/run this?
 
