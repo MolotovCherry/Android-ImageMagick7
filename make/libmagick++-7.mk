@@ -30,11 +30,12 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/Magick++/lib/Options.cpp \
     $(IMAGE_MAGICK)/Magick++/lib/Pixels.cpp \
     $(IMAGE_MAGICK)/Magick++/lib/ResourceLimits.cpp \
-    $(IMAGE_MAGICK)/Magick++/lib/STL.cpp \
     $(IMAGE_MAGICK)/Magick++/lib/SecurityPolicy.cpp \
     $(IMAGE_MAGICK)/Magick++/lib/Statistic.cpp \
+    $(IMAGE_MAGICK)/Magick++/lib/STL.cpp \
     $(IMAGE_MAGICK)/Magick++/lib/Thread.cpp \
     $(IMAGE_MAGICK)/Magick++/lib/TypeMetric.cpp \
+
 
 
 ifeq ($(BUILD_MAGICKPP),true)
