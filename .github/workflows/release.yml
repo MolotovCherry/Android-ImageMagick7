@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'cherryleafroad' && github.head_ref == 'imupdate') || github.event_name == 'release'
 
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +28,7 @@ jobs:
           Compress-Archive -CompressionLevel Optimal -Path "jniLibs/arm64-v8a" -DestinationPath "imagemagick-7-android-shared.zip"
 
       - name: Upload the artifacts
-        if: github.event_name == 'release' && github.event.action == 'created'
+        if: github.event_name == 'release'
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,13 +36,13 @@ jobs:
           args: 'imagemagick-7-android-*.zip'
 
       - name: Get latest release tag
-        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'cherryleafroad' && github.head_ref == 'imupdate'
+        if: github.event_name == 'pull_request'
         id: tag
         run: |
           echo "::set-output name=TAG::$(echo ImageMagick-* | cut -c13-)"
         
       - uses: ncipollo/release-action@v1
-        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'cherryleafroad' && github.head_ref == 'imupdate'
+        if: github.event_name == 'pull_request'
         with:
           name: Android ImageMagick ${{ steps.tag.outputs.TAG }}
           artifacts: 'imagemagick-7-android-*.zip'
