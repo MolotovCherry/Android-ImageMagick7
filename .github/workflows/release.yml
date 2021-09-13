@@ -39,8 +39,9 @@ jobs:
         if: github.event_name == 'pull_request'
         id: tag
         run: |
-          echo "::set-output name=TAG::$(echo ImageMagick-* | cut -c13-)"
-        
+          $tag = (Resolve-Path -Path "ImageMagick-*" | Split-Path -Leaf).Substring(12)
+          Write-Host "::set-output name=TAG::$tag"
+
       - uses: ncipollo/release-action@v1
         if: github.event_name == 'pull_request'
         with:
