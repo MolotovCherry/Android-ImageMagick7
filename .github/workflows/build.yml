@@ -20,17 +20,15 @@ jobs:
         with:
           ndk-version: r23
 
-      # so we can build all the libraries and test building on them all
-      - name: Alter config to shared lib build
-        run: ./.github-deps/change-to-shared-lib.ps1
-
       # This must be run as cmd /c to redirect output properly
       # because powershell considers stderr an error and doesn't
       # log it into the output properly
       - name: build
         id: build
         continue-on-error: true
-        run: cmd /c "build-release 2> errors.txt"
+        run: |
+          ./.github-deps/change-to-shared-lib.ps1
+          cmd /c "build-release 2> errors.txt"
 
       - name: Set error-log to var
         uses: actions/github-script@v4
