@@ -3,6 +3,9 @@ name: Handle Release
 on:
   release:
     types: [created]
+  pull_request:
+    branches: [ master ]
+    types: [ closed ]
 
 jobs:
   build:
@@ -13,44 +16,39 @@ jobs:
       - uses: nttld/setup-ndk@v1
         with:
           ndk-version: r23
-      - name: Static binary build
-        run: .\build-release.bat
-      - uses: actions/upload-artifact@v2
-        with:
-          name: imagemagick-7-android-static
-          path: jniLibs
-      - name: Alter config to shared lib build
+
+      - name: Release build
         run: |
+          ./build-release
+          Compress-Archive -CompressionLevel Optimal -Path "jniLibs/arm64-v8a" -DestinationPath "imagemagick-7-android-static.zip"
           rm -r jniLibs
           ./.github-deps/change-to-shared-lib.ps1
-      - name: Shared lib build
-        run: .\build-release.bat
-      - uses: actions/upload-artifact@v2
-        with:
-          name: imagemagick-7-android-shared-lib
-          path: jniLibs
+          ./build-release
+          Compress-Archive -CompressionLevel Optimal -Path "jniLibs/arm64-v8a" -DestinationPath "imagemagick-7-android-shared.zip"
 
-  generate:
-    name: Create release-artifacts
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: imagemagick-7-android-static
-      - name: Zip up files
-        run: zip -r -9 imagemagick-7-android-static.zip arm64-v8a
-      - run: rm -r arm64-v8a
-      - name: Download build artifacts 2
-        uses: actions/download-artifact@v2
-        with:
-          name: imagemagick-7-android-shared-lib
-      - name: Zip up files
-        run: zip -r -9 imagemagick-7-android-shared-lib.zip arm64-v8a
       - name: Upload the artifacts
+        if: github.event_name == 'release' && github.event.action == 'created'
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: 'imagemagick-7-android-*.zip'
+
+      - name: Get latest release tag
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'cherryleafroad' && github.head_ref == 'imupdate'
+        id: tag
+        run: |
+          echo "::set-output name=TAG::$(echo ImageMagick-* | cut -c13-)"
+        
+      - uses: ncipollo/release-action@v1
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'cherryleafroad' && github.head_ref == 'imupdate'
+        with:
+          name: Android ImageMagick ${{ steps.tag.outputs.TAG }}
+          artifacts: 'imagemagick-7-android-*.zip'
+          body: |
+            Library built using default config.
+            
+            If you need a different config than default, please follow compilation instructions on main page to manually build it (or, fork the project, change the config file, and use github actions to build it)
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ github.sha }}
+          tag: ${{ steps.tag.outputs.TAG }}
