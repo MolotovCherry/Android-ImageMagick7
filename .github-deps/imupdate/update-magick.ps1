@@ -1,3 +1,20 @@
+function Set-OutputVariable {
+    param(
+        [string]$Name,
+        [string]$Value
+    )
+
+    Write-Host "::set-output name=$Name::$Value"
+}
+
+function Set-Failed {
+    param(
+        [string]$Message
+    )
+
+    Write-Host "::error ::$Message"
+}
+
 # Update imagemagick to a new version
 
 # current path to 
@@ -17,8 +34,8 @@ Write-Host Searching for latest version...`n
 # get latest tag
 $tag = (git ls-remote --tags --refs --sort="v:refname" https://github.com/ImageMagick/ImageMagick "*.*.*-*" | Select-Object -Last 1).substring(51)
 
-Set-ActionOutput -Name "NewVersion" -Value "$tag"
-Set-ActionOutput -Name "OldVersion" -Value "$version"
+Set-OutputVariable "NewVersion" "$tag"
+Set-OutputVariable "OldVersion" "$version"
 
 Write-Host Found latest version: $tag
 
@@ -28,7 +45,7 @@ if ($version -ne $tag) {
 } else {
     Write-Host Local version $version is the same as remote $tag
     Write-Host No update found!
-    Set-ActionFailed -Message "No update found"
+    Set-Failed "No update found"
     Exit 1
 }
 

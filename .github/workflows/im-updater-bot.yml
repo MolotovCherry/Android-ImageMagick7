@@ -20,10 +20,8 @@ jobs:
 
       - name: Make changes to pull request
         id: imupdater
-        uses: Amadevus/pwsh-script@v2
         continue-on-error: true
-        with:
-          script: ./.github-deps/imupdate/update-magick.ps1
+        run: ./.github-deps/imupdate/update-magick.ps1
 
       - name: Create Pull Request
         id: cpr
