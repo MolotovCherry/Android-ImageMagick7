@@ -21,11 +21,13 @@ jobs:
       - name: Make changes to pull request
         id: imupdater
         uses: Amadevus/pwsh-script@v2
+        continue-on-error: true
         with:
           script: ./.github-deps/imupdate/update-magick.ps1
 
       - name: Create Pull Request
         id: cpr
+        if: steps.imupdater.outcome == 'success' && steps.imupdater.conclusion == 'success'
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
@@ -51,12 +53,13 @@ jobs:
           draft: false
 
       - name: Check outputs
+        if: steps.imupdater.outcome == 'success' && steps.imupdater.conclusion == 'success'
         run: |
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
 
       - name: Enable Pull Request Automerge
-        if: steps.cpr.outputs.pull-request-operation == 'created'
+        if: steps.cpr.outputs.pull-request-operation == 'created' && steps.imupdater.outcome == 'success' && steps.imupdater.conclusion == 'success'
         uses: peter-evans/enable-pull-request-automerge@v1
         with:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
