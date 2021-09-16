@@ -29,7 +29,8 @@ jobs:
       contents: read
       security-events: write
 
-    if: (github.event_name == 'pull_request' && github.head_ref != 'imupdate') || github.event_name == 'push'
+    # right side implies it's a pull request. Run on all excpept pull requests imupdate branch
+    if: github.event_name != 'pull_request' || github.head_ref != 'imupdate' && github.actor == 'cherryleafroad'
 
     strategy:
       fail-fast: false
