@@ -52,6 +52,10 @@ Check out the release page for the [latest built binaries](https://github.com/ch
 
 - OpenCL support is available for Qualcomm. OpenCL is recommended over OpenMP. Please [go here](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libopencl/qualcomm/lib) in order to learn how to setup OpenCL build for the project. You only need to find your own `libOpenCL.so` file and copy it over for your project. I can't host it here due to copyrights. **For OpenCL support, you need to build the library yourself because of copyright issues (I can't host the OpenCL lib here, so GitHub can't build it for me)**. >Btw, Github Actions can do the build for you too, change the config file, and manually run the action.<
 
+# KMagick
+
+Check out the [KMagick](https://github.com/cherryleafroad/kmagick) repo for instructions on how to use ImageMagick with Kotlin it in your project (instead of the binary).
+
 # Quick Setup Instructions
 
 - Android app setup code, including gradle files, assets, binary / java code, etc, can all be found under the [app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). This is not a 100% complete Android app, but rather it contains all the code examples needed for you to adapt it to your own project. Just copy / rewrite / delete code you want / don't need and combine it with your Android Studio project.
