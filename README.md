@@ -147,7 +147,9 @@ Note: This `libmagick.so` is NOT a real shared library. It is the ELF `magick` b
 
 ### Why no JMagick support?
 
-Well, you see. The thing is that the [jmagick project](https://github.com/techblue/jmagick) hasn't been updated since 2018. Imagemagick has grown and changed so much that it's not even compatible with it anymore. Furthermore, they aren't even using the better magick wand API. JMagick is mostly compatible with IM6, which is an older version. [I once had experimental support for Android and custom C patches for making jmagick](https://github.com/cherryleafroad/Android-ImageMagick7/tree/229070ade452f7d0559ecf158840baffae9138ea/libjmagick-7). It built and compiled of course, however there are so many little bugs and issues that nothing but a full rewrite of jmagick will truly properly support imagemagick. There was no point in maintaining something that technically builds, but isn't that usable in java code since it's buggy and missing so many features. Honestly, it would be much much easier for you to write your own jni lib that integrates the magick wand api. The Magick Wand API isn't even that difficult, and neither is JNI.
+Well, you see. The thing is that the [jmagick project](https://github.com/techblue/jmagick) hasn't been updated since 2018. Imagemagick has grown and changed so much that it's not even compatible with it anymore. Furthermore, they aren't even using the better magick wand API. JMagick is mostly compatible with IM6, which is an older version.
+
+But.. Forget JMagick, because now we have... [KMagick](https://github.com/cherryleafroad/kmagick)!! Yup, I created an entire ImageMagick API in Kotlin from the ground up!
 
 ### I'm getting some errors about not being able to write TMP files..?
 
