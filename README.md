@@ -7,6 +7,8 @@ This is a fully featured imagemagick build compatible with android. All libaries
 
 It can be configured to both build as a binary (with shared libaries or statically linked), or as separate shared libraries (and no binary).
 
+Would you love to use it programmatically in Kotlin? I just created [KMagick](https://github.com/cherryleafroad/kmagick), which are Kotlin bindings to the ImageMagick API! It replaces the defunct JMagick which hasn't been mainained in who knows how long. :smile: Check the other repo for information on how to use it with this.
+
 MagickWand and Magick++ are both available for compilation as well.
 
 It comes compiled with the following features:
