@@ -54,7 +54,7 @@ Check out the release page for the [latest built binaries](https://github.com/ch
 
 # KMagick
 
-Check out the [KMagick](https://github.com/cherryleafroad/kmagick) repo for instructions on how to use ImageMagick with Kotlin it in your project (instead of the binary).
+Check out the [KMagick](https://github.com/cherryleafroad/kmagick) repo for instructions on how to use ImageMagick with Kotlin in your project (instead of the binary).
 
 # Quick Setup Instructions
 
@@ -151,11 +151,11 @@ Note: This `libmagick.so` is NOT a real shared library. It is the ELF `magick` b
 4. Do a bunch of Googling for any JNI, make file, imagemagick wand API, or C / Rust errors errors you encounter (as is always the case with programming!)
 5. Profit!
 
-### Why no JMagick support?
+### Kmagick? Why not Jmagick?
 
-Well, you see. The thing is that the [jmagick project](https://github.com/techblue/jmagick) hasn't been updated since 2018. Imagemagick has grown and changed so much that it's not even compatible with it anymore. Furthermore, they aren't even using the better magick wand API. JMagick is mostly compatible with IM6, which is an older version.
+Well, you see. The thing is that the [jmagick project](https://github.com/techblue/jmagick) hasn't been updated since 2018. Imagemagick has grown and changed so much that it's not even compatible with it anymore. Furthermore, they aren't even using the better magick wand API. Jmagick is mostly compatible with IM6, which is an older version. It's just not up to par.
 
-But.. Forget JMagick, because now we have... [KMagick](https://github.com/cherryleafroad/kmagick)!! Yup, I created an entire ImageMagick API in Kotlin from the ground up!
+So... I made a completely new one called [Kmagick](https://github.com/cherryleafroad/kmagick)!! Yup, I really did make an entire ImageMagick API in Kotlin from the ground up! It's made to be compatible with the latest versions of ImageMagick, AND it uses Kotlin instead of Java! How cool is that?
 
 ### I'm getting some errors about not being able to write TMP files..?
 
