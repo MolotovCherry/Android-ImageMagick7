@@ -3,11 +3,9 @@
 
 [![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml)
 
-This is a fully featured imagemagick build compatible with android. All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
+This is a fully featured imagemagick build compatible with android [__and has Kotlin bindings__](https://github.com/cherryleafroad/kmagick) (check out KMagick below). All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
 
 It can be configured to both build as a binary (with shared libaries or statically linked), or as separate shared libraries (and no binary).
-
-Would you love to use it programmatically in Kotlin? I just created [KMagick](https://github.com/cherryleafroad/kmagick), which are Kotlin bindings to the ImageMagick API! It replaces the defunct JMagick which hasn't been mainained in who knows how long. :smile: Check the other repo for information on how to use it with this.
 
 MagickWand and Magick++ are both available for compilation as well.
 
