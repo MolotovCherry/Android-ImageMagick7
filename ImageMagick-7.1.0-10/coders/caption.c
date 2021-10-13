@@ -92,19 +92,27 @@
 %
 */
 
-static inline void AdjustTypeMetricBounds(TypeMetric *metrics)
+static inline void AdjustTypeMetricBounds(const DrawInfo *draw_info,
+  TypeMetric *metrics)
 {
-  double
-    x1;
-
+  if (draw_info->gravity == UndefinedGravity)
+    return;
   if (metrics->bounds.x1 >= 0.0)
+    metrics->bounds.x1=0.0;
+  else
     {
-      metrics->bounds.x1=0.0;
-      return;
+      double x1 = ceil(-metrics->bounds.x1+0.5);
+      metrics->width+=x1+x1;
+      metrics->bounds.x1=x1;
     }
-  x1=ceil(-metrics->bounds.x1+0.5);
-  metrics->width+=x1+x1;
-  metrics->bounds.x1=x1;
+  if (metrics->bounds.y1 >= 0.0)
+    metrics->bounds.y1=0.0;
+  else
+    {
+      double y1 = ceil(-metrics->bounds.y1+0.5);
+      metrics->height+=y1+y1;
+      metrics->bounds.y1=y1;
+    }
 }
 
 static Image *ReadCAPTIONImage(const ImageInfo *image_info,
@@ -190,7 +198,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
     {
       text=AcquireString(caption);
       i=FormatMagickCaption(image,draw_info,split,&metrics,&text,exception);
-      AdjustTypeMetricBounds(&metrics);
+      AdjustTypeMetricBounds(draw_info,&metrics);
       (void) CloneString(&draw_info->text,text);
       text=DestroyString(text);
       (void) FormatLocaleString(geometry,MagickPathExtent,"%+g%+g",
@@ -198,7 +206,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
       if (draw_info->gravity == UndefinedGravity)
         (void) CloneString(&draw_info->geometry,geometry);
       status=GetMultilineTypeMetrics(image,draw_info,&metrics,exception);
-      AdjustTypeMetricBounds(&metrics);
+      AdjustTypeMetricBounds(draw_info,&metrics);
       image->columns=(size_t) floor(metrics.width+draw_info->stroke_width+0.5);
     }
   if (image->rows == 0)
@@ -206,7 +214,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
       split=MagickTrue;
       text=AcquireString(caption);
       i=FormatMagickCaption(image,draw_info,split,&metrics,&text,exception);
-      AdjustTypeMetricBounds(&metrics);
+      AdjustTypeMetricBounds(draw_info,&metrics);
       (void) CloneString(&draw_info->text,text);
       text=DestroyString(text);
       (void) FormatLocaleString(geometry,MagickPathExtent,"%+g%+g",
@@ -214,7 +222,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
       if (draw_info->gravity == UndefinedGravity)
         (void) CloneString(&draw_info->geometry,geometry);
       status=GetMultilineTypeMetrics(image,draw_info,&metrics,exception);
-      AdjustTypeMetricBounds(&metrics);
+      AdjustTypeMetricBounds(draw_info,&metrics);
       image->rows=(size_t) ((i+1)*(metrics.ascent-metrics.descent+
         draw_info->interline_spacing+draw_info->stroke_width)+0.5);
     }
@@ -260,7 +268,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
             text=AcquireString(caption);
             i=FormatMagickCaption(image,draw_info,split,&metrics,&text,
               exception);
-            AdjustTypeMetricBounds(&metrics);
+            AdjustTypeMetricBounds(draw_info,&metrics);
             (void) CloneString(&draw_info->text,text);
             text=DestroyString(text);
             (void) FormatLocaleString(geometry,MagickPathExtent,"%+g%+g",
@@ -270,7 +278,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
             status=GetMultilineTypeMetrics(image,draw_info,&metrics,exception);
             if (status == MagickFalse)
               break;
-            AdjustTypeMetricBounds(&metrics);
+            AdjustTypeMetricBounds(draw_info,&metrics);
             width=(size_t) floor(metrics.width+draw_info->stroke_width+0.5);
             height=(size_t) floor(metrics.height+draw_info->interline_spacing+
               draw_info->stroke_width+0.5);
@@ -292,7 +300,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
         text=AcquireString(caption);
         i=FormatMagickCaption(image,draw_info,split,&metrics,&text,
           exception);
-        AdjustTypeMetricBounds(&metrics);
+        AdjustTypeMetricBounds(draw_info,&metrics);
         (void) CloneString(&draw_info->text,text);
         text=DestroyString(text);
         (void) FormatLocaleString(geometry,MagickPathExtent,"%+g%+g",
@@ -302,7 +310,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
         status=GetMultilineTypeMetrics(image,draw_info,&metrics,exception);
         if (status == MagickFalse)
           break;
-        AdjustTypeMetricBounds(&metrics);
+        AdjustTypeMetricBounds(draw_info,&metrics);
         width=(size_t) floor(metrics.width+draw_info->stroke_width+0.5);
         height=(size_t) floor(metrics.height+draw_info->interline_spacing+
           draw_info->stroke_width+0.5);
@@ -326,7 +334,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
     Draw caption.
   */
   i=FormatMagickCaption(image,draw_info,split,&metrics,&caption,exception);
-  AdjustTypeMetricBounds(&metrics);
+  AdjustTypeMetricBounds(draw_info,&metrics);
   (void) CloneString(&draw_info->text,caption);
   caption=DestroyString(caption);
   (void) FormatLocaleString(geometry,MagickPathExtent,"%+g%+g",
