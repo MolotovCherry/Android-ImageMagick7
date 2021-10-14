@@ -55,3 +55,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ github.sha }}
           tag: ${{ steps.tag.outputs.TAG }}
+             
+      - name: KMagick Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
+          repository: cherryleafroad/kmagick
+          event-type: new-release
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ steps.tag.outputs.TAG }}"}'
