@@ -1,7 +1,7 @@
 
 # Android ImageMagick 7.1.0-10
 
-[![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml)
+[![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/cherryleafroad/Android-ImageMagick7?style=plastic)
 
 This is a fully featured imagemagick build compatible with android [__and has Kotlin bindings__](https://github.com/cherryleafroad/kmagick) (check out KMagick below). All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
 
