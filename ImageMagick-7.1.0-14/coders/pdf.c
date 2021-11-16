@@ -203,7 +203,8 @@ static void ReadPDFInfo(const ImageInfo *image_info,Image *image,
     version[MagickPathExtent];
 
   int
-    c;
+    c,
+    percent_count;
 
   MagickByteBuffer
     buffer;
@@ -231,13 +232,12 @@ static void ReadPDFInfo(const ImageInfo *image_info,Image *image,
   pdf_info->trimbox=IsStringTrue(GetImageOption(image_info,"pdf:use-trimbox"));
   *version='\0';
   spotcolor=0;
+  percent_count=0;
   (void) memset(&buffer,0,sizeof(buffer));
   buffer.image=image;
   for (c=ReadMagickByteBuffer(&buffer); c != EOF; c=ReadMagickByteBuffer(&buffer))
   {
-    switch(c)
-    {
-      case '%':
+    if (c == '%')
       {
         if (*version == '\0')
           {
@@ -252,18 +252,27 @@ static void ReadPDFInfo(const ImageInfo *image_info,Image *image,
             if (c == EOF)
               break;
           }
-        continue;
+        if (++percent_count == 2)
+          percent_count=0;
+        else
+          continue;
       }
-      case '<':
+    else
       {
-        ReadGhostScriptXMPProfile(&buffer,&pdf_info->profile);
-        continue;
+        percent_count=0;
+        switch(c)
+        {
+          case '<':
+          {
+            ReadGhostScriptXMPProfile(&buffer,&pdf_info->profile);
+            continue;
+          }
+          case '/':
+            break;
+          default:
+            continue;
+        }
       }
-      case '/':
-        break;
-      default:
-        continue;
-    }
     if (c == EOF)
       break;
     if (CompareMagickByteBuffer(&buffer,PDFRotate,strlen(PDFRotate)) != MagickFalse)
