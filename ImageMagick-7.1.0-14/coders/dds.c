@@ -2069,6 +2069,9 @@ static MagickBooleanType ReadBC7Pixels(Image *image,
   {
     for (x = 0; x < (ssize_t) image->columns; x += 4)
     {
+      size_t
+        area;
+
       /* Get 4x4 patch of pixels to write on */
       q=QueueAuthenticPixels(image,x,y,MagickMin(4,image->columns-x),
         MagickMin(4,image->rows-y),exception);
@@ -2144,7 +2147,9 @@ static MagickBooleanType ReadBC7Pixels(Image *image,
         }
 
       /* Write the pixels */
-      for (i=0; i < 16; i++)
+      area=MagickMin(MagickMin(4,image->columns-x)*MagickMin(4,image->rows-y),
+        16);
+      for (i=0; i < (ssize_t) area; i++)
       {
         unsigned char
           c2;
