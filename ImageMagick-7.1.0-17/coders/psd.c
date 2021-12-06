@@ -936,19 +936,23 @@ static inline void SetPSDPixel(Image *image,const PixelChannel channel,
       PixelInfo
         *color;
 
+      ssize_t
+        index;
+
       if (channel == GrayPixelChannel)
         {
-          Quantum
-            index;
-
-          index=pixel;
+          index=(ssize_t) pixel;
           if (packet_size == 1)
-            index=(Quantum) ScaleQuantumToChar(index);
-          index=(Quantum) ConstrainColormapIndex(image,(ssize_t) index,
-            exception);
-          SetPixelIndex(image,index,q);
+            index=(ssize_t) ScaleQuantumToChar((Quantum) index);
+          index=ConstrainColormapIndex(image,index,exception);
+          SetPixelIndex(image,(Quantum) index,q);
         }
-      color=image->colormap+(ssize_t) GetPixelIndex(image,q);
+      else
+        {
+          index=(ssize_t) GetPixelIndex(image,q);
+          index=ConstrainColormapIndex(image,index,exception);
+        }
+      color=image->colormap+index;
       if (channel == AlphaPixelChannel)
         color->alpha=(MagickRealType) pixel;
       SetPixelViaPixelInfo(image,color,q);
@@ -1550,7 +1554,7 @@ static MagickBooleanType GetPixelChannelFromPsdIndex(const PSDInfo *psd_info,
       break;
     }
   }
-  if ((index < -2) || (index > MaxPixelChannels))
+  if ((index < -2) || (index >= MaxPixelChannels))
     return(MagickFalse);
   if (index == -1)
     *channel=AlphaPixelChannel;
@@ -2682,7 +2686,7 @@ static Image *ReadPSDImage(const ImageInfo *image_info,ExceptionInfo *exception)
             if (replicate_profile == MagickFalse)
               break;
           }
-        next=image->next;
+        next=next->next;
       }
       profile=DestroyStringInfo(profile);
     }
