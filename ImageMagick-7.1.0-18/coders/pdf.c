@@ -1465,8 +1465,7 @@ static MagickBooleanType WritePDFImage(const ImageInfo *image_info,Image *image,
     version=1.6;
   for (next=image; next != (Image *) NULL; next=GetNextImageInList(next))
   {
-    if (IdentifyImageCoderGray(next,exception) != MagickFalse)
-      SetImageColorspace(next,GRAYColorspace,exception);
+    (void) SetImageCoderGray(next,exception);
     icc_profile=GetCompatibleColorProfile(next);
     if (icc_profile != (StringInfo *) NULL)
       {
@@ -2525,7 +2524,7 @@ static MagickBooleanType WritePDFImage(const ImageInfo *image_info,Image *image,
     number_pixels=(MagickSizeType) tile_image->columns*tile_image->rows;
     if ((compression == FaxCompression) ||
         (compression == Group4Compression) ||
-        (IdentifyImageCoderGray(tile_image,exception) != MagickFalse))
+        (SetImageCoderGray(tile_image,exception) != MagickFalse))
       {
         switch (compression)
         {
