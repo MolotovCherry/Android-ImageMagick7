@@ -87,6 +87,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/fl32.c \
     $(IMAGE_MAGICK)/coders/flif.c \
     $(IMAGE_MAGICK)/coders/fpx.c \
+    $(IMAGE_MAGICK)/coders/ftxt.c \
     $(IMAGE_MAGICK)/coders/gif.c \
     $(IMAGE_MAGICK)/coders/gradient.c \
     $(IMAGE_MAGICK)/coders/gray.c \
@@ -145,6 +146,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/ps3.c \
     $(IMAGE_MAGICK)/coders/psd.c \
     $(IMAGE_MAGICK)/coders/pwp.c \
+    $(IMAGE_MAGICK)/coders/qoi.c \
     $(IMAGE_MAGICK)/coders/raw.c \
     $(IMAGE_MAGICK)/coders/rgb.c \
     $(IMAGE_MAGICK)/coders/rgf.c \
