@@ -630,6 +630,17 @@ typedef struct {
   int lenExp;
 } ElementT;
 
+typedef enum {
+  rtUnknown,
+  rtEntireImage,
+  rtCornerOnly
+} RunTypeE;
+
+typedef struct {
+  CacheView *View;
+  /* Other per-image metadata could go here. */
+} ImgT;
+
 typedef struct {
   RandomInfo * magick_restrict random_info;
   int numValStack;
@@ -644,6 +655,7 @@ struct _FxInfo {
   size_t ImgListLen;
   ssize_t ImgNum;
   MagickBooleanType NeedStats;
+  MagickBooleanType GotStats;
   MagickBooleanType NeedHsl;
   MagickBooleanType DebugOpt;       /* Whether "-debug" option is in effect */
   MagickBooleanType ContainsDebug;  /* Whether expression contains "debug ()" function */
@@ -665,11 +677,12 @@ struct _FxInfo {
   OperatorE * OperatorStack;
   ChannelStatistics ** statistics;
   int precision;
+  RunTypeE runType;
 
   RandomInfo
     **magick_restrict random_infos;
 
-  CacheView ** Views;
+  ImgT * Imgs;
   Image ** Images;
 
   ExceptionInfo * exception;
@@ -687,9 +700,10 @@ static MagickBooleanType TranslateExpression
 
 static MagickBooleanType GetFunction (FxInfo * pfx, FunctionE fe);
 
-static MagickBooleanType InitFx (FxInfo * pfx, const Image * img, ExceptionInfo *exception)
+static MagickBooleanType InitFx (FxInfo * pfx, const Image * img,
+  MagickBooleanType CalcAllStats, ExceptionInfo *exception)
 {
-  int i=0;
+  ssize_t i=0;
   const Image * next;
 
   pfx->ImgListLen = GetImageListLength (img);
@@ -697,22 +711,22 @@ static MagickBooleanType InitFx (FxInfo * pfx, const Image * img, ExceptionInfo 
   pfx->image = (Image *)img;
 
   pfx->NeedStats = MagickFalse;
+  pfx->GotStats = MagickFalse;
   pfx->NeedHsl = MagickFalse;
   pfx->DebugOpt = IsStringTrue (GetImageArtifact (img, "fx:debug"));
   pfx->statistics = NULL;
-  pfx->Views = NULL;
+  pfx->Imgs = NULL;
   pfx->Images = NULL;
   pfx->exception = exception;
   pfx->precision = GetMagickPrecision ();
   pfx->random_infos = AcquireRandomInfoThreadSet ();
   pfx->ContainsDebug = MagickFalse;
-
-  pfx->Views =
-    (CacheView **) AcquireQuantumMemory (pfx->ImgListLen, sizeof (pfx->Views));
-  if (!pfx->Views) {
+  pfx->runType = (CalcAllStats) ? rtEntireImage : rtCornerOnly;
+  pfx->Imgs = (ImgT *)AcquireQuantumMemory (pfx->ImgListLen, sizeof (ImgT));
+  if (!pfx->Imgs) {
     (void) ThrowMagickException (
       pfx->exception, GetMagickModule(), ResourceLimitFatalError,
-      "Views", "%lu",
+      "Imgs", "%lu",
       pfx->ImgListLen);
     return MagickFalse;
   }
@@ -720,15 +734,21 @@ static MagickBooleanType InitFx (FxInfo * pfx, const Image * img, ExceptionInfo 
   next = GetFirstImageInList (img);
   for ( ; next != (Image *) NULL; next=next->next)
   {
-    pfx->Views[i] = AcquireVirtualCacheView (next, pfx->exception);
-    if (!pfx->Views[i]) {
+    ImgT * pimg = &pfx->Imgs[i];
+    pimg->View = AcquireVirtualCacheView (next, pfx->exception);
+    if (!pimg->View) {
       (void) ThrowMagickException (
         pfx->exception, GetMagickModule(), ResourceLimitFatalError,
-        "Views", "[%i]",
+        "View", "[%li]",
         i);
+      /* dealloc any done so far, and Imgs */
+      for ( ; i > 0; i--) {
+        pimg = &pfx->Imgs[i-1];
+        pimg->View = DestroyCacheView (pimg->View);
+      }
+      pfx->Imgs=(ImgT *) RelinquishMagickMemory (pfx->Imgs);
       return MagickFalse;
     }
-
     i++;
   }
 
@@ -739,21 +759,21 @@ static MagickBooleanType InitFx (FxInfo * pfx, const Image * img, ExceptionInfo 
 
 static MagickBooleanType DeInitFx (FxInfo * pfx)
 {
-  size_t i;
+  ssize_t i;
 
   if (pfx->Images) pfx->Images = (Image**) RelinquishMagickMemory (pfx->Images);
 
-  if (pfx->Views) {
-    for (i = GetImageListLength(pfx->image); i > 0; i--) {
-      pfx->Views[i-1] = DestroyCacheView (pfx->Views[i-1]);
+  if (pfx->Imgs) {
+    for (i = (ssize_t)GetImageListLength(pfx->image); i > 0; i--) {
+      ImgT * pimg = &pfx->Imgs[i-1];
+      pimg->View = DestroyCacheView (pimg->View);
     }
-    pfx->Views=(CacheView **) RelinquishMagickMemory (pfx->Views);
+    pfx->Imgs=(ImgT *) RelinquishMagickMemory (pfx->Imgs);
   }
-
   pfx->random_infos = DestroyRandomInfoThreadSet (pfx->random_infos);
 
   if (pfx->statistics) {
-    for (i = GetImageListLength(pfx->image); i > 0; i--) {
+    for (i = (ssize_t)GetImageListLength(pfx->image); i > 0; i--) {
       pfx->statistics[i-1]=(ChannelStatistics *) RelinquishMagickMemory (pfx->statistics[i-1]);
     }
 
@@ -1010,7 +1030,12 @@ static MagickBooleanType DumpRPN (FxInfo * pfx, FILE * fh)
   fprintf (fh, "  maxUsedOprStack=%i", pfx->maxUsedOprStack);
   fprintf (fh, "  ImgListLen=%g", (double) pfx->ImgListLen);
   fprintf (fh, "  NeedStats=%s", pfx->NeedStats ? "yes" : "no");
+  fprintf (fh, "  GotStats=%s", pfx->GotStats ? "yes" : "no");
   fprintf (fh, "  NeedHsl=%s\n", pfx->NeedHsl ? "yes" : "no");
+  if      (pfx->runType==rtEntireImage) fprintf (stderr, "EntireImage");
+  else if (pfx->runType==rtCornerOnly)  fprintf (stderr, "CornerOnly");
+  fprintf (fh, "\n");
+
 
   for (i=0; i < pfx->usedElements; i++) {
     ElementT * pel = &pfx->Elements[i];
@@ -1590,7 +1615,7 @@ static ssize_t inline GetConstantColour (FxInfo * pfx, fxFltType *v0, fxFltType 
           *v1 = colour.green / QuantumRange;
           *v2 = colour.blue  / QuantumRange;
           dummy_exception = DestroyExceptionInfo (dummy_exception);
-          return (ssize_t) lenfun;
+          return (ssize_t)lenfun;
         }
       } else {
         (void) ThrowMagickException (
@@ -1612,7 +1637,7 @@ static ssize_t inline GetConstantColour (FxInfo * pfx, fxFltType *v0, fxFltType 
   *v2 = colour.blue  / QuantumRange;
 
   dummy_exception = DestroyExceptionInfo (dummy_exception);
-  return (ssize_t) strlen (pfx->token);
+  return (ssize_t)strlen (pfx->token);
 }
 
 static ssize_t inline GetHexColour (FxInfo * pfx, fxFltType *v0, fxFltType *v1, fxFltType *v2)
@@ -2546,8 +2571,16 @@ static MagickBooleanType TranslateExpression (
 
     UserSymbol = NewUserSymbol = MagickFalse;
 
-    if (!*pfx->pex) break;
-    if (*strLimit && (strchr(strLimit,*pfx->pex)!=NULL) ) break;
+    if ( (!*pfx->pex) || (*strLimit && (strchr(strLimit,*pfx->pex)!=NULL) ) )
+    {
+      if (IncrDecr) break;
+
+      (void) ThrowMagickException (
+        pfx->exception, GetMagickModule(), OptionError,
+        "Expected operand after operator", "at '%s'",
+        SetShortExp(pfx));
+      return MagickFalse;
+    }
 
     if (IncrDecr) {
       (void) ThrowMagickException (
@@ -2692,6 +2725,26 @@ static MagickBooleanType TranslateStatementList (FxInfo * pfx, const char * strL
    Run-time
 */
 
+static ChannelStatistics *CollectOneImgStats (FxInfo * pfx, Image * img)
+{
+  int ch;
+  ChannelStatistics * cs = GetImageStatistics (img, pfx->exception);
+  /* Use RelinquishMagickMemory() somewhere. */
+
+  for (ch=0; ch <= (int) MaxPixelChannels; ch++) {
+    cs[ch].mean *= QuantumScale;
+    cs[ch].median *= QuantumScale;
+    cs[ch].maxima *= QuantumScale;
+    cs[ch].minima *= QuantumScale;
+    cs[ch].standard_deviation *= QuantumScale;
+    cs[ch].kurtosis *= QuantumScale;
+    cs[ch].skewness *= QuantumScale;
+    cs[ch].entropy *= QuantumScale;
+  }
+
+  return cs;
+}
+
 static MagickBooleanType CollectStatistics (FxInfo * pfx)
 {
   Image * img = GetFirstImageInList (pfx->image);
@@ -2708,24 +2761,14 @@ static MagickBooleanType CollectStatistics (FxInfo * pfx)
   }
 
   for (;;) {
-    int ch;
-    ChannelStatistics * cs = GetImageStatistics (img, pfx->exception);
-    pfx->statistics[imgNum] = cs;
-    for (ch=0; ch <= (int) MaxPixelChannels; ch++) {
-      cs[ch].mean *= QuantumScale;
-      cs[ch].median *= QuantumScale;
-      cs[ch].maxima *= QuantumScale;
-      cs[ch].minima *= QuantumScale;
-      cs[ch].standard_deviation *= QuantumScale;
-      cs[ch].kurtosis *= QuantumScale;
-      cs[ch].skewness *= QuantumScale;
-      cs[ch].entropy *= QuantumScale;
-    }
+    pfx->statistics[imgNum] = CollectOneImgStats (pfx, img);
 
     if (++imgNum == pfx->ImgListLen) break;
     img = GetNextImageInList (img);
     assert (img != (Image *) NULL);
   }
+  pfx->GotStats = MagickTrue;
+
   return MagickTrue;
 }
 
@@ -2756,78 +2799,103 @@ static inline fxFltType PopVal (FxInfo * pfx, fxRtT * pfxrt, int addr)
   return pfxrt->ValStack[--pfxrt->usedValStack];
 }
 
-static fxFltType inline ImageStat (
+static inline fxFltType ImageStat (
   FxInfo * pfx, ssize_t ImgNum, PixelChannel channel, ImgAttrE ia)
 {
   ChannelStatistics * cs = NULL;
+  fxFltType ret = 0;
+  MagickBooleanType NeedRelinq = MagickFalse;
 
   assert (channel >= 0 && channel <= MaxPixelChannels);
 
-  if (pfx->NeedStats) cs = pfx->statistics[ImgNum];
+  if (pfx->GotStats) {
+    cs = pfx->statistics[ImgNum];
+  } else if (pfx->NeedStats) {
+    /* If we need more than one statistic per pixel, this is inefficient. */
+    cs = CollectOneImgStats (pfx, pfx->Images[ImgNum]);
+    NeedRelinq = MagickTrue;
+  }
 
   switch (ia) {
     case aDepth:
-      return (fxFltType) GetImageDepth (pfx->Images[ImgNum], pfx->exception);
+      ret = (fxFltType) GetImageDepth (pfx->Images[ImgNum], pfx->exception);
       break;
     case aExtent:
-      return (fxFltType) GetBlobSize (pfx->image);
+      ret = (fxFltType) GetBlobSize (pfx->image);
       break;
     case aKurtosis:
-      return cs[channel].kurtosis;
+      ret = cs[channel].kurtosis;
       break;
     case aMaxima:
-      return cs[channel].maxima;
+      ret = cs[channel].maxima;
       break;
     case aMean:
-      return cs[channel].mean;
+      ret = cs[channel].mean;
       break;
     case aMedian:
-      return cs[channel].median;
+      ret = cs[channel].median;
       break;
     case aMinima:
-      return cs[channel].minima;
+      ret = cs[channel].minima;
       break;
     case aPage:
       /* Do nothing */
       break;
     case aPageX:
-      return (fxFltType) pfx->Images[ImgNum]->page.x;
+      ret = (fxFltType) pfx->Images[ImgNum]->page.x;
+      break;
     case aPageY:
-      return (fxFltType) pfx->Images[ImgNum]->page.y;
+      ret = (fxFltType) pfx->Images[ImgNum]->page.y;
+      break;
     case aPageWid:
-      return (fxFltType) pfx->Images[ImgNum]->page.width;
+      ret = (fxFltType) pfx->Images[ImgNum]->page.width;
+      break;
     case aPageHt:
-      return (fxFltType) pfx->Images[ImgNum]->page.height;
+      ret = (fxFltType) pfx->Images[ImgNum]->page.height;
+      break;
     case aPrintsize:
       /* Do nothing */
       break;
     case aPrintsizeX:
-      return (fxFltType) PerceptibleReciprocal (pfx->Images[ImgNum]->resolution.x) * pfx->Images[ImgNum]->columns;
+      ret = (fxFltType) PerceptibleReciprocal (pfx->Images[ImgNum]->resolution.x)
+                        * pfx->Images[ImgNum]->columns;
+      break;
     case aPrintsizeY:
-      return (fxFltType) PerceptibleReciprocal (pfx->Images[ImgNum]->resolution.y) * pfx->Images[ImgNum]->rows;
+      ret = (fxFltType) PerceptibleReciprocal (pfx->Images[ImgNum]->resolution.y)
+                        * pfx->Images[ImgNum]->rows;
+      break;
     case aQuality:
-      return (fxFltType) pfx->Images[ImgNum]->quality;
+      ret = (fxFltType) pfx->Images[ImgNum]->quality;
+      break;
     case aRes:
       /* Do nothing */
       break;
     case aResX:
-      return pfx->Images[ImgNum]->resolution.x;
+      ret = pfx->Images[ImgNum]->resolution.x;
+      break;
     case aResY:
-      return pfx->Images[ImgNum]->resolution.y;
+      ret = pfx->Images[ImgNum]->resolution.y;
+      break;
     case aSkewness:
-      return cs[channel].skewness;
+      ret = cs[channel].skewness;
+      break;
     case aStdDev:
-      return cs[channel].standard_deviation;
+      ret = cs[channel].standard_deviation;
+      break;
     case aH:
-      return (fxFltType) pfx->Images[ImgNum]->rows;
+      ret = (fxFltType) pfx->Images[ImgNum]->rows;
+      break;
     case aN:
-      return (fxFltType) pfx->ImgListLen;
+      ret = (fxFltType) pfx->ImgListLen;
+      break;
     case aT: /* image index in list */
-      return (fxFltType) ImgNum;
+      ret = (fxFltType) ImgNum;
+      break;
     case aW:
-      return (fxFltType) pfx->Images[ImgNum]->columns;
+      ret = (fxFltType) pfx->Images[ImgNum]->columns;
+      break;
     case aZ:
-      return (fxFltType) GetImageDepth (pfx->Images[ImgNum], pfx->exception);
+      ret = (fxFltType) GetImageDepth (pfx->Images[ImgNum], pfx->exception);
       break;
     default:
       (void) ThrowMagickException (
@@ -2835,7 +2903,9 @@ static fxFltType inline ImageStat (
         "Unknown ia=", "%i",
         ia);
   }
-  return -99.0;
+  if (NeedRelinq) cs = (ChannelStatistics *)RelinquishMagickMemory (cs);
+
+  return ret;
 }
 
 static fxFltType inline FxGcd (fxFltType x, fxFltType y, const size_t depth)
@@ -2850,15 +2920,16 @@ static fxFltType inline FxGcd (fxFltType x, fxFltType y, const size_t depth)
 }
 
 static ssize_t inline ChkImgNum (FxInfo * pfx, fxFltType f)
+/* Returns -1 if f is too large. */
 {
   ssize_t i = (ssize_t) floor ((double) f + 0.5);
   if (i < 0) i += pfx->ImgListLen;
-  if (i < 0 || (size_t)i >= pfx->ImgListLen) {
+  if (i < 0 || i >= (ssize_t)pfx->ImgListLen) {
     (void) ThrowMagickException (
       pfx->exception, GetMagickModule(), OptionError,
       "ImgNum", "%lu bad for ImgListLen %lu",
       i, pfx->ImgListLen);
-    
+    i = -1;
   }
   return i;
 }
@@ -2883,11 +2954,11 @@ static fxFltType GetHslFlt (FxInfo * pfx, ssize_t ImgNum, const fxFltType fx, co
   double hue=0, saturation=0, lightness=0;
 
   MagickBooleanType okay = MagickTrue;
-  if(!InterpolatePixelChannel (img, pfx->Views[ImgNum], RedPixelChannel, img->interpolate,
+  if(!InterpolatePixelChannel (img, pfx->Imgs[ImgNum].View, RedPixelChannel, img->interpolate,
     (double) fx, (double) fy, &red, pfx->exception)) okay = MagickFalse;
-  if(!InterpolatePixelChannel (img, pfx->Views[ImgNum], GreenPixelChannel, img->interpolate,
+  if(!InterpolatePixelChannel (img, pfx->Imgs[ImgNum].View, GreenPixelChannel, img->interpolate,
     (double) fx, (double) fy, &green, pfx->exception)) okay = MagickFalse;
-  if(!InterpolatePixelChannel (img, pfx->Views[ImgNum], BluePixelChannel, img->interpolate,
+  if(!InterpolatePixelChannel (img, pfx->Imgs[ImgNum].View, BluePixelChannel, img->interpolate,
     (double) fx, (double) fy, &blue, pfx->exception)) okay = MagickFalse;
 
   if (!okay)
@@ -2912,7 +2983,7 @@ static fxFltType GetHslInt (FxInfo * pfx, ssize_t ImgNum, const ssize_t imgx, co
 
   double hue=0, saturation=0, lightness=0;
 
-  const Quantum * p = GetCacheViewVirtualPixels (pfx->Views[ImgNum], imgx, imgy, 1, 1, pfx->exception);
+  const Quantum * p = GetCacheViewVirtualPixels (pfx->Imgs[ImgNum].View, imgx, imgy, 1, 1, pfx->exception);
   if (!p)
     (void) ThrowMagickException (
       pfx->exception, GetMagickModule(), OptionError,
@@ -2941,7 +3012,7 @@ static fxFltType inline GetIntensity (FxInfo * pfx, ssize_t ImgNum, const fxFltT
 
   (void) GetPixelInfo (img, &pixelinf);
 
-  if (!InterpolatePixelInfo (img, pfx->Views[pfx->ImgNum], img->interpolate,
+  if (!InterpolatePixelInfo (img, pfx->Imgs[pfx->ImgNum].View, img->interpolate,
               (double) fx, (double) fy, &pixelinf, pfx->exception))
   {
     (void) ThrowMagickException (
@@ -2960,6 +3031,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
   fxFltType regA=0, regB=0, regC=0, regD=0, regE=0;
   Image * img = pfx->image;
   ChannelStatistics * cs = NULL;
+  MagickBooleanType NeedRelinq = MagickFalse;
   double hue=0, saturation=0, lightness=0;
   int i;
 
@@ -2968,10 +3040,13 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
      Similarly img.
   */
   if (!p) p = GetCacheViewVirtualPixels (
-    pfx->Views[pfx->ImgNum], imgx, imgy, 1, 1, pfx->exception);
+    pfx->Imgs[pfx->ImgNum].View, imgx, imgy, 1, 1, pfx->exception);
 
-  if (pfx->NeedStats) {
+  if (pfx->GotStats) {
     cs = pfx->statistics[pfx->ImgNum];
+  } else if (pfx->NeedStats) {
+    cs = CollectOneImgStats (pfx, pfx->Images[pfx->ImgNum]);
+    NeedRelinq = MagickTrue;
   }
 
   /*  Folllowing is only for expressions like "saturation", with no image specifier.
@@ -3070,7 +3145,6 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
           regA = (fxFltType) ((size_t)(regA+0.5) << (size_t)(regB+0.5));
           break;
         case oRshift:
-          regA = (fxFltType) 0.0;
           if ((size_t) (regB+0.5) >= (8*sizeof(size_t)))
             {
               (void) ThrowMagickException ( pfx->exception, GetMagickModule(),
@@ -3220,7 +3294,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
         case fDebug:
           /* FIXME: debug() should give channel name. */
 
-          fprintf (stderr, "%s[%g,%g].%i: %s=%.*Lg\n",
+          (void) fprintf (stderr, "%s[%g,%g].[%i]: %s=%.*Lg\n",
                    img->filename, (double) imgx, (double) imgy,
                    channel, SetPtrShortExp (pfx, pel->pExpStart, (size_t) (pel->lenExp+1)),
                    pfx->precision, regA);
@@ -3344,6 +3418,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
              May have ImgAttr qualifier or channel qualifier or both.
           */
           ssize_t ImgNum = ChkImgNum (pfx, regA);
+          if (ImgNum < 0) break;
           regA = (fxFltType) 0;
           if (ImgNum == 0) {
             Image * pimg = pfx->Images[0];
@@ -3355,7 +3430,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
                     regA = QuantumScale * p[pimg->channel_map[WHICH_NON_ATTR_CHAN].offset];
                   } else {
                     const Quantum * pv = GetCacheViewVirtualPixels (
-                                   pfx->Views[0], imgx, imgy, 1,1, pfx->exception);
+                                   pfx->Imgs[0].View, imgx, imgy, 1,1, pfx->exception);
                     if (!pv) {
                       (void) ThrowMagickException (
                         pfx->exception, GetMagickModule(), OptionError,
@@ -3377,7 +3452,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
                   regA = QuantumScale * p[pimg->channel_map[WHICH_NON_ATTR_CHAN].offset];
                 } else {
                   const Quantum * pv = GetCacheViewVirtualPixels (
-                                 pfx->Views[0], imgx, imgy, 1,1, pfx->exception);
+                                 pfx->Imgs[0].View, imgx, imgy, 1,1, pfx->exception);
                   if (!pv) {
                     (void) ThrowMagickException (
                       pfx->exception, GetMagickModule(), OptionError,
@@ -3409,7 +3484,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
               }
 
               pv = GetCacheViewVirtualPixels (
-                     pfx->Views[ImgNum], imgx, imgy, 1,1, pfx->exception);
+                     pfx->Imgs[ImgNum].View, imgx, imgy, 1,1, pfx->exception);
               if (!pv) {
                 (void) ThrowMagickException (
                   pfx->exception, GetMagickModule(), OptionError,
@@ -3437,7 +3512,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
                 regA = QuantumScale * p[pimg->channel_map[WHICH_NON_ATTR_CHAN].offset];
               } else {
                 const Quantum * pv = GetCacheViewVirtualPixels (
-                               pfx->Views[0], imgx, imgy, 1,1, pfx->exception);
+                               pfx->Imgs[0].View, imgx, imgy, 1,1, pfx->exception);
                 if (!pv) {
                   (void) ThrowMagickException (
                     pfx->exception, GetMagickModule(), OptionError,
@@ -3459,7 +3534,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
               regA = QuantumScale * p[pimg->channel_map[WHICH_NON_ATTR_CHAN].offset];
             } else {
               const Quantum * pv = GetCacheViewVirtualPixels (
-                                   pfx->Views[0], imgx, imgy, 1,1, pfx->exception);
+                                   pfx->Imgs[0].View, imgx, imgy, 1,1, pfx->exception);
               if (!pv) {
                 (void) ThrowMagickException (
                   pfx->exception, GetMagickModule(), OptionError,
@@ -3474,8 +3549,10 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
         case fUP: {
           /* 3 args are: ImgNum, x, y */
           ssize_t ImgNum = ChkImgNum (pfx, regA);
-
           fxFltType fx, fy;
+
+          if (ImgNum < 0) break;
+
           if (pel->IsRelative) {
             fx = imgx + regB;
             fy = imgy + regC;
@@ -3498,7 +3575,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
           {
             double v;
             Image * imUP = pfx->Images[ImgNum];
-            if (! InterpolatePixelChannel (imUP, pfx->Views[ImgNum], WHICH_NON_ATTR_CHAN,
+            if (! InterpolatePixelChannel (imUP, pfx->Imgs[ImgNum].View, WHICH_NON_ATTR_CHAN,
                     imUP->interpolate, (double) fx, (double) fy, &v, pfx->exception))
             {
               (void) ThrowMagickException (
@@ -3519,7 +3596,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
 
           if (pel->ImgAttrQual == aNull) {
             const Quantum * pv = GetCacheViewVirtualPixels (
-                                   pfx->Views[ImgNum], imgx, imgy, 1,1, pfx->exception);
+                                   pfx->Imgs[ImgNum].View, imgx, imgy, 1,1, pfx->exception);
             if (!pv) {
               (void) ThrowMagickException (
                 pfx->exception, GetMagickModule(), OptionError,
@@ -3573,7 +3650,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
           {
             double v;
 
-            if (! InterpolatePixelChannel (pfx->Images[ImgNum], pfx->Views[ImgNum],
+            if (! InterpolatePixelChannel (pfx->Images[ImgNum], pfx->Imgs[ImgNum].View,
                                            WHICH_NON_ATTR_CHAN, pfx->Images[ImgNum]->interpolate,
                                            (double) fx, (double) fy, &v, pfx->exception)
                                           )
@@ -3591,7 +3668,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
         case fNull:
           break;
         case aDepth:
-          regA = (fxFltType) GetImageDepth (img, pfx->exception) / QuantumRange;
+          regA = (fxFltType) GetImageDepth (img, pfx->exception);
           break;
         case aExtent:
           regA = (fxFltType) img->extent;
@@ -3762,6 +3839,12 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
 
   *result = regA;
 
+  if (NeedRelinq) cs = (ChannelStatistics *)RelinquishMagickMemory (cs);
+
+  if (pfx->exception->severity != UndefinedException) {
+    return MagickFalse;
+  }
+
   if (pfxrt->usedValStack != 0) {
       (void) ThrowMagickException (
         pfx->exception, GetMagickModule(), OptionError,
@@ -3787,7 +3870,7 @@ MagickPrivate MagickBooleanType FxEvaluateChannelExpression (
   assert (pfx != NULL);
   assert (pfx->image != NULL);
   assert (pfx->Images != NULL);
-  assert (pfx->Views != NULL);
+  assert (pfx->Imgs != NULL);
   assert (pfx->fxrts != NULL);
 
   pfx->fxrts[id].thisPixel = NULL;
@@ -3804,7 +3887,8 @@ MagickPrivate MagickBooleanType FxEvaluateChannelExpression (
   return MagickTrue;
 }
 
-FxInfo *AcquireFxInfo (const Image * images, const char * expression, ExceptionInfo *exception)
+static FxInfo *AcquireFxInfoPrivate (const Image * images, const char * expression,
+  MagickBooleanType CalcAllStats, ExceptionInfo *exception)
 {
   char chLimit;
 
@@ -3812,7 +3896,7 @@ FxInfo *AcquireFxInfo (const Image * images, const char * expression, ExceptionI
 
   memset (pfx, 0, sizeof (*pfx));
 
-  if (!InitFx (pfx, images, exception)) {
+  if (!InitFx (pfx, images, CalcAllStats, exception)) {
     pfx = (FxInfo*) RelinquishMagickMemory(pfx);
     return NULL;
   }
@@ -3868,7 +3952,7 @@ FxInfo *AcquireFxInfo (const Image * images, const char * expression, ExceptionI
     return NULL;
   }
 
-  if (pfx->NeedStats && !pfx->statistics) {
+  if (pfx->NeedStats && pfx->runType == rtEntireImage && !pfx->statistics) {
     if (!CollectStatistics (pfx)) {
       (void) DestroyRPN (pfx);
       pfx->expression = DestroyString (pfx->expression);
@@ -3927,6 +4011,11 @@ FxInfo *AcquireFxInfo (const Image * images, const char * expression, ExceptionI
   return pfx;
 }
 
+FxInfo *AcquireFxInfo (const Image * images, const char * expression, ExceptionInfo *exception)
+{
+  return AcquireFxInfoPrivate (images, expression, MagickFalse, exception);
+}
+
 FxInfo *DestroyFxInfo (FxInfo * pfx)
 {
   ssize_t t;
@@ -3934,7 +4023,7 @@ FxInfo *DestroyFxInfo (FxInfo * pfx)
   assert (pfx != NULL);
   assert (pfx->image != NULL);
   assert (pfx->Images != NULL);
-  assert (pfx->Views != NULL);
+  assert (pfx->Imgs != NULL);
   assert (pfx->fxrts != NULL);
 
   for (t=0; t < (ssize_t) GetMagickResourceLimit(ThreadResource); t++) {
@@ -3993,7 +4082,7 @@ MagickExport Image *FxImage (const Image *image, const char *expression,
     return NULL;
   }
 
-  pfx = AcquireFxInfo (image, expression, exception);
+  pfx = AcquireFxInfoPrivate (image, expression, MagickTrue, exception);
 
   if (!pfx) {
     fx_image=DestroyImage(fx_image);
@@ -4002,7 +4091,7 @@ MagickExport Image *FxImage (const Image *image, const char *expression,
 
   assert (pfx->image != NULL);
   assert (pfx->Images != NULL);
-  assert (pfx->Views != NULL);
+  assert (pfx->Imgs != NULL);
   assert (pfx->fxrts != NULL);
 
   status=MagickTrue;
