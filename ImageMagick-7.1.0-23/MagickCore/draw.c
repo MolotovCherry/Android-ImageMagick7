@@ -1603,13 +1603,13 @@ static Image *DrawClippingMask(Image *image,const DrawInfo *draw_info,
   status=RenderMVGContent(clip_mask,clone_info,0,exception);
   clone_info=DestroyDrawInfo(clone_info);
   separate_mask=SeparateImage(clip_mask,AlphaChannel,exception);
-  if (separate_mask != (Image *) NULL)
+  if (separate_mask == (Image *) NULL)
+    status=MagickFalse; 
+  else
     {
       clip_mask=DestroyImage(clip_mask);
       clip_mask=separate_mask;
-      status=NegateImage(clip_mask,MagickFalse,exception);
-      if (status == MagickFalse)
-        clip_mask=DestroyImage(clip_mask);
+      status&=NegateImage(clip_mask,MagickFalse,exception);
     }
   if (status == MagickFalse)
     clip_mask=DestroyImage(clip_mask);
@@ -2273,10 +2273,10 @@ static MagickBooleanType CheckPrimitiveExtent(MVGInfo *mvg_info,
     Check if there is enough storage for drawing pimitives.
   */
   quantum=sizeof(**mvg_info->primitive_info);
-  extent=(double) mvg_info->offset+pad+(PrimitiveExtentPad+1)*quantum;
-  if (extent < (double) *mvg_info->extent)
+  extent=(double) mvg_info->offset+pad+(PrimitiveExtentPad+1)*(double) quantum;
+  if (extent <= (double) *mvg_info->extent)
     return(MagickTrue);
-  if (extent >= (double) MAGICK_SSIZE_MAX)
+  if ((extent >= (double) MAGICK_SSIZE_MAX) || (IsNaN(extent) != 0))
     return(MagickFalse);
   *mvg_info->primitive_info=(PrimitiveInfo *) ResizeQuantumMemory(
     *mvg_info->primitive_info,(size_t) (extent+1),quantum);
@@ -5559,8 +5559,8 @@ MagickExport MagickBooleanType DrawPrimitive(Image *image,
               }
             else
               if ((LocaleCompare(clone_info->magick,"ftp") != 0) &&
-                  (LocaleCompare(clone_info->magick,"https") != 0) &&
-                  (LocaleCompare(clone_info->magick,"http") != 0))
+                  (LocaleCompare(clone_info->magick,"http") != 0) &&
+                  (LocaleCompare(clone_info->magick,"https") != 0))
                 composite_images=ReadImage(clone_info,exception);
               else
                 (void) ThrowMagickException(exception,GetMagickModule(),
@@ -7374,7 +7374,7 @@ static PrimitiveInfo *TraceStrokePolygon(const DrawInfo *draw_info,
     else
       {
         slope.p=dy.p/dx.p;
-        inverse_slope.p=(-1.0/slope.p);
+        inverse_slope.p=(-1.0*PerceptibleReciprocal(slope.p));
       }
   mid=ExpandAffine(&draw_info->affine)*draw_info->stroke_width/2.0;
   miterlimit=(double) (draw_info->miterlimit*draw_info->miterlimit*mid*mid);
