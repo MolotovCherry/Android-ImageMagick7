@@ -39,9 +39,9 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickWand/pixel-wand.c \
     $(IMAGE_MAGICK)/MagickWand/script-token.c \
     $(IMAGE_MAGICK)/MagickWand/stream.c \
+    $(IMAGE_MAGICK)/MagickWand/wand-view.c \
     $(IMAGE_MAGICK)/MagickWand/wand.c \
     $(IMAGE_MAGICK)/MagickWand/wandcli.c \
-    $(IMAGE_MAGICK)/MagickWand/wand-view.c \
 
 
 # compiling with openCL support
