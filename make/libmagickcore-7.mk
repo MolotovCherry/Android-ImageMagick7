@@ -199,8 +199,8 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/artifact.c \
     $(IMAGE_MAGICK)/MagickCore/attribute.c \
     $(IMAGE_MAGICK)/MagickCore/blob.c \
-    $(IMAGE_MAGICK)/MagickCore/cache.c \
     $(IMAGE_MAGICK)/MagickCore/cache-view.c \
+    $(IMAGE_MAGICK)/MagickCore/cache.c \
     $(IMAGE_MAGICK)/MagickCore/channel.c \
     $(IMAGE_MAGICK)/MagickCore/cipher.c \
     $(IMAGE_MAGICK)/MagickCore/client.c \
@@ -230,8 +230,8 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/geometry.c \
     $(IMAGE_MAGICK)/MagickCore/histogram.c \
     $(IMAGE_MAGICK)/MagickCore/identify.c \
-    $(IMAGE_MAGICK)/MagickCore/image.c \
     $(IMAGE_MAGICK)/MagickCore/image-view.c \
+    $(IMAGE_MAGICK)/MagickCore/image.c \
     $(IMAGE_MAGICK)/MagickCore/layer.c \
     $(IMAGE_MAGICK)/MagickCore/linked-list.c \
     $(IMAGE_MAGICK)/MagickCore/list.c \
@@ -257,9 +257,9 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/MagickCore/profile.c \
     $(IMAGE_MAGICK)/MagickCore/property.c \
     $(IMAGE_MAGICK)/MagickCore/quantize.c \
-    $(IMAGE_MAGICK)/MagickCore/quantum.c \
     $(IMAGE_MAGICK)/MagickCore/quantum-export.c \
     $(IMAGE_MAGICK)/MagickCore/quantum-import.c \
+    $(IMAGE_MAGICK)/MagickCore/quantum.c \
     $(IMAGE_MAGICK)/MagickCore/random.c \
     $(IMAGE_MAGICK)/MagickCore/registry.c \
     $(IMAGE_MAGICK)/MagickCore/resample.c \
