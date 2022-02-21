@@ -159,6 +159,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/sgi.c \
     $(IMAGE_MAGICK)/coders/sixel.c \
     $(IMAGE_MAGICK)/coders/stegano.c \
+    $(IMAGE_MAGICK)/coders/strimg.c \
     $(IMAGE_MAGICK)/coders/sun.c \
     $(IMAGE_MAGICK)/coders/svg.c \
     $(IMAGE_MAGICK)/coders/tga.c \
@@ -187,7 +188,6 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/xcf.c \
     $(IMAGE_MAGICK)/coders/xpm.c \
     $(IMAGE_MAGICK)/coders/xps.c \
-    $(IMAGE_MAGICK)/coders/xtrn.c \
     $(IMAGE_MAGICK)/coders/xwd.c \
     $(IMAGE_MAGICK)/coders/yaml.c \
     $(IMAGE_MAGICK)/coders/ycbcr.c \
