@@ -2643,12 +2643,26 @@ static MagickBooleanType TranslateExpression (
     pfx->usedOprStack--;
     (void) AddElement (pfx, (fxFltType) 0, op);
     if (op == oAssign) {
+      if (UserSymNdx0 < 0) {
+        (void) ThrowMagickException (
+          pfx->exception, GetMagickModule(), OptionError,
+          "Assignment to unknown user symbol at", "'%s'",
+          SetShortExp(pfx));
+        return MagickFalse;
+      }
       /* Adjust last element, by deletion and add.
       */
       pfx->usedElements--;
       (void) AddAddressingElement (pfx, rCopyTo, UserSymNdx0);
       break;
     } else if (OprInPlace (op)) {
+      if (UserSymNdx0 < 0) {
+        (void) ThrowMagickException (
+          pfx->exception, GetMagickModule(), OptionError,
+          "Operator-in-place to unknown user symbol at", "'%s'",
+          SetShortExp(pfx));
+        return MagickFalse;
+      }
       /* Modify latest element.
       */
       pfx->Elements[pfx->usedElements-1].EleNdx = UserSymNdx0;
@@ -3801,18 +3815,23 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
           break;
 
         case rGoto:
+          assert (pel->EleNdx >= 0);
           i = pel->EleNdx-1; /* -1 because 'for' loop will increment. */
           break;
         case rIfZeroGoto:
+          assert (pel->EleNdx >= 0);
           if (fabs((double) regA) < MagickEpsilon) i = pel->EleNdx-1;
           break;
         case rIfNotZeroGoto:
+          assert (pel->EleNdx >= 0);
           if (fabs((double) regA) > MagickEpsilon) i = pel->EleNdx-1;
           break;
         case rCopyFrom:
+          assert (pel->EleNdx >= 0);
           regA = pfxrt->UserSymVals[pel->EleNdx];
           break;
         case rCopyTo:
+          assert (pel->EleNdx >= 0);
           pfxrt->UserSymVals[pel->EleNdx] = regA;
           break;
         case rZerStk:
@@ -4150,7 +4169,7 @@ MagickExport Image *FxImage (const Image *image, const char *expression,
 
         if (!ExecuteRPN (pfx, &pfx->fxrts[id], &result, channel, x, y)) {
           status=MagickFalse;
-          continue;
+          break;
         }
 
         q[i] = ClampToQuantum ((MagickRealType) (QuantumRange*result));

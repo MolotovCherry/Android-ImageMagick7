@@ -4673,7 +4673,7 @@ static PolygonInfo **AcquirePolygonTLS(const PrimitiveInfo *primitive_info,
   return(polygon_info);
 }
 
-static MagickBooleanType AcquirePolygonEdgesTLS(PolygonInfo **polygon_info,
+static MagickBooleanType ClonePolygonEdgesTLS(PolygonInfo **polygon_info,
   const size_t number_threads,ExceptionInfo *exception)
 {
   ssize_t
@@ -4750,19 +4750,17 @@ static double GetFillAlpha(PolygonInfo *polygon_info,const double mid,
     distance,
     subpath_alpha;
 
-  PointInfo
-    delta;
-
   const PointInfo
     *q;
 
   EdgeInfo
     *p;
 
-  ssize_t
-    i;
+  PointInfo
+    delta;
 
   ssize_t
+    i,
     j,
     winding_number;
 
@@ -4803,24 +4801,33 @@ static double GetFillAlpha(PolygonInfo *polygon_info,const double mid,
       q=p->points+i-1;
       delta.x=(q+1)->x-q->x;
       delta.y=(q+1)->y-q->y;
-      beta=delta.x*(x-q->x)+delta.y*(y-q->y);
+      beta=delta.x*(x-q->x)+delta.y*(y-q->y);  /* segLen*point-cos(theta) */
       if (beta <= 0.0)
         {
+          /*
+            Cosine <= 0, point is closest to q.
+          */
           delta.x=(double) x-q->x;
           delta.y=(double) y-q->y;
           distance=delta.x*delta.x+delta.y*delta.y;
         }
       else
         {
-          alpha=delta.x*delta.x+delta.y*delta.y;
+          alpha=delta.x*delta.x+delta.y*delta.y;  /* segLen*segLen */
           if (beta >= alpha)
             {
+              /*
+                Point is closest to q+1.
+              */
               delta.x=(double) x-(q+1)->x;
               delta.y=(double) y-(q+1)->y;
               distance=delta.x*delta.x+delta.y*delta.y;
             }
           else
             {
+              /*
+                Point is closest to point between q & q+1.
+              */
               alpha=PerceptibleReciprocal(alpha);
               beta=delta.x*(y-q->y)-delta.y*(x-q->x);
               distance=alpha*beta*beta;
@@ -5018,7 +5025,7 @@ static MagickBooleanType DrawPolygonPrimitive(Image *image,
   poly_extent.y2=CastDoubleToLong(floor(bounds.y2+0.5));
   number_threads=GetMagickNumberThreads(image,image,poly_extent.y2-
     poly_extent.y1+1,1);
-  status=AcquirePolygonEdgesTLS(polygon_info,number_threads,exception);
+  status=ClonePolygonEdgesTLS(polygon_info,number_threads,exception);
   if (status == MagickFalse)
     {
       polygon_info=DestroyPolygonTLS(polygon_info);
