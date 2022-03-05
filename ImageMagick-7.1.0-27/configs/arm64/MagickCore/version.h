@@ -26,20 +26,20 @@ extern "C" {
   Define declarations.
 */
 #define MagickPackageName "ImageMagick"
-#define MagickCopyright  "(C) 1999-2021 ImageMagick Studio LLC"
+#define MagickCopyright  "(C) 1999 ImageMagick Studio LLC"
 #define MagickLibVersion  0x710
 #define MagickLibVersionText  "7.1.0"
 #define MagickLibVersionNumber  10,0,0
-#define MagickLibAddendum  "-26"
+#define MagickLibAddendum  "-27"
 #define MagickLibInterface  10
 #define MagickLibMinInterface  10
 #define MagickPlatform  "aarch64"
 #define MagickppLibVersionText  "7.1.0"
 #define MagickppLibVersionNumber  5:0:0
-#define MagickppLibAddendum  "-26"
+#define MagickppLibAddendum  "-27"
 #define MagickppLibInterface  5
 #define MagickppLibMinInterface  5
-#define MagickReleaseDate  "2022-02-19"
+#define MagickReleaseDate  "2022-02-26"
 #define MagickAuthoritativeLicense  \
   "https://imagemagick.org/script/license.php"
 #define MagickAuthoritativeURL  "https://imagemagick.org"
