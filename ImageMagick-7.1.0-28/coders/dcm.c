@@ -3269,17 +3269,17 @@ static Image *ReadDCMImage(const ImageInfo *image_info,ExceptionInfo *exception)
             If we're entering a sequence, push the current image parameters
             onto the stack, so we can restore them at the end of the sequence.
           */
-          info_copy=(DCMInfo *) AcquireMagickMemory(sizeof(info));
-          if (info_copy == (DCMInfo *) NULL)
+          DCMInfo *clone_info = (DCMInfo *) AcquireMagickMemory(sizeof(info));
+          if (clone_info == (DCMInfo *) NULL)
             ThrowDCMException(ResourceLimitError,"MemoryAllocationFailed")
-          (void) memcpy(info_copy,&info,sizeof(info));
-          info_copy->scale=(Quantum *) AcquireQuantumMemory(
-            info_copy->scale_size+1,sizeof(*info_copy->scale));
-          if (info_copy->scale == (Quantum *) NULL)
+          (void) memcpy(clone_info,&info,sizeof(info));
+          clone_info->scale=(Quantum *) AcquireQuantumMemory(
+            clone_info->scale_size+1,sizeof(*clone_info->scale));
+          if (clone_info->scale == (Quantum *) NULL)
             ThrowDCMException(ResourceLimitError,"MemoryAllocationFailed")
-          (void) memcpy(info_copy->scale,info.scale,info_copy->scale_size*
-            sizeof(*info_copy->scale));
-          AppendValueToLinkedList(stack,info_copy);
+          (void) memcpy(clone_info->scale,info.scale,clone_info->scale_size*
+            sizeof(*clone_info->scale));
+          AppendValueToLinkedList(stack,clone_info);
           sequence_depth++;
         }
       datum=0;
@@ -4022,8 +4022,8 @@ static Image *ReadDCMImage(const ImageInfo *image_info,ExceptionInfo *exception)
           ThrowDCMException(CorruptImageError,"InsufficientImageDataInFile")
         if (info.scale != (Quantum *) NULL)
           info.scale=(Quantum *) RelinquishMagickMemory(info.scale);
-        info.scale_size=MagickMax(length,MaxMap)+1;
-        info.scale=(Quantum *) AcquireQuantumMemory(info.scale_size,
+        info.scale_size=MagickMax(length,MaxMap);
+        info.scale=(Quantum *) AcquireQuantumMemory(info.scale_size+1,
           sizeof(*info.scale));
         if (info.scale == (Quantum *) NULL)
           ThrowDCMException(ResourceLimitError,"MemoryAllocationFailed")
@@ -4110,7 +4110,7 @@ static Image *ReadDCMImage(const ImageInfo *image_info,ExceptionInfo *exception)
             {
               index=map.red[i];
               if ((info.scale != (Quantum *) NULL) && (index >= 0) &&
-                  (index <= (int) info.max_value))
+                  (index < (int) info.scale_size))
                 index=(int) info.scale[index];
               image->colormap[i].red=(MagickRealType) index;
             }
@@ -4119,7 +4119,7 @@ static Image *ReadDCMImage(const ImageInfo *image_info,ExceptionInfo *exception)
             {
               index=map.green[i];
               if ((info.scale != (Quantum *) NULL) && (index >= 0) &&
-                  (index <= (int) info.max_value))
+                  (index < (int) info.scale_size))
                 index=(int) info.scale[index];
               image->colormap[i].green=(MagickRealType) index;
             }
@@ -4128,7 +4128,7 @@ static Image *ReadDCMImage(const ImageInfo *image_info,ExceptionInfo *exception)
             {
               index=map.blue[i];
               if ((info.scale != (Quantum *) NULL) && (index >= 0) &&
-                  (index <= (int) info.max_value))
+                  (index < (int) info.scale_size))
                 index=(int) info.scale[index];
               image->colormap[i].blue=(MagickRealType) index;
             }
@@ -4137,7 +4137,7 @@ static Image *ReadDCMImage(const ImageInfo *image_info,ExceptionInfo *exception)
             {
               index=map.gray[i];
               if ((info.scale != (Quantum *) NULL) && (index >= 0) &&
-                  (index <= (int) info.max_value))
+                  (index < (int) info.scale_size))
                 index=(int) info.scale[index];
               image->colormap[i].red=(MagickRealType) index;
               image->colormap[i].green=(MagickRealType) index;
