@@ -842,6 +842,9 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
               {
                 if (LocaleCompare(keyword,"id") == 0)
                   {
+                    if (*id != '\0')
+                      ThrowMIFFException(CorruptImageError,
+                        "ImproperImageHeader");
                     (void) CopyMagickString(id,options,MagickPathExtent);
                     break;
                   }
@@ -1125,6 +1128,7 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
           CorruptImageError,"ImproperImageHeader","`%s'",image->filename);
         break;
       }
+    *id='\0';
     if (image->montage != (char *) NULL)
       {
         char

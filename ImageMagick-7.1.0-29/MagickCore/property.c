@@ -1486,7 +1486,20 @@ static MagickBooleanType GetEXIFProperty(const Image *image,
             case EXIF_FMT_BYTE:
             case EXIF_FMT_UNDEFINED:
             {
-              EXIFMultipleValues(1,"%.20g",(double) (*(unsigned char *) p1));
+              value=(char *) NULL;
+              if (~((size_t) number_bytes) >= 1)
+                value=(char *) AcquireQuantumMemory((size_t) number_bytes+1UL,
+                  sizeof(*value));
+              if (value != (char *) NULL)
+                {
+                  for (i=0; i < (ssize_t) number_bytes; i++)
+                  {
+                    value[i]='.';
+                    if (isprint((int) p[i]) != 0)
+                      value[i]=(char) p[i];
+                  }
+                  value[i]='\0';
+                }
               break;
             }
             case EXIF_FMT_SBYTE:
@@ -2972,10 +2985,10 @@ MagickExport const char *GetMagickProperty(ImageInfo *image_info,
             if (convex_hull[n].y < extreme.y)
               {
                 extreme=convex_hull[n];
-                continue; 
+                continue;
               }
             if (convex_hull[n].y != extreme.y)
-              continue; 
+              continue;
             if (convex_hull[n].x < extreme.x)
               extreme=convex_hull[n];
           }
@@ -2988,10 +3001,10 @@ MagickExport const char *GetMagickProperty(ImageInfo *image_info,
             if (convex_hull[n].x > extreme.x)
               {
                 extreme=convex_hull[n];
-                continue; 
+                continue;
               }
             if (convex_hull[n].x != extreme.x)
-              continue; 
+              continue;
             if (convex_hull[n].y < extreme.y)
               extreme=convex_hull[n];
           }
@@ -3004,10 +3017,10 @@ MagickExport const char *GetMagickProperty(ImageInfo *image_info,
             if (convex_hull[n].y > extreme.y)
               {
                 extreme=convex_hull[n];
-                continue; 
+                continue;
               }
             if (convex_hull[n].y != extreme.y)
-              continue; 
+              continue;
             if (convex_hull[n].x > extreme.x)
               extreme=convex_hull[n];
           }
@@ -3020,10 +3033,10 @@ MagickExport const char *GetMagickProperty(ImageInfo *image_info,
             if (convex_hull[n].x < extreme.x)
               {
                 extreme=convex_hull[n];
-                continue; 
+                continue;
               }
             if (convex_hull[n].x != extreme.x)
-              continue; 
+              continue;
             if (convex_hull[n].y > extreme.y)
               extreme=convex_hull[n];
           }
