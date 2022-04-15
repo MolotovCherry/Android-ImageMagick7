@@ -181,5 +181,5 @@ Note: This is not a "copy all the files"-"change nothing"-"run it directly witho
 
 [![Donate](./readme_files/donate.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BKDN933UM444J)
 
-If you found this library useful, please consider showing appreciation and sending a donation my way (maybe for a cup of coffee or a donut).
-I don't always have the time nor mental energy to keep this updated for free, so any donations will help this project continue to be supported for longer and get more frequent updates! Thanks for your support! <3
+If you found this library useful, please consider showing appreciation and help fund it by sending a donation my way.  
+All donations help this project continue to be supported for longer and receive more frequent updates! Thanks for your support! <3
