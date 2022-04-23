@@ -140,7 +140,6 @@ static inline MagickBooleanType IsHEIFSuccess(Image *image,
 static MagickBooleanType ReadHEICColorProfile(Image *image,
   struct heif_image_handle *image_handle,ExceptionInfo *exception)
 {
-#if LIBHEIF_NUMERIC_VERSION >= 0x01040000
   size_t
     length;
 
@@ -176,7 +175,6 @@ static MagickBooleanType ReadHEICColorProfile(Image *image,
         }
     }
   color_profile=(unsigned char *) RelinquishMagickMemory(color_profile);
-#endif
   return(MagickTrue);
 }
 
@@ -262,6 +260,7 @@ static MagickBooleanType ReadHEICImageHandle(const ImageInfo *image_info,
     chroma;
 
   int
+    bits_per_pixel,
     shift,
     stride = 0;
 
@@ -289,16 +288,9 @@ static MagickBooleanType ReadHEICImageHandle(const ImageInfo *image_info,
   if (heif_image_handle_has_alpha_channel(image_handle) != 0)
     image->alpha_trait=BlendPixelTrait;
   image->depth=8;
-#if LIBHEIF_NUMERIC_VERSION > 0x01040000
-  {
-    int
-      bits_per_pixel;
-
-    bits_per_pixel=heif_image_handle_get_luma_bits_per_pixel(image_handle);
-    if (bits_per_pixel != -1)
-      image->depth=(size_t) bits_per_pixel;
-  }
-#endif
+  bits_per_pixel=heif_image_handle_get_luma_bits_per_pixel(image_handle);
+  if (bits_per_pixel != -1)
+    image->depth=(size_t) bits_per_pixel;
   preserve_orientation=IsStringTrue(GetImageOption(image_info,
     "heic:preserve-orientation"));
   if (preserve_orientation == MagickFalse)
@@ -318,17 +310,13 @@ static MagickBooleanType ReadHEICImageHandle(const ImageInfo *image_info,
   if (preserve_orientation == MagickTrue)
     decode_options->ignore_transformations=1;
   chroma=heif_chroma_interleaved_RGB;
-#if LIBHEIF_NUMERIC_VERSION > 0x01040000
   if (image->depth > 8)
     chroma=heif_chroma_interleaved_RRGGBB_LE;
-#endif
   if (image->alpha_trait != UndefinedPixelTrait)
     {
       chroma=heif_chroma_interleaved_RGBA;
-#if LIBHEIF_NUMERIC_VERSION > 0x01040000
       if (image->depth > 8)
         chroma=heif_chroma_interleaved_RRGGBBAA_LE;
-#endif
     }
   error=heif_decode_image(image_handle,&heif_image,heif_colorspace_RGB,chroma,
     decode_options);
@@ -510,6 +498,7 @@ static Image *ReadHEICImage(const ImageInfo *image_info,
   if ((filetype_check == heif_filetype_no) ||
       (filetype_check == heif_filetype_yes_unsupported))
     ThrowReaderException(CoderError,"ImageTypeNotSupported");
+  (void) CloseBlob(image);
 #if LIBHEIF_NUMERIC_VERSION >= 0x010b0000
   if (heif_has_compatible_brand(magic,sizeof(magic), "avif"))
     (void) CopyMagickString(image->magick,"AVIF",MagickPathExtent);
@@ -601,7 +590,6 @@ static Image *ReadHEICImage(const ImageInfo *image_info,
   heif_context_free(heif_context);
   if (status == MagickFalse)
     return(DestroyImageList(image));
-  (void) CloseBlob(image);
   return(GetFirstImageInList(image));
 }
 #endif
@@ -634,7 +622,6 @@ static Image *ReadHEICImage(const ImageInfo *image_info,
 static MagickBooleanType IsHEIC(const unsigned char *magick,const size_t length)
 {
 #if defined(MAGICKCORE_HEIC_DELEGATE)
-#if LIBHEIF_NUMERIC_VERSION >= 0x01040000
   enum heif_filetype_result
     type;
 
@@ -643,7 +630,6 @@ static MagickBooleanType IsHEIC(const unsigned char *magick,const size_t length)
   type=heif_check_filetype(magick,(int) length);
   if (type == heif_filetype_yes_supported)
     return(MagickTrue);
-#endif
 #endif
   return(MagickFalse);
 }
@@ -678,12 +664,8 @@ ModuleExport size_t RegisterHEICImage(void)
   entry=AcquireMagickInfo("HEIC","HEIC","High Efficiency Image Format");
 #if defined(MAGICKCORE_HEIC_DELEGATE)
   entry->decoder=(DecodeImageHandler *) ReadHEICImage;
-#if LIBHEIF_NUMERIC_VERSION >= 0x01030000
   if (heif_have_encoder_for_format(heif_compression_HEVC))
     entry->encoder=(EncodeImageHandler *) WriteHEICImage;
-#else
-  entry->encoder=(EncodeImageHandler *) WriteHEICImage;
-#endif
 #endif
   entry->magick=(IsImageFormatHandler *) IsHEIC;
   entry->mime_type=ConstantString("image/heic");
@@ -696,12 +678,8 @@ ModuleExport size_t RegisterHEICImage(void)
   entry=AcquireMagickInfo("HEIC","HEIF","High Efficiency Image Format");
 #if defined(MAGICKCORE_HEIC_DELEGATE)
   entry->decoder=(DecodeImageHandler *) ReadHEICImage;
-#if LIBHEIF_NUMERIC_VERSION >= 0x01030000
   if (heif_have_encoder_for_format(heif_compression_HEVC))
     entry->encoder=(EncodeImageHandler *) WriteHEICImage;
-#else
-  entry->encoder=(EncodeImageHandler *) WriteHEICImage;
-#endif
 #endif
   entry->magick=(IsImageFormatHandler *) IsHEIC;
   entry->mime_type=ConstantString("image/heif");
@@ -788,7 +766,6 @@ ModuleExport void UnregisterHEICImage(void)
 */
 
 #if defined(MAGICKCORE_HEIC_DELEGATE)
-#if LIBHEIF_NUMERIC_VERSION >= 0x01030000
 static void WriteProfile(struct heif_context *context,Image *image,
   ExceptionInfo *exception)
 {
@@ -867,7 +844,6 @@ static void WriteProfile(struct heif_context *context,Image *image,
   }
   heif_image_handle_release(image_handle);
 }
-#endif
 
 static struct heif_error heif_write_func(struct heif_context *context,
   const void* data,size_t size,void* userdata)
@@ -1188,10 +1164,8 @@ static MagickBooleanType WriteHEICImage(const ImageInfo *image_info,
 #endif
   do
   {
-#if LIBHEIF_NUMERIC_VERSION >= 0x01040000
     const StringInfo
       *profile;
-#endif
 
     enum heif_chroma
       chroma;
@@ -1225,20 +1199,16 @@ static MagickBooleanType WriteHEICImage(const ImageInfo *image_info,
           status=TransformImageColorspace(image,sRGBColorspace,exception);
         colorspace=heif_colorspace_RGB;
         chroma=heif_chroma_interleaved_RGBA;
-#if LIBHEIF_NUMERIC_VERSION > 0x01040000
         if (image->depth > 8)
           chroma=heif_chroma_interleaved_RRGGBBAA_LE;
-#endif
       }
     else
       if (IssRGBCompatibleColorspace(image->colorspace) != MagickFalse)
         {
           colorspace=heif_colorspace_RGB;
           chroma=heif_chroma_interleaved_RGB;
-#if LIBHEIF_NUMERIC_VERSION > 0x01040000
           if (image->depth > 8)
             chroma=heif_chroma_interleaved_RRGGBB_LE;
-#endif
           if (GetPixelChannels(image) == 1)
             {
               colorspace=heif_colorspace_monochrome;
@@ -1260,20 +1230,16 @@ static MagickBooleanType WriteHEICImage(const ImageInfo *image_info,
     status=IsHEIFSuccess(image,&error,exception);
     if (status == MagickFalse)
       break;
-#if LIBHEIF_NUMERIC_VERSION >= 0x01040000
     profile=GetImageProfile(image,"icc");
     if (profile != (StringInfo *) NULL)
       (void) heif_image_set_raw_color_profile(heif_image,"prof",
         GetStringInfoDatum(profile),GetStringInfoLength(profile));
-#endif
     if (colorspace == heif_colorspace_YCbCr)
       status=WriteHEICImageYCbCr(image,heif_image,exception);
     else
-#if LIBHEIF_NUMERIC_VERSION > 0x01040000
       if (image->depth > 8)
         status=WriteHEICImageRRGGBBAA(image,heif_image,exception);
       else
-#endif
         status=WriteHEICImageRGBA(image,heif_image,exception);
     if (status == MagickFalse)
       break;
@@ -1325,10 +1291,8 @@ static MagickBooleanType WriteHEICImage(const ImageInfo *image_info,
     status=IsHEIFSuccess(image,&error,exception);
     if (status == MagickFalse)
       break;
-#if LIBHEIF_NUMERIC_VERSION >= 0x01030000
     if (image->profiles != (void *) NULL)
       WriteProfile(heif_context,image,exception);
-#endif
     if (GetNextImageInList(image) == (Image *) NULL)
       break;
     image=SyncNextImageInList(image);
@@ -1346,10 +1310,8 @@ static MagickBooleanType WriteHEICImage(const ImageInfo *image_info,
     {
       writer.writer_api_version=1;
       writer.write=heif_write_func;
-#if LIBHEIF_NUMERIC_VERSION >= 0x01030000
       if (image->profiles != (void *) NULL)
         WriteProfile(heif_context,image,exception);
-#endif
       error=heif_context_write(heif_context,&writer,image);
       status=IsHEIFSuccess(image,&error,exception);
     }
