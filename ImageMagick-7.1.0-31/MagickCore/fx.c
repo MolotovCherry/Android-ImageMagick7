@@ -2857,8 +2857,6 @@ static inline fxFltType ImageStat (
     cs = CollectOneImgStats (pfx, pfx->Images[ImgNum]);
     NeedRelinq = MagickTrue;
   }
-  if (cs == (ChannelStatistics *) NULL)
-    return(0);
 
   switch (ia) {
     case aDepth:
@@ -2868,19 +2866,24 @@ static inline fxFltType ImageStat (
       ret = (fxFltType) GetBlobSize (pfx->image);
       break;
     case aKurtosis:
-      ret = cs[channel].kurtosis;
+      if (cs != (ChannelStatistics *) NULL)
+        ret = cs[channel].kurtosis;
       break;
     case aMaxima:
-      ret = cs[channel].maxima;
+      if (cs != (ChannelStatistics *) NULL)
+        ret = cs[channel].maxima;
       break;
     case aMean:
-      ret = cs[channel].mean;
+      if (cs != (ChannelStatistics *) NULL)
+        ret = cs[channel].mean;
       break;
     case aMedian:
-      ret = cs[channel].median;
+      if (cs != (ChannelStatistics *) NULL)
+        ret = cs[channel].median;
       break;
     case aMinima:
-      ret = cs[channel].minima;
+      if (cs != (ChannelStatistics *) NULL)
+        ret = cs[channel].minima;
       break;
     case aPage:
       /* Do nothing */
@@ -2921,7 +2924,8 @@ static inline fxFltType ImageStat (
       ret = pfx->Images[ImgNum]->resolution.y;
       break;
     case aSkewness:
-      ret = cs[channel].skewness;
+      if (cs != (ChannelStatistics *) NULL)
+        ret = cs[channel].skewness;
       break;
     case aStdDev:
       ret = cs[channel].standard_deviation;
