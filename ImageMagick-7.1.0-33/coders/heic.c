@@ -495,8 +495,7 @@ static Image *ReadHEICImage(const ImageInfo *image_info,
   if (ReadBlob(image,sizeof(magic),magic) != sizeof(magic))
     ThrowReaderException(CorruptImageError,"InsufficientImageDataInFile");
   filetype_check=heif_check_filetype(magic,sizeof(magic));
-  if ((filetype_check == heif_filetype_no) ||
-      (filetype_check == heif_filetype_yes_unsupported))
+  if (filetype_check == heif_filetype_no)
     ThrowReaderException(CoderError,"ImageTypeNotSupported");
   (void) CloseBlob(image);
 #if LIBHEIF_NUMERIC_VERSION >= 0x010b0000
@@ -1254,8 +1253,6 @@ static MagickBooleanType WriteHEICImage(const ImageInfo *image_info,
       else
         error=heif_encoder_set_lossy_quality(heif_encoder,(int)
           image_info->quality);
-    if (IsHEIFSuccess(image,&error,exception) == MagickFalse)
-      break;
     status=IsHEIFSuccess(image,&error,exception);
     if (status == MagickFalse)
       break;

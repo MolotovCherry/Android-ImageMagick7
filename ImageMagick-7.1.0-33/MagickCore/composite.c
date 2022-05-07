@@ -2137,6 +2137,8 @@ MagickExport MagickBooleanType CompositeImage(Image *image,
             canvas_dissolve=geometry_info.sigma/100.0;
           if ((canvas_dissolve-MagickEpsilon) < 0.0)
             canvas_dissolve=0.0;
+          if ((canvas_dissolve+MagickEpsilon) > 1.0)
+            canvas_dissolve=1.0;
         }
       break;
     }
@@ -2384,7 +2386,7 @@ MagickExport MagickBooleanType CompositeImage(Image *image,
 
             PixelChannel channel = GetPixelChannelChannel(image,i);
             PixelTrait traits = GetPixelChannelTraits(image,channel);
-            PixelTrait source_traits=GetPixelChannelTraits(source_image,
+            PixelTrait source_traits = GetPixelChannelTraits(source_image,
               channel);
             if ((traits == UndefinedPixelTrait) ||
                 (source_traits == UndefinedPixelTrait))
