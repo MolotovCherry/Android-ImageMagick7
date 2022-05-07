@@ -78,6 +78,7 @@
 #include "MagickCore/option.h"
 #include "MagickCore/pixel.h"
 #include "MagickCore/pixel-accessor.h"
+#include "MagickCore/policy.h"
 #include "MagickCore/property.h"
 #include "MagickCore/quantum.h"
 #include "MagickCore/quantum-private.h"
@@ -729,7 +730,7 @@ static MagickBooleanType InitFx (FxInfo * pfx, const Image * img,
     (void) ThrowMagickException (
       pfx->exception, GetMagickModule(), ResourceLimitFatalError,
       "Imgs", "%lu",
-      pfx->ImgListLen);
+      (unsigned long) pfx->ImgListLen);
     return MagickFalse;
   }
 
@@ -742,7 +743,7 @@ static MagickBooleanType InitFx (FxInfo * pfx, const Image * img,
       (void) ThrowMagickException (
         pfx->exception, GetMagickModule(), ResourceLimitFatalError,
         "View", "[%li]",
-        i);
+        (long) i);
       /* dealloc any done so far, and Imgs */
       for ( ; i > 0; i--) {
         pimg = &pfx->Imgs[i-1];
@@ -1607,7 +1608,7 @@ static ssize_t inline GetConstantColour (FxInfo * pfx, fxFltType *v0, fxFltType 
           (void) ThrowMagickException (
             pfx->exception, GetMagickModule(), OptionError,
             "lenfun too long", "'%lu' at '%s'",
-            lenfun, SetShortExp(pfx));
+            (unsigned long) lenfun, SetShortExp(pfx));
           dummy_exception = DestroyExceptionInfo (dummy_exception);
           return -1;
         }
@@ -2701,6 +2702,8 @@ static MagickBooleanType TranslateExpression (
     }
   }
 
+  if (ternary.addrQuery != NULL_ADDRESS) *needPopAll = MagickTrue;
+
   (void) ResolveTernaryAddresses (pfx, &ternary);
 
   pfx->teDepth--;
@@ -2806,7 +2809,7 @@ static MagickBooleanType CollectStatistics (FxInfo * pfx)
     (void) ThrowMagickException (
       pfx->exception, GetMagickModule(), ResourceLimitFatalError,
       "Statistics", "%lu",
-      pfx->ImgListLen);
+      (unsigned long) pfx->ImgListLen);
     return MagickFalse;
   }
 
@@ -2936,7 +2939,8 @@ static inline fxFltType ImageStat (
         ret = cs[channel].skewness;
       break;
     case aStdDev:
-      ret = cs[channel].standard_deviation;
+      if (cs != (ChannelStatistics *) NULL)
+        ret = cs[channel].standard_deviation;
       break;
     case aH:
       ret = (fxFltType) pfx->Images[ImgNum]->rows;
@@ -2982,7 +2986,7 @@ static ssize_t inline ChkImgNum (FxInfo * pfx, fxFltType f)
     (void) ThrowMagickException (
       pfx->exception, GetMagickModule(), OptionError,
       "ImgNum", "%lu bad for ImgListLen %lu",
-      i, pfx->ImgListLen);
+      (unsigned long) i, (unsigned long) pfx->ImgListLen);
     i = -1;
   }
   return i;
@@ -3018,7 +3022,8 @@ static fxFltType GetHslFlt (FxInfo * pfx, ssize_t ImgNum, const fxFltType fx, co
   if (!okay)
     (void) ThrowMagickException (
       pfx->exception, GetMagickModule(), OptionError,
-      "GetHslFlt failure", "%lu %Lg,%Lg %i", ImgNum, fx, fy, channel);
+      "GetHslFlt failure", "%lu %g,%g %i", (unsigned long) ImgNum,
+      (double) fx, (double) fy, channel);
 
   ConvertRGBToHSL (
     red, green, blue,
@@ -3041,8 +3046,8 @@ static fxFltType GetHslInt (FxInfo * pfx, ssize_t ImgNum, const ssize_t imgx, co
   if (p == (const Quantum *) NULL)
     {
       (void) ThrowMagickException (pfx->exception,GetMagickModule(),
-        OptionError,"GetHslInt failure","%lu %li,%li %i",ImgNum,imgx,imgy,
-        channel);
+        OptionError,"GetHslInt failure","%lu %li,%li %i",(unsigned long) ImgNum,
+        (long) imgx,(long) imgy,channel);
       return(0.0);
     }
 
@@ -3074,7 +3079,8 @@ static fxFltType inline GetIntensity (FxInfo * pfx, ssize_t ImgNum, const fxFltT
   {
     (void) ThrowMagickException (
       pfx->exception, GetMagickModule(), OptionError,
-      "GetIntensity failure", "%lu %Lg,%Lg", ImgNum, fx, fy);
+      "GetIntensity failure", "%lu %g,%g", (unsigned long) ImgNum,
+      (double) fx, (double) fy);
   }
 
   SetPixelViaPixelInfo (img, &pixelinf, quantum_pixel);
@@ -3102,7 +3108,8 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
   if (p == (const Quantum *) NULL)
     {
       (void) ThrowMagickException (pfx->exception,GetMagickModule(),
-        OptionError,"GetHslInt failure","%lu %li,%li",pfx->ImgNum,imgx,imgy);
+        OptionError,"GetHslInt failure","%lu %li,%li",(unsigned long)
+        pfx->ImgNum,(long) imgx,(long) imgy);
       return(MagickFalse);
     }
 
@@ -3358,10 +3365,10 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
         case fDebug:
           /* FIXME: debug() should give channel name. */
 
-          (void) fprintf (stderr, "%s[%g,%g].[%i]: %s=%.*Lg\n",
+          (void) fprintf (stderr, "%s[%g,%g].[%i]: %s=%.*g\n",
                    img->filename, (double) imgx, (double) imgy,
                    channel, SetPtrShortExp (pfx, pel->pExpStart, (size_t) (pel->lenExp+1)),
-                   pfx->precision, regA);
+                   pfx->precision, (double) regA);
           break;
         case fDrc:
           regA = regA / (regB*(regA-1.0) + 1.0);
@@ -3498,7 +3505,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
                     if (!pv) {
                       (void) ThrowMagickException (
                         pfx->exception, GetMagickModule(), OptionError,
-                        "fU can't get cache", "%lu", ImgNum);
+                        "fU can't get cache", "%lu", (unsigned long) ImgNum);
                       break;
                     }
                     regA = QuantumScale * pv[pimg->channel_map[WHICH_NON_ATTR_CHAN].offset];
@@ -3520,7 +3527,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
                   if (!pv) {
                     (void) ThrowMagickException (
                       pfx->exception, GetMagickModule(), OptionError,
-                      "fU can't get cache", "%lu", ImgNum);
+                      "fU can't get cache", "%lu", (unsigned long) ImgNum);
                     break;
                   }
                   regA = QuantumScale * pv[pimg->channel_map[WHICH_NON_ATTR_CHAN].offset];
@@ -3552,7 +3559,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
               if (!pv) {
                 (void) ThrowMagickException (
                   pfx->exception, GetMagickModule(), OptionError,
-                  "fU can't get cache", "%lu", ImgNum);
+                  "fU can't get cache", "%lu", (unsigned long) ImgNum);
                 break;
               }
               regA = QuantumScale *
@@ -3644,7 +3651,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
             {
               (void) ThrowMagickException (
                 pfx->exception, GetMagickModule(), OptionError,
-                "fUP can't get interpolate", "%lu", ImgNum);
+                "fUP can't get interpolate", "%lu", (unsigned long) ImgNum);
               break;
             }
             regA = v * QuantumScale;
@@ -3664,7 +3671,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
             if (!pv) {
               (void) ThrowMagickException (
                 pfx->exception, GetMagickModule(), OptionError,
-                "fV can't get cache", "%lu", ImgNum);
+                "fV can't get cache", "%lu", (unsigned long) ImgNum);
               break;
             }
 
@@ -3721,7 +3728,7 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
             {
               (void) ThrowMagickException (
                 pfx->exception, GetMagickModule(), OptionError,
-                "fSP or fVP can't get interp", "%lu", ImgNum);
+                "fSP or fVP can't get interp", "%lu", (unsigned long) ImgNum);
               break;
             }
             regA = v * (fxFltType)QuantumScale;
@@ -3977,12 +3984,26 @@ static FxInfo *AcquireFxInfoPrivate (const Image * images, const char * expressi
   }
 
   if ((*expression == '@') && (strlen(expression) > 1))
-    pfx->expression = FileToString (expression+1, ~0UL, exception);
-  else
-    pfx->expression = ConstantString (expression);
+    {
+      MagickBooleanType
+        status;
+
+      /*
+        Read expression from a file.
+      */
+      status=IsRightsAuthorized(PathPolicyDomain,ReadPolicyRights,expression);
+      if (status != MagickFalse)
+        pfx->expression=FileToString(expression+1,~0UL,exception);
+      else
+        {
+          errno=EPERM;
+          (void) ThrowMagickException(exception,GetMagickModule(),PolicyError,
+            "NotAuthorized","`%s'",expression);
+        }
+    }
   if (pfx->expression == (char *) NULL)
-    return((FxInfo *) NULL);
-  pfx->pex = (char *)pfx->expression;
+    pfx->expression=ConstantString(expression);
+  pfx->pex = (char *) pfx->expression;
 
   pfx->teDepth = 0;
   if (!TranslateStatementList (pfx, ";", &chLimit)) {
@@ -4048,7 +4069,7 @@ static FxInfo *AcquireFxInfoPrivate (const Image * images, const char * expressi
       (void) ThrowMagickException (
         pfx->exception, GetMagickModule(), ResourceLimitFatalError,
         "fxrts", "%lu",
-        number_threads);
+        (unsigned long) number_threads);
       (void) DestroyRPN (pfx);
       pfx->expression = DestroyString (pfx->expression);
       pfx->pex = NULL;

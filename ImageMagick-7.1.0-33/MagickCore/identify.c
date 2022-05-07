@@ -1562,6 +1562,10 @@ MagickExport MagickBooleanType IdentifyImage(Image *image,FILE *file,
   if (strlen(buffer) > 1)
     buffer[strlen(buffer)-1]='\0';
   (void) FormatLocaleFile(file,"  Number pixels: %s\n",buffer);
+  (void) FormatLocaleString(buffer,MagickPathExtent,"%s",
+    CommandOptionToMnemonic(MagickCacheOptions,(ssize_t)
+    GetImagePixelCacheType(image)));
+  (void) FormatLocaleFile(file,"  Pixel cache type: %s\n",buffer);
   if (elapsed_time > MagickEpsilon)
     {
       (void) FormatMagickSize((MagickSizeType) ((double) image->columns*
