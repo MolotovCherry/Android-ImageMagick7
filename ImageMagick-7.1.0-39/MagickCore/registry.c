@@ -51,6 +51,8 @@
 #include "MagickCore/registry-private.h"
 #include "MagickCore/splay-tree.h"
 #include "MagickCore/string_.h"
+#include "MagickCore/string-private.h"
+#include "MagickCore/timer-private.h"
 #include "MagickCore/utility.h"
 
 /*
@@ -476,6 +478,8 @@ MagickExport MagickBooleanType SetImageRegistry(const RegistryType type,
         *string;
 
       string=(const char *) value;
+      if (LocaleCompare(key,"date:precision") == 0)
+        SetMagickDatePrecision(StringToInteger(string));
       clone_value=(void *) ConstantString(string);
       break;
     }
