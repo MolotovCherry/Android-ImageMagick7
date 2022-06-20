@@ -70,6 +70,12 @@ static void
   StopTimer(TimerInfo *);
 
 /*
+  Static declarations.
+*/
+static ssize_t
+  date_precision = -1;
+
+/*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %                                                                             %
@@ -257,8 +263,7 @@ MagickExport ssize_t FormatMagickTime(const time_t time,const size_t length,
   char *timestamp)
 {
   ssize_t
-    count,
-    date_precision = -1;
+    count;
 
   struct tm
     utc_time;
@@ -269,15 +274,8 @@ MagickExport ssize_t FormatMagickTime(const time_t time,const size_t length,
       char
         *limit;
 
-      ExceptionInfo
-        *exception = AcquireExceptionInfo();
-
       date_precision=0;
-      limit=(char *) GetImageRegistry(StringRegistryType,"date:precision",
-        exception);
-      exception=DestroyExceptionInfo(exception);
-      if (limit == (char *) NULL)
-        limit=GetEnvironmentValue("MAGICK_DATE_PRECISION");
+      limit=GetEnvironmentValue("MAGICK_DATE_PRECISION");
       if (limit != (char *) NULL)
         {
           date_precision=StringToInteger(limit);
@@ -475,6 +473,33 @@ MagickExport void ResetTimer(TimerInfo *time_info)
   StopTimer(time_info);
   time_info->elapsed.stop=0.0;
   time_info->user.stop=0.0;
+}
+
+/*
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%                                                                             %
+%                                                                             %
+%   S e t M a g i c k D a t e P r e c i s i o n                               %
+%                                                                             %
+%                                                                             %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  SetMagickDatePrecision() sets the pseudo-random number generator secret key.
+%
+%  The format of the SetMagickDatePrecision method is:
+%
+%      void SetMagickDatePrecision(const unsigned long precision)
+%
+%  A description of each parameter follows:
+%
+%    o key: the date precision.
+%
+*/
+MagickPrivate void SetMagickDatePrecision(const unsigned long precision)
+{
+  date_precision=precision;
 }
 
 /*

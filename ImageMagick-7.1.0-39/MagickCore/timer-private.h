@@ -57,6 +57,9 @@ static inline void GetMagickLocaltime(const time_t *timep,struct tm *result)
 extern MagickExport time_t
   GetMagickTime(void);
 
+extern MagickPrivate void
+  SetMagickDatePrecision(const unsigned long);
+
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif
