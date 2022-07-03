@@ -1,9 +1,9 @@
 
 # Android ImageMagick 7.1.0-39
 
-[![Build](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cherryleafroad/Android-ImageMagick7/actions/workflows/codeql-analysis.yml) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/cherryleafroad/Android-ImageMagick7?style=plastic)
+[![Build](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/MolotovCherry/Android-ImageMagick7?style=plastic)
 
-This is a fully featured imagemagick build compatible with android [__and has Kotlin bindings__](https://github.com/cherryleafroad/kmagick) (check out KMagick below). All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
+This is a fully featured imagemagick build compatible with android [__and has Kotlin bindings__](https://github.com/MolotovCherry/kmagick) (check out KMagick below). All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
 
 It can be configured to both build as a binary (with shared libaries or statically linked), or as separate shared libraries (and no binary).
 
@@ -46,26 +46,26 @@ You can test it with earlier versions, but I offer no support for it. If you're 
 
 # Binaries
 
-Check out the release page for the [latest built binaries](https://github.com/cherryleafroad/Android-ImageMagick7/releases). This is built using the [default configuration](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk). If you need a special configuration (for example OpenCL), you will need to build it for yourself from source.
+Check out the release page for the [latest built binaries](https://github.com/MolotovCherry/Android-ImageMagick7/releases). This is built using the [default configuration](https://github.com/MolotovCherry/Android-ImageMagick7/blob/master/Application.mk). If you need a special configuration (for example OpenCL), you will need to build it for yourself from source.
 
-- OpenCL support is available for Qualcomm. OpenCL is recommended over OpenMP. Please [go here](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/libopencl/qualcomm/lib) in order to learn how to setup OpenCL build for the project. You only need to find your own `libOpenCL.so` file and copy it over for your project. I can't host it here due to copyrights. **For OpenCL support, you need to build the library yourself because of copyright issues (I can't host the OpenCL lib here, so GitHub can't build it for me)**. >Btw, Github Actions can do the build for you too, change the config file, and manually run the action.<
+- OpenCL support is available for Qualcomm. OpenCL is recommended over OpenMP. Please [go here](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/libopencl/qualcomm/lib) in order to learn how to setup OpenCL build for the project. You only need to find your own `libOpenCL.so` file and copy it over for your project. I can't host it here due to copyrights. **For OpenCL support, you need to build the library yourself because of copyright issues (I can't host the OpenCL lib here, so GitHub can't build it for me)**. >Btw, Github Actions can do the build for you too, change the config file, and manually run the action.<
 
 # KMagick
 
-Check out the [KMagick](https://github.com/cherryleafroad/kmagick) repo for instructions on how to use ImageMagick with Kotlin in your project (instead of the binary).
+Check out the [KMagick](https://github.com/MolotovCherry/kmagick) repo for instructions on how to use ImageMagick with Kotlin in your project (instead of the binary).
 
 # Quick Setup Instructions
 
-- Android app setup code, including gradle files, assets, binary / java code, etc, can all be found under the [app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). This is not a 100% complete Android app, but rather it contains all the code examples needed for you to adapt it to your own project. Just copy / rewrite / delete code you want / don't need and combine it with your Android Studio project.
-- Place your libs under the [libs/arch](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app/libs/arm64-v8a) folder. It's already setup to be noticed when your APK is built.
+- Android app setup code, including gradle files, assets, binary / java code, etc, can all be found under the [app folder](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app). This is not a 100% complete Android app, but rather it contains all the code examples needed for you to adapt it to your own project. Just copy / rewrite / delete code you want / don't need and combine it with your Android Studio project.
+- Place your libs under the [libs/arch](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app/libs/arm64-v8a) folder. It's already setup to be noticed when your APK is built.
 
 ## How to run the binary
 
-1. Put the generated binary in the [assets bin folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app/src/main/assets/usr/bin/arm64-v8a). Put all libs in the [libs/arch](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app/libs/arm64-v8a) folder.
+1. Put the generated binary in the [assets bin folder](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app/src/main/assets/usr/bin/arm64-v8a). Put all libs in the [libs/arch](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app/libs/arm64-v8a) folder.
 2. Add environment variables before you run the binary.
 3. Execute binary with args.
 
-- All example code and setup to do this is can be found in the [example android app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app).
+- All example code and setup to do this is can be found in the [example android app folder](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app).
 
 | ENV Variable | Description | Example Value |
 |--|--|--|
@@ -76,8 +76,8 @@ Check out the [KMagick](https://github.com/cherryleafroad/kmagick) repo for inst
 
 # Building from Source
 
-- In order to understand how to build the project, please [install](https://developer.android.com/studio/projects/install-ndk) and [setup NDK](https://developer.android.com/ndk/guides) as per Google's instructions. Make sure you read how NDK works as it is important to getting your build successfully compiling. The required gradle files for building inside the [app folder](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app).
-- Edit your build configuration under [`Application.mk`](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) to your liking, then (next step below)
+- In order to understand how to build the project, please [install](https://developer.android.com/studio/projects/install-ndk) and [setup NDK](https://developer.android.com/ndk/guides) as per Google's instructions. Make sure you read how NDK works as it is important to getting your build successfully compiling. The required gradle files for building inside the [app folder](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app).
+- Edit your build configuration under [`Application.mk`](https://github.com/MolotovCherry/Android-ImageMagick7/blob/master/Application.mk) to your liking, then (next step below)
 - Use your CMD in the root and execute `build-release.bat`. Sorry, the build only currently works on Windows because I didn't have time to test the make files under Linux. Contributions are welcome.
 
 # Building with Docker
@@ -114,7 +114,7 @@ Build it with OpenCL support (note, probably not all devices support OpenCL), st
 
 ### Can I customize the build features?
 
-Yes you can. Just go to [Application.mk](https://github.com/cherryleafroad/Android-ImageMagick7/blob/master/Application.mk) in the root directory and alter the variables inside to your desired configuration. Build configuration has been made very simple! Piece of cake!
+Yes you can. Just go to [Application.mk](https://github.com/MolotovCherry/Android-ImageMagick7/blob/master/Application.mk) in the root directory and alter the variables inside to your desired configuration. Build configuration has been made very simple! Piece of cake!
 
 ### Is there an easier way to build this without so much work?
 
@@ -122,11 +122,11 @@ Actually there is! Fork my repo, change the config to what you want, then use Gi
 
 ### Why am I getting linking errors?
 
-You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn't know where to find any required libraries. Either that, or you don't have any libraries in your project at all. Check out the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app) for where to put your libs. Hint: put it in the `libs` folder. And MAKE sure you went through the example android app and are using the supporting gradle / java code. It's all there.
+You probably didn't add the `LD_LIBRARY_PATH` environment variable, so it doesn't know where to find any required libraries. Either that, or you don't have any libraries in your project at all. Check out the [example android app](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app) for where to put your libs. Hint: put it in the `libs` folder. And MAKE sure you went through the example android app and are using the supporting gradle / java code. It's all there.
 
 ### Why won't the binary execute properly?
 
-Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. Please make sure all the files in the assets are there and you're using the env variables properly. Please also see the example code in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). Everything you need is here. In the case of API >= 29, see the below answer.
+Either you are using the wrong architecture (we only support armv8a), or your source code for running the binary is wrong. Please make sure all the files in the assets are there and you're using the env variables properly. Please also see the example code in the [example android app](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app). Everything you need is here. In the case of API >= 29, see the below answer.
 
 ### On API >= 29, I am getting permission denied errors!
 
@@ -142,14 +142,14 @@ There are 2 solutions for you on Android 10+:
 
 Note: This `libmagick.so` is NOT a real shared library. It is the ELF `magick` binary with a different filename, that's all. The naming allows us to copy the binary over with the other real libs.
 
-#### Solution 2 - Use [KMagick](https://github.com/cherryleafroad/kmagick)
-Since it is a jni lib, you won't have to try executing anything, thereby bypassing all the problems. :) Also, it's easier to use and setup than a binary, although you should probably still run it in a separate thread regardless (don't block your main thread!). You can find KMagick [here](https://github.com/cherryleafroad/kmagick).
+#### Solution 2 - Use [KMagick](https://github.com/MolotovCherry/kmagick)
+Since it is a jni lib, you won't have to try executing anything, thereby bypassing all the problems. :) Also, it's easier to use and setup than a binary, although you should probably still run it in a separate thread regardless (don't block your main thread!). You can find KMagick [here](https://github.com/MolotovCherry/kmagick).
 
 #### Solution 3 - use this project to create your own JNI lib which links against/integrates with the native imagemagick lib
-Note: You should just use [kmagick](https://github.com/cherryleafroad/kmagick) instead since I already made a Kotlin library for this.
+Note: You should just use [kmagick](https://github.com/MolotovCherry/kmagick) instead since I already made a Kotlin library for this.
 1. [Read Oracle's documentation for how JNI works](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/jniTOC.html).
 2. [Read the official Android mk guide](https://developer.android.com/ndk/guides/android_mk). You can also study the make file setup I already have going. Specifically `Android.mk`, `Application.mk`, and the files under the `make` directory. After you're familiar enough with how it works, you can create your own `mk` file and integrate it into the project and tell it to build and link/integrate your own JNI lib against the real `libmagick.so` lib. You can do a static or shared library build (static meaning that there will be only 1 lib, which is yours, and all other libs like imagemagick will be inside it). Building a native imagemagick lib (shared or static) is already supported with a switch in the settings, so it will take minimal effort for you to integrate your build into it.
-3. Program all your C code / Rust code. I STRONGLY recommend using Rust as it's a better and much safer low level language compared to C. [It has JNI bindings support already](https://crates.io/crates/jni), and even [imagemagick magick wand bindings](https://crates.io/crates/magick_rust). I STRONGLY recommend you use the [imagemagick magick wand API](https://imagemagick.org/script/magick-wand.php) instead of the other ones since it's much easier to do what you want using it. In the case of Rust, you're probably better off just using `release.bat` to build the project with static libs, then add a line below that for building your rust/jni lib against the generated static lib(s). Trust me, it's not as hard as one might think it would be (you can see here that I already have a [kmagick script which links against the android lib](https://github.com/cherryleafroad/kmagick/blob/main/rust/build-android.ps1))
+3. Program all your C code / Rust code. I STRONGLY recommend using Rust as it's a better and much safer low level language compared to C. [It has JNI bindings support already](https://crates.io/crates/jni), and even [imagemagick magick wand bindings](https://crates.io/crates/magick_rust). I STRONGLY recommend you use the [imagemagick magick wand API](https://imagemagick.org/script/magick-wand.php) instead of the other ones since it's much easier to do what you want using it. In the case of Rust, you're probably better off just using `release.bat` to build the project with static libs, then add a line below that for building your rust/jni lib against the generated static lib(s). Trust me, it's not as hard as one might think it would be (you can see here that I already have a [kmagick script which links against the android lib](https://github.com/MolotovCherry/kmagick/blob/main/rust/build-android.ps1))
 4. Do a bunch of Googling for any JNI, make file, imagemagick wand API, or C / Rust errors errors you encounter (as is always the case with programming!)
 5. Profit!
 
@@ -157,7 +157,7 @@ Note: You should just use [kmagick](https://github.com/cherryleafroad/kmagick) i
 
 Well, you see. The thing is that the [jmagick project](https://github.com/techblue/jmagick) hasn't been updated since 2018. Imagemagick has grown and changed so much that it's not even compatible with it anymore. Furthermore, they aren't even using the better magick wand API. Jmagick is mostly compatible with IM6, which is an older version. It's just not up to par.
 
-So... I made a completely new one called [Kmagick](https://github.com/cherryleafroad/kmagick)!! Yup, I really did make an entire ImageMagick API in Kotlin from the ground up! It's made to be compatible with the latest versions of ImageMagick, AND it uses Kotlin instead of Java! How cool is that?
+So... I made a completely new one called [Kmagick](https://github.com/MolotovCherry/kmagick)!! Yup, I really did make an entire ImageMagick API in Kotlin from the ground up! It's made to be compatible with the latest versions of ImageMagick, AND it uses Kotlin instead of Java! How cool is that?
 
 ### I'm getting some errors about not being able to write TMP files..?
 
@@ -173,7 +173,7 @@ Only Windows is supported by the build system. The make files assume you have Wi
 
 ### Do you have any examples? / Where are the examples?
 
-You can see all the example code you need for running the binary in the [example android app](https://github.com/cherryleafroad/Android-ImageMagick7/tree/master/example-app/android/app). It also has an entire sample project setup to get you started quick.
+You can see all the example code you need for running the binary in the [example android app](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/example-app/android/app). It also has an entire sample project setup to get you started quick.
 
 Note: This is not a "copy all the files"-"change nothing"-"run it directly without figuring it out"-solution, but rather an example template to help you get yours right with copyable code examples. This won't work directly out of the box. But it is also generally complete, more than enough to even copy over and fix whatever needs fixing if you wanted to. So, you should be using your own project, then just gut out the example project into yours as needed.
 
