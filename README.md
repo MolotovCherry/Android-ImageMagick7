@@ -62,3 +62,10 @@ Please visit the [wiki](https://github.com/MolotovCherry/Android-ImageMagick7/wi
 \- [Setup & building instructions](https://github.com/MolotovCherry/Android-ImageMagick7/wiki/Setup--&--building-instructions)  
 \- [Running from ADB (for testing)](https://github.com/MolotovCherry/Android-ImageMagick7/wiki/Running-from-ADB-(for-testing))  
 \- [FAQ](https://github.com/MolotovCherry/Android-ImageMagick7/wiki/FAQ)
+
+# Did this library help you?
+
+[![Donate](https://raw.githubusercontent.com/MolotovCherry/Android-ImageMagick7/master/readme_files/donate.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BKDN933UM444J)
+
+If you found this library useful, please consider showing appreciation and help fund it by sending a donation my way.  
+All donations help this project continue to be supported for longer and receive more frequent updates! Thanks for your support! <3
