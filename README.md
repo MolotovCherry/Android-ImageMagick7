@@ -58,7 +58,7 @@ Check out the [KMagick](https://github.com/MolotovCherry/kmagick) repo for instr
 
 Please visit the [wiki](https://github.com/MolotovCherry/Android-ImageMagick7/wiki) for instructions on how to use this project.
 
-\- [Wiki home](https://github.com/MolotovCherry/Android-ImageMagick7/wiki)
-\- [Setup & building instructions](https://github.com/MolotovCherry/Android-ImageMagick7/wiki/Setup--&--building-instructions)
-\- [Running from ADB (for testing)](https://github.com/MolotovCherry/Android-ImageMagick7/wiki/Running-from-ADB-(for-testing))
+\- [Wiki home](https://github.com/MolotovCherry/Android-ImageMagick7/wiki)  
+\- [Setup & building instructions](https://github.com/MolotovCherry/Android-ImageMagick7/wiki/Setup--&--building-instructions)  
+\- [Running from ADB (for testing)](https://github.com/MolotovCherry/Android-ImageMagick7/wiki/Running-from-ADB-(for-testing))  
 \- [FAQ](https://github.com/MolotovCherry/Android-ImageMagick7/wiki/FAQ)
