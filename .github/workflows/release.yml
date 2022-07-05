@@ -27,13 +27,25 @@ jobs:
           ./build-release
           Compress-Archive -CompressionLevel Optimal -Path "jniLibs/arm64-v8a" -DestinationPath "imagemagick-7-android-shared.zip"
 
-      - name: Upload the artifacts
+      - name: Get latest release
         if: github.event_name == 'release'
-        uses: skx/github-action-publish-binaries@master
+        id: latest_release
+        uses: kaliber5/action-get-release@v1
+        with:
+          token: ${{ github.token }}
+          latest: true
+
+      - name: Update release artifacts
+        if: github.event_name == 'release'
+        uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: 'imagemagick-7-android-*.zip'
+          file: 'imagemagick-7-android-*.zip'
+          release_id: ${{ steps.latest_release.outputs.id }}
+          overwrite: true
+          draft: false
+          tag_name: ${{ steps.latest_release.outputs.tag_name }}
 
       - name: Get latest release tag
         if: github.event_name == 'pull_request'
