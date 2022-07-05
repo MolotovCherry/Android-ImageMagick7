@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'cherryleafroad' && github.head_ref == 'imupdate') || github.event_name == 'release'
+    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'molotovcherry' && github.head_ref == 'imupdate') || github.event_name == 'release'
 
     steps:
       - uses: actions/checkout@v2
@@ -60,6 +60,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
-          repository: cherryleafroad/kmagick
+          repository: molotovcherry/kmagick
           event-type: new-release
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ steps.tag.outputs.TAG }}"}'

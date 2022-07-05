@@ -49,7 +49,7 @@ jobs:
           labels: |
             update
             automated pr
-          assignees: cherryleafroad
+          assignees: molotovcherry
           draft: false
 
       - name: Check outputs
