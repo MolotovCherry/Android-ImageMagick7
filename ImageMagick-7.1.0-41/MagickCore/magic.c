@@ -80,14 +80,15 @@ typedef struct _MagicMapInfo
 
   const size_t
     length;
+
+  const MagickBooleanType
+    skip_spaces;
 } MagicMapInfo;
 
 struct _MagicInfo
 {
   char
-    *path,
-    *name,
-    *target;
+    *name;
 
   unsigned char
     *magic;
@@ -99,8 +100,7 @@ struct _MagicInfo
     offset;
 
   MagickBooleanType
-    exempt,
-    stealth;
+    skip_spaces;
 
   size_t
     signature;
@@ -216,13 +216,11 @@ static LinkedListInfo *AcquireMagicList(ExceptionInfo *exception)
         continue;
       }
     (void) memset(magic_info,0,sizeof(*magic_info));
-    magic_info->path=(char *) "[built-in]";
     magic_info->name=(char *) p->name;
     magic_info->offset=p->offset;
-    magic_info->target=(char *) p->magic;
     magic_info->magic=(unsigned char *) p->magic;
     magic_info->length=p->length;
-    magic_info->exempt=MagickTrue;
+    magic_info->skip_spaces=p->skip_spaces;
     magic_info->signature=MagickCoreSignature;
     status&=InsertValueInSortedLinkedList(list,CompareMagickInfoExtent,
       NULL,magic_info);
@@ -300,9 +298,16 @@ MagickExport const MagicInfo *GetMagicInfo(const unsigned char *magic,
       p=(const MagicInfo *) GetNextValueInLinkedList(magic_cache);
       while (p != (const MagicInfo *) NULL)
       {
+        const unsigned char
+          *q;
+
+        q=magic;
+        if (p->skip_spaces != MagickFalse)
+          while (isspace(*q) != 0) q++;
+        assert(p->offset >= 0);
         offset=p->offset+(MagickOffsetType) p->length;
         if ((offset <= (MagickOffsetType) length) &&
-            (memcmp(magic+p->offset,p->magic,p->length) == 0))
+            (memcmp(q+p->offset,p->magic,p->length) == 0))
           break;
         p=(const MagicInfo *) GetNextValueInLinkedList(magic_cache);
       }
@@ -323,10 +328,16 @@ MagickExport const MagicInfo *GetMagicInfo(const unsigned char *magic,
     }
   while (p != (const MagicInfo *) NULL)
   {
+    const unsigned char
+      *q;
+
+    q=magic;
+    if (p->skip_spaces != MagickFalse)
+      while (isspace(*q) != 0) q++;
     assert(p->offset >= 0);
     offset=p->offset+(MagickOffsetType) p->length;
     if ((offset <= (MagickOffsetType) length) &&
-        (memcmp(magic+p->offset,p->magic,p->length) == 0))
+        (memcmp(q+p->offset,p->magic,p->length) == 0))
       break;
     p=(const MagicInfo *) GetNextValueInLinkedList(magic_list);
   }
@@ -437,9 +448,7 @@ static int MagicInfoCompare(const void *x,const void *y)
 
   p=(const MagicInfo **) x,
   q=(const MagicInfo **) y;
-  if (LocaleCompare((*p)->path,(*q)->path) == 0)
-    return(LocaleCompare((*p)->name,(*q)->name));
-  return(LocaleCompare((*p)->path,(*q)->path));
+  return(LocaleCompare((*p)->name,(*q)->name));
 }
 
 #if defined(__cplusplus) || defined(c_plusplus)
@@ -481,8 +490,7 @@ MagickExport const MagicInfo **GetMagicInfoList(const char *pattern,
   p=(const MagicInfo *) GetNextValueInLinkedList(magic_list);
   for (i=0; p != (const MagicInfo *) NULL; )
   {
-    if ((p->stealth == MagickFalse) &&
-        (GlobExpression(p->name,pattern,MagickFalse) != MagickFalse))
+    if (GlobExpression(p->name,pattern,MagickFalse) != MagickFalse)
       aliases[i++]=p;
     p=(const MagicInfo *) GetNextValueInLinkedList(magic_list);
   }
@@ -574,8 +582,7 @@ MagickExport char **GetMagicList(const char *pattern,size_t *number_aliases,
   p=(const MagicInfo *) GetNextValueInLinkedList(magic_list);
   for (i=0; p != (const MagicInfo *) NULL; )
   {
-    if ((p->stealth == MagickFalse) &&
-        (GlobExpression(p->name,pattern,MagickFalse) != MagickFalse))
+    if (GlobExpression(p->name,pattern,MagickFalse) != MagickFalse)
       aliases[i++]=ConstantString(p->name);
     p=(const MagicInfo *) GetNextValueInLinkedList(magic_list);
   }
@@ -681,9 +688,6 @@ static MagickBooleanType IsMagicListInstantiated(ExceptionInfo *exception)
 MagickExport MagickBooleanType ListMagicInfo(FILE *file,
   ExceptionInfo *exception)
 {
-  const char
-    *path;
-
   const MagicInfo
     **magic_info;
 
@@ -701,34 +705,24 @@ MagickExport MagickBooleanType ListMagicInfo(FILE *file,
   magic_info=GetMagicInfoList("*",&number_aliases,exception);
   if (magic_info == (const MagicInfo **) NULL)
     return(MagickFalse);
-  path=(const char *) NULL;
+  (void) FormatLocaleFile(file,"Name      Offset Target\n");
+  (void) FormatLocaleFile(file,
+    "-------------------------------------------------"
+    "------------------------------\n");
   for (i=0; i < (ssize_t) number_aliases; i++)
   {
-    if (magic_info[i]->stealth != MagickFalse)
-      continue;
-    if ((path == (const char *) NULL) ||
-        (LocaleCompare(path,magic_info[i]->path) != 0))
-      {
-        if (magic_info[i]->path != (char *) NULL)
-          (void) FormatLocaleFile(file,"\nPath: %s\n\n",magic_info[i]->path);
-        (void) FormatLocaleFile(file,"Name      Offset Target\n");
-        (void) FormatLocaleFile(file,
-          "-------------------------------------------------"
-          "------------------------------\n");
-      }
-    path=magic_info[i]->path;
     (void) FormatLocaleFile(file,"%s",magic_info[i]->name);
     for (j=(ssize_t) strlen(magic_info[i]->name); j <= 9; j++)
       (void) FormatLocaleFile(file," ");
     (void) FormatLocaleFile(file,"%6ld ",(long) magic_info[i]->offset);
-    if (magic_info[i]->target != (char *) NULL)
+    if (magic_info[i]->magic != (unsigned char *) NULL)
       {
-        for (j=0; magic_info[i]->target[j] != '\0'; j++)
-          if (isprint((int) ((unsigned char) magic_info[i]->target[j])) != 0)
-            (void) FormatLocaleFile(file,"%c",magic_info[i]->target[j]);
+        for (j=0; magic_info[i]->magic[j] != '\0'; j++)
+          if (isprint((int) (magic_info[i]->magic[j])) != 0)
+            (void) FormatLocaleFile(file,"%c",magic_info[i]->magic[j]);
           else
             (void) FormatLocaleFile(file,"\\%03o",(unsigned int)
-              ((unsigned char) magic_info[i]->target[j]));
+              ((unsigned char) magic_info[i]->magic[j]));
       }
     (void) FormatLocaleFile(file,"\n");
   }
@@ -783,22 +777,7 @@ MagickPrivate MagickBooleanType MagicComponentGenesis(void)
 
 static void *DestroyMagicElement(void *magic_info)
 {
-  MagicInfo
-    *p;
-
-  p=(MagicInfo *) magic_info;
-  if (p->exempt == MagickFalse)
-    {
-      if (p->path != (char *) NULL)
-        p->path=DestroyString(p->path);
-      if (p->name != (char *) NULL)
-        p->name=DestroyString(p->name);
-      if (p->target != (char *) NULL)
-        p->target=DestroyString(p->target);
-      if (p->magic != (unsigned char *) NULL)
-        p->magic=(unsigned char *) RelinquishMagickMemory(p->magic);
-    }
-  p=(MagicInfo *) RelinquishMagickMemory(p);
+  RelinquishMagickMemory((MagicInfo *) magic_info);
   return((void *) NULL);
 }
 
