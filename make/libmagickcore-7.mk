@@ -57,6 +57,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/art.c \
     $(IMAGE_MAGICK)/coders/ashlar.c \
     $(IMAGE_MAGICK)/coders/avs.c \
+    $(IMAGE_MAGICK)/coders/bayer.c \
     $(IMAGE_MAGICK)/coders/bgr.c \
     $(IMAGE_MAGICK)/coders/bmp.c \
     $(IMAGE_MAGICK)/coders/braille.c \
