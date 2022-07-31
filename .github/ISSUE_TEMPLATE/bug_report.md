@@ -13,6 +13,7 @@ Please answer the following questions for yourself before submitting an issue.
 
 - [ ] I am running the latest version
 - [ ] I checked the documentation and examples and found no answer
+- [ ] I understand that this is a development library/binary, used for developing my own android app, and as a result, there's no such thing as an "apk". If I want an "apk", I will use something else like Termux instead which has their own imagemagick package, or I'll run the binary using the instructions provided in the wiki
 - [ ] I checked that this isn't an [ImageMagick](https://github.com/ImageMagick/ImageMagick) bug itself, and is an actual problem with this specific library, and the bug is not present in the official imagemagick
 - [ ] I checked to make sure that this issue has not already been filed
 - [ ] I'm reporting the issue to the correct repository. E.g, report kmagick bugs to the kmagick repo
