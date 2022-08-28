@@ -1790,20 +1790,24 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
         if ((samples_per_pixel > 2) && (interlace != PLANARCONFIG_SEPARATE))
           {
             quantum_type=RGBQuantum;
-            pad=(size_t) MagickMax((size_t) samples_per_pixel-3,0);
+            pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
+              extra_samples-3,0);
             if (image->alpha_trait != UndefinedPixelTrait)
               {
                 quantum_type=RGBAQuantum;
-                pad=(size_t) MagickMax((size_t) samples_per_pixel-4,0);
+                pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
+                  extra_samples-4,0);
               }
             if (image->colorspace == CMYKColorspace)
               {
                 quantum_type=CMYKQuantum;
-                pad=(size_t) MagickMax((size_t) samples_per_pixel-4,0);
+                pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
+                  extra_samples-4,0);
                 if (image->alpha_trait != UndefinedPixelTrait)
                   {
                     quantum_type=CMYKAQuantum;
-                    pad=(size_t) MagickMax((size_t) samples_per_pixel-5,0);
+                    pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
+                      extra_samples-5,0);
                   }
               }
             status=SetQuantumPad(image,quantum_info,pad*((bits_per_sample+7) >>
@@ -1869,9 +1873,6 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
       }
       case ReadStripMethod:
       {
-        unsigned char
-          *p;
-
         size_t
           extent;
 
@@ -1883,12 +1884,13 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
           strip_size;
 
         unsigned char
+          *p,
           *strip_pixels;
 
         /*
           Convert stripped TIFF image.
         */
-        extent=4*(samples_per_pixel+1)*TIFFStripSize(tiff);
+        extent=4*((image->depth+7)/8)*(samples_per_pixel+1)*TIFFStripSize(tiff);
         strip_pixels=(unsigned char *) AcquireQuantumMemory(extent,
           sizeof(*strip_pixels));
         if (strip_pixels == (unsigned char *) NULL)
