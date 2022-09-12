@@ -70,6 +70,7 @@
 #include "MagickCore/resource_.h"
 #include "MagickCore/string_.h"
 #include "MagickCore/statistic.h"
+#include "MagickCore/statistic-private.h"
 #include "MagickCore/string-private.h"
 #include "MagickCore/thread-private.h"
 #include "MagickCore/transform.h"
@@ -1191,15 +1192,6 @@ static MagickBooleanType GetPeakAbsoluteDistortion(const Image *image,
   return(status);
 }
 
-static inline double MagickLog10(const double x)
-{
-#define Log10Epsilon  (1.0e-11)
-
- if (fabs(x) < Log10Epsilon)
-   return(log10(Log10Epsilon));
- return(log10(fabs(x)));
-}
-
 static MagickBooleanType GetPeakSignalToNoiseRatio(const Image *image,
   const Image *reconstruct_image,double *distortion,ExceptionInfo *exception)
 {
@@ -1211,10 +1203,8 @@ static MagickBooleanType GetPeakSignalToNoiseRatio(const Image *image,
 
   status=GetMeanSquaredDistortion(image,reconstruct_image,distortion,exception);
   for (i=0; i <= MaxPixelChannels; i++)
-    if (fabs(distortion[i]) < MagickEpsilon)
-      distortion[i]=INFINITY;
-    else
-      distortion[i]=10.0*MagickLog10(1.0)-10.0*MagickLog10(distortion[i]);
+    if (fabs(distortion[i]) >= MagickEpsilon)
+      distortion[i]=(-10.0*MagickLog10(distortion[i]));
   return(status);
 }
 
@@ -2964,6 +2954,8 @@ MagickExport Image *SimilarityImage(const Image *image,const Image *reference,
       if (*similarity_metric <= similarity_threshold)
         break;
       similarity=GetSimilarityMetric(image,reference,metric,x,y,exception);
+      if (metric == PeakSignalToNoiseRatioErrorMetric)
+        similarity*=0.01;
       if ((metric == NormalizedCrossCorrelationErrorMetric) ||
           (metric == UndefinedErrorMetric))
         similarity=1.0-similarity;

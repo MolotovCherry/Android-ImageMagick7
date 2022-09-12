@@ -90,6 +90,7 @@
 #include "MagickCore/resource_.h"
 #include "MagickCore/splay-tree.h"
 #include "MagickCore/statistic.h"
+#include "MagickCore/statistic-private.h"
 #include "MagickCore/string_.h"
 #include "MagickCore/thread-private.h"
 #include "MagickCore/threshold.h"
@@ -2885,6 +2886,13 @@ static inline fxFltType ImageStat (
   fxFltType ret = 0;
   MagickBooleanType NeedRelinq = MagickFalse;
 
+  if (ImgNum < 0)
+    {
+      (void) ThrowMagickException(pfx->exception,GetMagickModule(),
+        OptionError,"NoSuchImage","%lu",(unsigned long) ImgNum);
+      ImgNum=0;
+    }
+
   if (pfx->GotStats) {
     if ((channel < 0) || (channel > MaxPixelChannels))
       {
@@ -3456,10 +3464,10 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
           regA = log ((double) regA);
           break;
         case fLogtwo:
-          regA = log10((double) regA) / log10(2.0);
+          regA = MagickLog10((double) regA) / log10(2.0);
           break;
         case fLog:
-          regA = log10 ((double) regA);
+          regA = MagickLog10 ((double) regA);
           break;
         case fMax:
           regA = (regA > regB) ? regA : regB;
