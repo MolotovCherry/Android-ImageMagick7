@@ -791,7 +791,11 @@ MagickExport MagickBooleanType GetMultilineTypeMetrics(Image *image,
   assert(draw_info->text != (char *) NULL);
   assert(draw_info->signature == MagickCoreSignature);
   if (*draw_info->text == '\0')
-    return(MagickFalse);
+    {
+      (void) ThrowMagickException(exception,GetMagickModule(),OptionError,
+        "LabelExpected","`%s'",image->filename);
+      return(MagickFalse);
+    }
   annotate_info=CloneDrawInfo((ImageInfo *) NULL,draw_info);
   annotate_info->text=DestroyString(annotate_info->text);
   /*
@@ -1014,7 +1018,7 @@ static MagickBooleanType RenderType(Image *image,const DrawInfo *draw_info,
   if ((type_info == (const TypeInfo *) NULL) &&
       (draw_info->family != (const char *) NULL))
     {
-      if (strstr(draw_info->family,",'\"") == (char *) NULL)
+      if (strpbrk(draw_info->family,",'\"") == (char *) NULL)
         type_info=GetTypeInfoByFamily(draw_info->family,draw_info->style,
           draw_info->stretch,draw_info->weight,exception);
       if (type_info == (const TypeInfo *) NULL)
@@ -1412,9 +1416,11 @@ static FT_Memory FreetypeAcquireMemoryManager()
   return(memory);
 }
 
-static void FreetypeDone(FT_Memory memory,FT_Library library)
+static void FreetypeDone(FT_Memory memory,FT_Library library,
+  FT_StreamRec *stream)
 {
   (void) FT_Done_Library(library);
+  stream=(FT_StreamRec *) RelinquishMagickMemory(stream);
   memory=(FT_Memory) RelinquishMagickMemory(memory);
 }
 
@@ -1606,8 +1612,7 @@ static MagickBooleanType RenderFreetype(Image *image,const DrawInfo *draw_info,
   ft_status=FT_Open_Face(library,&args,face_index,&face);
   if (ft_status != 0)
     {
-      stream=(FT_StreamRec *) RelinquishMagickMemory(stream);
-      FreetypeDone(memory,library);
+      FreetypeDone(memory,library,stream);
       ThrowFreetypeErrorException("UnableToReadFont",ft_status,args.pathname);
       args.pathname=DestroyString(args.pathname);
       return(MagickFalse);
@@ -1662,7 +1667,7 @@ static MagickBooleanType RenderFreetype(Image *image,const DrawInfo *draw_info,
       if (ft_status != 0)
         {
           (void) FT_Done_Face(face);
-          FreetypeDone(memory,library);
+          FreetypeDone(memory,library,stream);
           ThrowFreetypeErrorException("UnrecognizedFontEncoding",ft_status,
             encoding);
           return(MagickFalse);
@@ -1694,7 +1699,7 @@ static MagickBooleanType RenderFreetype(Image *image,const DrawInfo *draw_info,
   if (ft_status != 0)
     {
       (void) FT_Done_Face(face);
-      FreetypeDone(memory,library);
+      FreetypeDone(memory,library,stream);
       ThrowFreetypeErrorException("UnableToReadFont",ft_status,
         draw_info->font);
       return(MagickFalse);
@@ -1733,7 +1738,7 @@ static MagickBooleanType RenderFreetype(Image *image,const DrawInfo *draw_info,
       (first_glyph_id == 0))
     {
       (void) FT_Done_Face(face);
-      FreetypeDone(memory,library);
+      FreetypeDone(memory,library,stream);
       return(MagickTrue);
     }
   /*
@@ -2048,7 +2053,7 @@ static MagickBooleanType RenderFreetype(Image *image,const DrawInfo *draw_info,
   */
   annotate_info=DestroyDrawInfo(annotate_info);
   (void) FT_Done_Face(face);
-  FreetypeDone(memory,library);
+  FreetypeDone(memory,library,stream);
   return(status);
 }
 #else

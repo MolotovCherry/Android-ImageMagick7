@@ -1714,9 +1714,9 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
                       exception);
                   }
             }
-            (void) SetPixelMetaChannels(image,extra_samples,exception);
             if (image->alpha_trait != UndefinedPixelTrait)
-              (void) SetPixelMetaChannels(image,extra_samples-1,exception);
+              extra_samples--;
+            (void) SetPixelMetaChannels(image,extra_samples,exception);
           }
       }
     if (image->alpha_trait != UndefinedPixelTrait)
@@ -1787,17 +1787,8 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
               quantum_type=samples_per_pixel == 1 ? AlphaQuantum :
                 GrayAlphaQuantum;
           }
-        if ((samples_per_pixel > 2) && (interlace != PLANARCONFIG_SEPARATE))
+        if (samples_per_pixel > 2)
           {
-            quantum_type=RGBQuantum;
-            pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
-              extra_samples-3,0);
-            if (image->alpha_trait != UndefinedPixelTrait)
-              {
-                quantum_type=RGBAQuantum;
-                pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
-                  extra_samples-4,0);
-              }
             if (image->colorspace == CMYKColorspace)
               {
                 quantum_type=CMYKQuantum;
@@ -1809,6 +1800,18 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
                     pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
                       extra_samples-5,0);
                   }
+              }
+            else if (image->alpha_trait != UndefinedPixelTrait)
+              {
+                quantum_type=RGBAQuantum;
+                pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
+                  extra_samples-4,0);
+              }
+            else
+              {
+                quantum_type=RGBQuantum;
+                pad=(size_t) MagickMax((ssize_t) samples_per_pixel+
+                  extra_samples-3,0);
               }
             status=SetQuantumPad(image,quantum_info,pad*((bits_per_sample+7) >>
               3));
@@ -1890,7 +1893,8 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
         /*
           Convert stripped TIFF image.
         */
-        extent=4*((image->depth+7)/8)*(samples_per_pixel+1)*TIFFStripSize(tiff);
+        extent=4*MagickMax(image->columns*(samples_per_pixel+extra_samples)*
+          (image->depth+7)/8,TIFFStripSize(tiff));
         strip_pixels=(unsigned char *) AcquireQuantumMemory(extent,
           sizeof(*strip_pixels));
         if (strip_pixels == (unsigned char *) NULL)
