@@ -618,8 +618,7 @@ static inline float JXLGetDistance(const ImageInfo *image_info)
     return(1.0f);
   if (image_info->quality >= 30)
     return(0.1f+(float) (100-MagickMin(100,image_info->quality))*0.09f);
-  return(MagickMin(25.0,6.4f+(float) pow(2.5f,(30.0-image_info->quality)/5.0f)/
-    6.25f));
+  return(6.24f+(float) pow(2.5f,(30.0-image_info->quality)/5.0f)/6.25f);
 }
 
 static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
@@ -634,8 +633,8 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
   JxlEncoder
     *jxl_info;
 
-  JxlEncoderOptions
-    *jxl_options;
+  JxlEncoderFrameSettings
+    *frame_settings;
 
   JxlEncoderStatus
     jxl_status;
@@ -712,8 +711,14 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
         basic_info.bits_per_sample=32;
         basic_info.exponent_bits_per_sample=8;
       }
+  if (IsGrayColorspace(image->colorspace) != MagickFalse)
+    basic_info.num_color_channels=1;
   if (image->alpha_trait == BlendPixelTrait)
-    basic_info.alpha_bits=basic_info.bits_per_sample;
+    {
+      basic_info.alpha_bits=basic_info.bits_per_sample;
+      basic_info.alpha_exponent_bits=basic_info.exponent_bits_per_sample;
+      basic_info.num_extra_channels=1;
+    }
   if (image->quality == 100)
     basic_info.uses_original_profile=JXL_TRUE;
   jxl_status=JxlEncoderSetBasicInfo(jxl_info,&basic_info);
@@ -723,24 +728,27 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
       JxlEncoderDestroy(jxl_info);
       ThrowWriterException(CoderError,"UnableToWriteImageData");
     }
-  jxl_options=JxlEncoderOptionsCreate(jxl_info,(JxlEncoderOptions *) NULL);
-  if (jxl_options == (JxlEncoderOptions *) NULL)
+  frame_settings=JxlEncoderFrameSettingsCreate(jxl_info,
+    (JxlEncoderFrameSettings *) NULL);
+  if (frame_settings == (JxlEncoderFrameSettings *) NULL)
     {
       JxlThreadParallelRunnerDestroy(runner);
       JxlEncoderDestroy(jxl_info);
       ThrowWriterException(CoderError,"MemoryAllocationFailed");
     }
   if (image->quality == 100)
-    (void) JxlEncoderOptionsSetLossless(jxl_options,JXL_TRUE);
+    (void) JxlEncoderSetFrameLossless(frame_settings,JXL_TRUE);
   else
-    (void) JxlEncoderOptionsSetDistance(jxl_options,JXLGetDistance(image_info));
+    (void) JxlEncoderSetFrameDistance(frame_settings,
+      JXLGetDistance(image_info));
   option=GetImageOption(image_info,"jxl:effort");
   if (option != (const char *) NULL)
-    (void) JxlEncoderOptionsSetEffort(jxl_options,StringToInteger(option));
+    (void) JxlEncoderFrameSettingsSetOption(frame_settings,
+      JXL_ENC_FRAME_SETTING_EFFORT,StringToInteger(option));
   option=GetImageOption(image_info,"jxl:decoding-speed");
   if (option != (const char *) NULL)
-    (void) JxlEncoderOptionsSetDecodingSpeed(jxl_options,
-      StringToInteger(option));
+    (void) JxlEncoderFrameSettingsSetOption(frame_settings,
+      JXL_ENC_FRAME_SETTING_DECODING_SPEED,StringToInteger(option));
   jxl_status=JXLWriteMetadata(image,jxl_info);
   jxl_status=JXL_ENC_SUCCESS;
   if (jxl_status != JXL_ENC_SUCCESS)
@@ -783,7 +791,7 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
       JxlEncoderDestroy(jxl_info);
       ThrowWriterException(CoderError,"MemoryAllocationFailed");
     }
-  jxl_status=JxlEncoderAddImageFrame(jxl_options,&pixel_format,pixels,
+  jxl_status=JxlEncoderAddImageFrame(frame_settings,&pixel_format,pixels,
     bytes_per_row*image->rows);
   if (jxl_status == JXL_ENC_SUCCESS)
     {
