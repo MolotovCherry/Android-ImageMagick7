@@ -46,9 +46,9 @@ APP_CPPFLAGS += -O3
 #------------------------------------------
 # Magick options
 
-HDRI_ENABLE   := true
+HDRI_ENABLE   := false
 # 8, 16, 32
-QUANTUM_DEPTH := 16
+QUANTUM_DEPTH := 8
 
 
 #------------------------------------------
