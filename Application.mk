@@ -46,9 +46,9 @@ APP_CPPFLAGS += -O3
 #------------------------------------------
 # Magick options
 
-HDRI_ENABLE   := true
+HDRI_ENABLE   := false
 # 8, 16, 32
-QUANTUM_DEPTH := 16
+QUANTUM_DEPTH := 8
 
 
 #------------------------------------------
@@ -59,12 +59,12 @@ QUANTUM_DEPTH := 16
 # binary.
 #
 
-STATIC_BUILD     := true
+STATIC_BUILD     := false
 # magick bin requires magick wand API
 BUILD_MAGICK_BIN := true
 BUILD_MAGICKWAND := true
 # requires magickwand
-BUILD_MAGICKPP   := false
+BUILD_MAGICKPP   := true
 
 
 #------------------------------------------
