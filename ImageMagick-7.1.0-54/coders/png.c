@@ -11117,7 +11117,7 @@ static MagickBooleanType WriteOnePNGImage(MngInfo *mng_info,
     {
       if (ping_exclude_gAMA == MagickFalse &&
           ping_have_iCCP == MagickFalse &&
-          ping_have_sRGB == MagickFalse &&
+          ping_have_sRGB != MagickFalse &&
           (ping_exclude_sRGB == MagickFalse ||
           (image->gamma < .45 || image->gamma > .46)))
       {
@@ -11125,7 +11125,6 @@ static MagickBooleanType WriteOnePNGImage(MngInfo *mng_info,
         {
           /*
             Note image gamma.
-            To do: check for cHRM+gAMA == sRGB, and write sRGB instead.
           */
           if (logging != MagickFalse)
             (void) LogMagickEvent(CoderEvent,GetMagickModule(),
@@ -11142,7 +11141,6 @@ static MagickBooleanType WriteOnePNGImage(MngInfo *mng_info,
             {
               /*
                 Note image chromaticity.
-                Note: if cHRM+gAMA == sRGB write sRGB instead.
               */
                PrimaryInfo
                  bp,
