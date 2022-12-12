@@ -41,10 +41,12 @@
   Include declarations.
 */
 #include "MagickCore/studio.h"
+#include "MagickCore/artifact.h"
 #include "MagickCore/image.h"
 #include "MagickCore/log.h"
 #include "MagickCore/monitor.h"
 #include "MagickCore/monitor-private.h"
+#include "MagickCore/pixel-accessor.h"
 
 /*
   Static declarations.
@@ -115,7 +117,10 @@ MagickPrivate void MonitorComponentTerminus(void)
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%  SetImageProgress() returns the progress of an image processing operation.
+%  SetImageProgress() calls the monitoring callback with the progress of an
+%  image processing operation.  It also sets the `monitor:progress` image
+%  artifact available with GetImageArtifact().
+%
 %
 %  The format of the SetImageProgress method is:
 %
@@ -144,12 +149,16 @@ MagickExport MagickBooleanType SetImageProgress(const Image *image,
 
   if (image->progress_monitor == (MagickProgressMonitor) NULL)
     return(MagickTrue);
-  (void) FormatLocaleString(message,MagickPathExtent,"%s/%s",tag,
-    image->filename);
+  (void) FormatLocaleString(message,MagickPathExtent,"%s/%s",
+    tag == (const char *) NULL ? "null" : tag,image->filename);
   if (monitor_semaphore == (SemaphoreInfo *) NULL)
     ActivateSemaphoreInfo(&monitor_semaphore);
   LockSemaphoreInfo(monitor_semaphore);
   status=image->progress_monitor(message,offset,extent,image->client_data);
+  (void) FormatLocaleString(message,MagickPathExtent,"%g%%:%s:%s",
+    (100.0*offset*PerceptibleReciprocal(extent-1.0)),
+    tag == (const char *) NULL ? "null" : tag,image->filename);
+  (void) SetImageArtifact((Image *) image,"monitor:progress",message);
   UnlockSemaphoreInfo(monitor_semaphore);
   return(status);
 }
