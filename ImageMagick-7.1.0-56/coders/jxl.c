@@ -260,10 +260,31 @@ static inline void JXLSetFormat(Image *image,JxlPixelFormat *pixel_format,
     }
 }
 
+static inline void JXLInitImage(Image *image,JxlBasicInfo *basic_info)
+{
+  image->columns=basic_info->xsize;
+  image->rows=basic_info->ysize;
+  image->depth=basic_info->bits_per_sample;
+  if (basic_info->alpha_bits != 0)
+    image->alpha_trait=BlendPixelTrait;
+  image->orientation=JXLOrientationToOrientation(basic_info->orientation);
+  if (basic_info->have_animation == JXL_TRUE)
+    {
+      if ((basic_info->animation.tps_numerator > 0) &&
+          (basic_info->animation.tps_denominator > 0))
+      image->ticks_per_second=basic_info->animation.tps_numerator /
+        basic_info->animation.tps_denominator;
+      image->iterations=basic_info->animation.num_loops;
+    }
+}
+
 static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
 {
   Image
     *image;
+
+  JxlBasicInfo
+    basic_info = { 0 };
 
   JxlDecoder
     *jxl_info;
@@ -285,6 +306,8 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
     memory_manager_info;
 
   size_t
+    extent = 0,
+    image_count = 0,
     input_size;
 
   StringInfo
@@ -296,7 +319,7 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
     *output_buffer = (unsigned char *) NULL;
 
   void
-    *runner;
+    *runner = NULL;
 
   /*
     Open image file.
@@ -323,28 +346,33 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
   if (jxl_info == (JxlDecoder *) NULL)
     ThrowReaderException(CoderError,"MemoryAllocationFailed");
   (void) JxlDecoderSetKeepOrientation(jxl_info,JXL_TRUE);
-  runner=JxlThreadParallelRunnerCreate(NULL,(size_t) GetMagickResourceLimit(
-    ThreadResource));
-  if (runner == (void *) NULL)
-    {
-      JxlDecoderDestroy(jxl_info);
-      ThrowReaderException(CoderError,"MemoryAllocationFailed");
-    }
-  jxl_status=JxlDecoderSetParallelRunner(jxl_info,JxlThreadParallelRunner,
-    runner);
-  if (jxl_status != JXL_DEC_SUCCESS)
-    {
-      JxlThreadParallelRunnerDestroy(runner);
-      JxlDecoderDestroy(jxl_info);
-      ThrowReaderException(CoderError,"MemoryAllocationFailed");
-    }
-  events_wanted=(JxlDecoderStatus) (JXL_DEC_BASIC_INFO | JXL_DEC_BOX);
+  (void) JxlDecoderSetUnpremultiplyAlpha(jxl_info,JXL_TRUE);
+  events_wanted=(JxlDecoderStatus) (JXL_DEC_BASIC_INFO | JXL_DEC_BOX |
+    JXL_DEC_FRAME);
   if (image_info->ping == MagickFalse)
-    events_wanted=(JxlDecoderStatus) (events_wanted | JXL_DEC_FULL_IMAGE |
-      JXL_DEC_COLOR_ENCODING);
+    {
+      events_wanted=(JxlDecoderStatus) (events_wanted | JXL_DEC_FULL_IMAGE |
+        JXL_DEC_COLOR_ENCODING);
+      runner=JxlThreadParallelRunnerCreate(NULL,(size_t) GetMagickResourceLimit(
+        ThreadResource));
+      if (runner == (void *) NULL)
+        {
+          JxlDecoderDestroy(jxl_info);
+          ThrowReaderException(CoderError,"MemoryAllocationFailed");
+        }
+      jxl_status=JxlDecoderSetParallelRunner(jxl_info,JxlThreadParallelRunner,
+        runner);
+      if (jxl_status != JXL_DEC_SUCCESS)
+        {
+          JxlThreadParallelRunnerDestroy(runner);
+          JxlDecoderDestroy(jxl_info);
+          ThrowReaderException(CoderError,"MemoryAllocationFailed");
+        }
+    }
   if (JxlDecoderSubscribeEvents(jxl_info,events_wanted) != JXL_DEC_SUCCESS)
     {
-      JxlThreadParallelRunnerDestroy(runner);
+      if (runner != NULL)
+        JxlThreadParallelRunnerDestroy(runner);
       JxlDecoderDestroy(jxl_info);
       ThrowReaderException(CoderError,"UnableToReadImageData");
     }
@@ -352,7 +380,8 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
   pixels=(unsigned char *) AcquireQuantumMemory(input_size,sizeof(*pixels));
   if (pixels == (unsigned char *) NULL)
     {
-      JxlThreadParallelRunnerDestroy(runner);
+      if (runner != NULL)
+        JxlThreadParallelRunnerDestroy(runner);
       JxlDecoderDestroy(jxl_info);
       ThrowReaderException(CoderError,"MemoryAllocationFailed");
     }
@@ -390,36 +419,28 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
       }
       case JXL_DEC_BASIC_INFO:
       {
-        JxlBasicInfo
-          basic_info;
-
-        (void) memset(&basic_info,0,sizeof(basic_info));
         jxl_status=JxlDecoderGetBasicInfo(jxl_info,&basic_info);
         if (jxl_status != JXL_DEC_SUCCESS)
           break;
-        if (basic_info.have_animation == 1)
+        if ((basic_info.have_animation == JXL_TRUE) &&
+            (basic_info.animation.have_timecodes == JXL_TRUE))
           {
             /*
-              We don't currently support animation.
+              We currently don't support animations with time codes.
             */
             (void) ThrowMagickException(exception,GetMagickModule(),
               MissingDelegateError,"NoDecodeDelegateForThisImageFormat","`%s'",
               image->filename);
             break;
           }
-        image->columns=basic_info.xsize;
-        image->rows=basic_info.ysize;
-        image->depth=basic_info.bits_per_sample;
-        if (basic_info.alpha_bits != 0)
-          image->alpha_trait=BlendPixelTrait;
-        image->orientation=JXLOrientationToOrientation(basic_info.orientation);
+        JXLInitImage(image,&basic_info);
         jxl_status=JXL_DEC_BASIC_INFO;
         break;
       }
       case JXL_DEC_COLOR_ENCODING:
       {
         JxlColorEncoding
-          color_encoding;
+          color_encoding = { 0 };
 
         size_t
           profile_size;
@@ -428,7 +449,6 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
           *profile;
 
         JXLSetFormat(image,&pixel_format,exception);
-        (void) memset(&color_encoding,0,sizeof(color_encoding));
         jxl_status=JxlDecoderGetColorAsEncodedProfile(jxl_info,&pixel_format,
           JXL_COLOR_PROFILE_TARGET_DATA,&color_encoding);
         if (jxl_status == JXL_DEC_SUCCESS)
@@ -459,25 +479,41 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
           jxl_status=JXL_DEC_COLOR_ENCODING;
         break;
       }
+      case JXL_DEC_FRAME:
+      {
+        if (image_count++ != 0)
+          {
+            /*
+              Allocate next image structure.
+            */
+            AcquireNextImage(image_info,image,exception);
+            if (GetNextImageInList(image) == (Image *) NULL)
+              break;
+            image=SyncNextImageInList(image);
+            JXLInitImage(image,&basic_info);
+          }
+        break;
+      }
       case JXL_DEC_NEED_IMAGE_OUT_BUFFER:
       {
-        size_t
-          extent;
-
         status=SetImageExtent(image,image->columns,image->rows,exception);
         if (status == MagickFalse)
           break;
         JXLSetFormat(image,&pixel_format,exception);
-        jxl_status=JxlDecoderImageOutBufferSize(jxl_info,&pixel_format,&extent);
-        if (jxl_status != JXL_DEC_SUCCESS)
-          break;
-        output_buffer=(unsigned char *) AcquireQuantumMemory(extent,
-          sizeof(*output_buffer));
-        if (output_buffer == (unsigned char *) NULL)
+        if (extent == 0)
           {
-            (void) ThrowMagickException(exception,GetMagickModule(),CoderError,
-              "MemoryAllocationFailed","`%s'",image->filename);
-            break;
+            jxl_status=JxlDecoderImageOutBufferSize(jxl_info,&pixel_format,
+              &extent);
+            if (jxl_status != JXL_DEC_SUCCESS)
+              break;
+            output_buffer=(unsigned char *) AcquireQuantumMemory(extent,
+              sizeof(*output_buffer));
+            if (output_buffer == (unsigned char *) NULL)
+              {
+                (void) ThrowMagickException(exception,GetMagickModule(),
+                  CoderError,"MemoryAllocationFailed","`%s'",image->filename);
+                break;
+              }
           }
         jxl_status=JxlDecoderSetImageOutBuffer(jxl_info,&pixel_format,
           output_buffer,extent);
@@ -600,12 +636,13 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
     }
   output_buffer=(unsigned char *) RelinquishMagickMemory(output_buffer);
   pixels=(unsigned char *) RelinquishMagickMemory(pixels);
-  JxlThreadParallelRunnerDestroy(runner);
+  if (runner != NULL)
+    JxlThreadParallelRunnerDestroy(runner);
   JxlDecoderDestroy(jxl_info);
   if (jxl_status == JXL_DEC_ERROR)
     ThrowReaderException(CorruptImageError,"UnableToReadImageData");
   (void) CloseBlob(image);
-  return(image);
+  return(GetFirstImageInList(image));
 }
 #endif
 
@@ -652,7 +689,7 @@ ModuleExport size_t RegisterJXLImage(void)
   entry->encoder=(EncodeImageHandler *) WriteJXLImage;
   entry->magick=(IsImageFormatHandler *) IsJXL;
 #endif
-  entry->flags^=CoderAdjoinFlag;
+  entry->mime_type=ConstantString("image/jxl");
   if (*version != '\0')
     entry->version=ConstantString(version);
   (void) RegisterMagickInfo(entry);
@@ -753,7 +790,7 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
     *xmp_profile = (StringInfo *) NULL;
 
   JxlBasicInfo
-    basic_info;
+    basic_info = { 0 };
 
   JxlEncoder
     *jxl_info;
@@ -768,7 +805,7 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
     memory_manager;
 
   JxlPixelFormat
-    pixel_format;
+    pixel_format = { 0 };
 
   MagickBooleanType
     status;
@@ -802,6 +839,9 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
   status=OpenBlob(image_info,image,WriteBinaryBlobMode,exception);
   if (status == MagickFalse)
     return(status);
+  if ((IssRGBCompatibleColorspace(image->colorspace) == MagickFalse) &&
+      (IsCMYKColorspace(image->colorspace) == MagickFalse))
+    (void) TransformImageColorspace(image,sRGBColorspace,exception);
   /*
     Initialize JXL delegate library.
   */
@@ -824,9 +864,7 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
       JxlEncoderDestroy(jxl_info);
       return(MagickFalse);
     }
-  (void) memset(&pixel_format,0,sizeof(pixel_format));
   JXLSetFormat(image,&pixel_format,exception);
-  (void) memset(&basic_info,0,sizeof(basic_info));
   JxlEncoderInitBasicInfo(&basic_info);
   basic_info.xsize=(uint32_t) image->columns;
   basic_info.ysize=(uint32_t) image->rows;
@@ -853,7 +891,7 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
       basic_info.alpha_exponent_bits=basic_info.exponent_bits_per_sample;
       basic_info.num_extra_channels=1;
     }
-  if (image->quality == 100)
+  if (image_info->quality == 100)
     basic_info.uses_original_profile=JXL_TRUE;
   jxl_status=JxlEncoderSetBasicInfo(jxl_info,&basic_info);
   if (jxl_status != JXL_ENC_SUCCESS)
@@ -870,8 +908,11 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
       JxlEncoderDestroy(jxl_info);
       ThrowWriterException(CoderError,"MemoryAllocationFailed");
     }
-  if (image->quality == 100)
-    (void) JxlEncoderSetFrameLossless(frame_settings,JXL_TRUE);
+  if (image_info->quality == 100)
+    {
+      (void) JxlEncoderSetFrameDistance(frame_settings,0.f);
+      (void) JxlEncoderSetFrameLossless(frame_settings,JXL_TRUE);
+    }
   else
     (void) JxlEncoderSetFrameDistance(frame_settings,
       JXLGetDistance(image_info));
