@@ -67,11 +67,6 @@
 #endif
 
 /*
-  Define declarations.
-*/
-#define ExifNamespace  "Exif\0\0"
-
-/*
   Typedef declarations.
 */
 typedef struct MemoryManagerInfo
@@ -582,10 +577,21 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
             exif_profile=AcquireStringInfo((size_t) size);
             p=GetStringInfoDatum(exif_profile);
             jxl_status=JxlDecoderSetBoxBuffer(jxl_info,p,size);
-            if (size > 8)
+            if (size > 4)
               {
-                (void) DestroyStringInfo(SplitStringInfo(exif_profile,4));
-                SetStringInfoLength(exif_profile,size-8);
+                /*
+                  Extract Exif profile.
+                */
+                StringInfo *snippet = SplitStringInfo(exif_profile,4);
+                unsigned int offset = 0;
+                offset|=(unsigned int) (*(GetStringInfoDatum(snippet)+0)) << 24;
+                offset|=(unsigned int) (*(GetStringInfoDatum(snippet)+1)) << 16;
+                offset|=(unsigned int) (*(GetStringInfoDatum(snippet)+2)) << 8;
+                offset|=(unsigned int) (*(GetStringInfoDatum(snippet)+3)) << 0;
+                snippet=DestroyStringInfo(snippet);
+                if (offset < GetStringInfoLength(exif_profile))
+                  (void) DestroyStringInfo(SplitStringInfo(exif_profile,
+                    offset));
               }
           }
         if (LocaleNCompare(type,"xml ",sizeof(type)) == 0)
@@ -614,17 +620,19 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
     }
   }
   (void) JxlDecoderReleaseBoxBuffer(jxl_info);
-  if (exif_profile != (StringInfo *) NULL)
+  if ((exif_profile != (StringInfo *) NULL) &&
+      (GetStringInfoLength(exif_profile) > 6))
     {
       /*
         Cache Exif profile.
       */
-      StringInfo *profile = StringToStringInfo(ExifNamespace);
+      StringInfo *profile = StringToStringInfo("Exif\0\0");
       DestroyStringInfo(SplitStringInfo(exif_profile,2));
       ConcatenateStringInfo(profile,exif_profile);
-      exif_profile=DestroyStringInfo(exif_profile);
+      SetStringInfoLength(profile,GetStringInfoLength(profile)-4);
       (void) SetImageProfile(image,"exif",profile,exception);
       profile=DestroyStringInfo(profile);
+      exif_profile=DestroyStringInfo(exif_profile);
     }
   if (xmp_profile != (StringInfo *) NULL)
     {
@@ -801,6 +809,9 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
   JxlEncoderStatus
     jxl_status;
 
+  JxlFrameHeader
+    frame_header = { 0 };
+
   JxlMemoryManager
     memory_manager;
 
@@ -893,6 +904,16 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
     }
   if (image_info->quality == 100)
     basic_info.uses_original_profile=JXL_TRUE;
+  if ((image_info->adjoin != MagickFalse) &&
+      (GetNextImageInList(image) != (Image *) NULL))
+    {
+      basic_info.have_animation=JXL_TRUE;
+      basic_info.animation.num_loops=(uint32_t) image->iterations;
+      basic_info.animation.tps_numerator=(uint32_t) image->ticks_per_second;
+      basic_info.animation.tps_denominator=1;
+      JxlEncoderInitFrameHeader(&frame_header);
+      frame_header.duration=1;
+    }
   jxl_status=JxlEncoderSetBasicInfo(jxl_info,&basic_info);
   if (jxl_status != JXL_ENC_SUCCESS)
     {
@@ -929,27 +950,28 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
   if ((exif_profile != (StringInfo *) NULL) ||
       (xmp_profile != (StringInfo *) NULL))
     {
-      /*
-        Add metadata boxes.
-      */
       (void) JxlEncoderUseBoxes(jxl_info);
-      if (exif_profile != (StringInfo *) NULL)
+      if ((exif_profile != (StringInfo *) NULL) &&
+          (GetStringInfoLength(exif_profile) > 6))
         {
           /*
-            Prepend a 2-byte header.
+            Add Exif profile.
           */
-          StringInfo *profile = AcquireStringInfo(2);
-          ConcatenateStringInfo(profile,exif_profile);
-          (void) DestroyStringInfo(SplitStringInfo(profile,
-            strlen(ExifNamespace)));
-          (void) memset(GetStringInfoDatum(profile),0,2);
+          StringInfo *profile = CloneStringInfo(exif_profile);
+          DestroyStringInfo(SplitStringInfo(profile,2));
+          SetStringInfoLength(profile,GetStringInfoLength(profile));
           (void) JxlEncoderAddBox(jxl_info,"Exif",GetStringInfoDatum(profile),
             GetStringInfoLength(profile),0);
           profile=DestroyStringInfo(profile);
         }
       if (xmp_profile != (StringInfo *) NULL)
-        (void) JxlEncoderAddBox(jxl_info,"xml ",GetStringInfoDatum(xmp_profile),
-          GetStringInfoLength(xmp_profile),0);
+        {
+          /*
+            Add Exif profile.
+          */
+          (void) JxlEncoderAddBox(jxl_info,"xml ",GetStringInfoDatum(
+            xmp_profile),GetStringInfoLength(xmp_profile),0);
+        }
       (void) JxlEncoderCloseBoxes(jxl_info);
     }
   jxl_status=JXLWriteMetadata(image,jxl_info);
@@ -980,26 +1002,54 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
       JxlEncoderDestroy(jxl_info);
       ThrowWriterException(CoderError,"MemoryAllocationFailed");
     }
-  pixels=(unsigned char *) GetVirtualMemoryBlob(pixel_info);
-  if (IsGrayColorspace(image->colorspace) != MagickFalse)
-    status=ExportImagePixels(image,0,0,image->columns,image->rows,
-      image->alpha_trait == BlendPixelTrait ? "IA" : "I",
-      JXLDataTypeToStorageType(image,pixel_format.data_type,exception),pixels,
-      exception);
-  else
-    status=ExportImagePixels(image,0,0,image->columns,image->rows,
-      image->alpha_trait == BlendPixelTrait ? "RGBA" : "RGB",
-      JXLDataTypeToStorageType(image,pixel_format.data_type,exception),pixels,
-      exception);
-  if (status == MagickFalse)
-    {
-      pixel_info=RelinquishVirtualMemory(pixel_info);
-      JxlThreadParallelRunnerDestroy(runner);
-      JxlEncoderDestroy(jxl_info);
-      ThrowWriterException(CoderError,"MemoryAllocationFailed");
-    }
-  jxl_status=JxlEncoderAddImageFrame(frame_settings,&pixel_format,pixels,
-    bytes_per_row*image->rows);
+  do
+  {
+    Image
+      *next;
+
+    if (basic_info.have_animation == JXL_TRUE)
+      {
+        jxl_status=JxlEncoderSetFrameHeader(frame_settings,&frame_header);
+        if (jxl_status != JXL_ENC_SUCCESS)
+          break;
+      }
+    pixels=(unsigned char *) GetVirtualMemoryBlob(pixel_info);
+    if (IsGrayColorspace(image->colorspace) != MagickFalse)
+      status=ExportImagePixels(image,0,0,image->columns,image->rows,
+        image->alpha_trait == BlendPixelTrait ? "IA" : "I",
+        JXLDataTypeToStorageType(image,pixel_format.data_type,exception),
+        pixels,exception);
+    else
+      status=ExportImagePixels(image,0,0,image->columns,image->rows,
+        image->alpha_trait == BlendPixelTrait ? "RGBA" : "RGB",
+        JXLDataTypeToStorageType(image,pixel_format.data_type,exception),
+        pixels,exception);
+    if (status == MagickFalse)
+      {
+        (void) ThrowMagickException(exception,GetMagickModule(),CoderError,
+          "MemoryAllocationFailed","`%s'",image->filename);
+        status=MagickFalse;
+        break;
+      }
+    if (jxl_status != JXL_ENC_SUCCESS)
+      break;
+    jxl_status=JxlEncoderAddImageFrame(frame_settings,&pixel_format,pixels,
+      bytes_per_row*image->rows);
+    if (jxl_status != JXL_ENC_SUCCESS)
+      break;
+    next=GetNextImageInList(image);
+    if (next == (Image*) NULL)
+      break;
+    if ((next->columns != image->columns) || (next->rows != image->rows))
+      {
+       (void) ThrowMagickException(exception,GetMagickModule(),ImageError,
+         "FramesNotSameDimensions","`%s'",image->filename);
+       status=MagickFalse;
+       break;
+      }
+    image=SyncNextImageInList(image);
+  } while (image_info->adjoin != MagickFalse);
+  pixel_info=RelinquishVirtualMemory(pixel_info);
   if (jxl_status == JXL_ENC_SUCCESS)
     {
       unsigned char
@@ -1010,7 +1060,6 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
         MagickMaxBufferExtent,sizeof(*output_buffer));
       if (output_buffer == (unsigned char *) NULL)
         {
-          pixel_info=RelinquishVirtualMemory(pixel_info);
           JxlThreadParallelRunnerDestroy(runner);
           JxlEncoderDestroy(jxl_info);
           ThrowWriterException(CoderError,"MemoryAllocationFailed");
@@ -1042,7 +1091,6 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
       }
       output_buffer=(unsigned char *) RelinquishMagickMemory(output_buffer);
     }
-  pixel_info=RelinquishVirtualMemory(pixel_info);
   JxlThreadParallelRunnerDestroy(runner);
   JxlEncoderDestroy(jxl_info);
   if (jxl_status != JXL_ENC_SUCCESS)
