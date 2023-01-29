@@ -80,7 +80,8 @@
 #include <libheif/heif.h>
 #endif
 #endif
-
+
+
 #if defined(MAGICKCORE_HEIC_DELEGATE)
 /*
   Forward declarations.
@@ -217,16 +218,37 @@ static MagickBooleanType ReadHEICExifProfile(Image *image,
     GetStringInfoDatum(exif_profile));
   if ((IsHEIFSuccess(image,&error,exception) != MagickFalse) && (length > 4))
     {
+      StringInfo
+        *snippet = SplitStringInfo(exif_profile,4);
+
+      unsigned char
+        *datum;
+
+      unsigned int
+        offset = 0;
+
       /*
         Extract Exif profile.
       */
-      StringInfo *snippet = SplitStringInfo(exif_profile,4);
-      unsigned int offset = 0;
-      offset|=(unsigned int) (*(GetStringInfoDatum(snippet)+0)) << 24;
-      offset|=(unsigned int) (*(GetStringInfoDatum(snippet)+1)) << 16;
-      offset|=(unsigned int) (*(GetStringInfoDatum(snippet)+2)) << 8;
-      offset|=(unsigned int) (*(GetStringInfoDatum(snippet)+3)) << 0;
+      datum=GetStringInfoDatum(snippet);
+      offset|=(unsigned int) (*(datum++)) << 24;
+      offset|=(unsigned int) (*(datum++)) << 16;
+      offset|=(unsigned int) (*(datum++)) << 8;
+      offset|=(unsigned int) (*(datum++)) << 0;
       snippet=DestroyStringInfo(snippet);
+      /*
+        Strip any EOI marker if payload starts with a JPEG marker.
+      */
+      length=GetStringInfoLength(exif_profile);
+      datum=GetStringInfoDatum(exif_profile);
+      if ((length > 2) && 
+          ((memcmp(datum,"\0xFF\0xD8",2) == 0) ||
+           (memcmp(datum,"\0xFF\0xE1",2) == 0)) &&
+           memcmp(datum+length-2,"\0xFF\0xD9",2) == 0)
+        SetStringInfoLength(exif_profile,length-2);
+      /*
+        Skip to actual Exif payload.
+      */
       if (offset < GetStringInfoLength(exif_profile))
         {
           (void) DestroyStringInfo(SplitStringInfo(exif_profile,offset));
@@ -636,7 +658,8 @@ static Image *ReadHEICImage(const ImageInfo *image_info,
   return(GetFirstImageInList(image));
 }
 #endif
-
+
+
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -676,7 +699,8 @@ static MagickBooleanType IsHEIC(const unsigned char *magick,const size_t length)
 #endif
   return(MagickFalse);
 }
-
+
+
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -756,7 +780,8 @@ ModuleExport size_t RegisterHEICImage(void)
 #endif
   return(MagickImageCoderSignature);
 }
-
+
+
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -789,7 +814,8 @@ ModuleExport void UnregisterHEICImage(void)
 #endif
 #endif
 }
-
+
+
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
