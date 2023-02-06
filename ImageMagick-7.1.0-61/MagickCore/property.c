@@ -3735,14 +3735,7 @@ MagickExport char *InterpretImageProperties(ImageInfo *image_info,Image *image,
       /*
         Handle a '@' replace string from file.
       */
-      if (IsRightsAuthorized(PathPolicyDomain,ReadPolicyRights,p) == MagickFalse)
-        {
-          errno=EPERM;
-          (void) ThrowMagickException(exception,GetMagickModule(),PolicyError,
-            "NotAuthorized","`%s'",p);
-          return(ConstantString(""));
-        }
-      interpret_text=FileToString(p+1,~0UL,exception);
+      interpret_text=FileToString(p,~0UL,exception);
       if (interpret_text != (char *) NULL)
         return(interpret_text);
     }
@@ -4708,28 +4701,6 @@ MagickExport MagickBooleanType SetImageProperty(Image *image,
           return(MagickFalse);
         }
 #endif
-      if (LocaleCompare("profile",property) == 0)
-        {
-          ImageInfo
-            *image_info;
-
-          StringInfo
-            *profile = (StringInfo *) NULL;
-
-          image_info=AcquireImageInfo();
-          (void) CopyMagickString(image_info->filename,value,MagickPathExtent);
-          (void) SetImageInfo(image_info,1,exception);
-          if (LocaleCompare(image_info->filename,"-") != 0)
-            profile=FileToStringInfo(image_info->filename,~0UL,exception);
-          if (profile != (StringInfo *) NULL)
-            {
-              status=SetImageProfile(image,image_info->magick,profile,
-                exception);
-              profile=DestroyStringInfo(profile);
-            }
-          image_info=DestroyImageInfo(image_info);
-          return(MagickTrue);
-        }
       break; /* not an attribute, add as a property */
     }
     case 'R':

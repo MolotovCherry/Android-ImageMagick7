@@ -60,6 +60,7 @@
 #include "MagickWand/wandcli-private.h"
 #include "MagickCore/color-private.h"
 #include "MagickCore/composite-private.h"
+#include "MagickCore/geometry-private.h"
 #include "MagickCore/image-private.h"
 #include "MagickCore/monitor-private.h"
 #include "MagickCore/string-private.h"
@@ -5093,6 +5094,7 @@ WandPrivate void CLINoImageOperator(MagickCLI *cli_wand,
         */
 
         /* escape the 'key' once only, using first image. */
+        StringInfo *profile = (StringInfo *) NULL;
         arg1=InterpretImageProperties(_image_info,_images,arg1n,_exception);
         if (arg1 == (char *) NULL)
           CLIWandExceptionBreak(OptionWarning,"InterpretPropertyFailure",
@@ -5138,9 +5140,16 @@ WandPrivate void CLINoImageOperator(MagickCLI *cli_wand,
                        "InterpretPropertyFailure",option);
               }
             (void) SetImageOption(_image_info,arg1+7,arg2);
-            arg1=DestroyString((char *)arg1);
-            arg2=DestroyString((char *)arg2);
+            arg1=DestroyString((char *) arg1);
+            arg2=DestroyString((char *) arg2);
             break;
+          }
+        if (LocaleCompare(arg1,"profile") == 0)
+          {
+            (void) CopyMagickString(_image_info->filename,arg2,MagickPathExtent);
+            (void) SetImageInfo(_image_info,1,_exception);
+            if (LocaleCompare(_image_info->filename,"-") != 0)
+              profile=FileToStringInfo(_image_info->filename,~0UL,_exception);
           }
         /* Set Artifacts/Properties/Attributes all images (required) */
         if ( _images == (Image *) NULL )
@@ -5163,8 +5172,12 @@ WandPrivate void CLINoImageOperator(MagickCLI *cli_wand,
               (void) SetImageProperty(_images,arg1+9,arg2,_exception);
             else
               (void) SetImageProperty(_images,arg1,arg2,_exception);
+            if (profile != (StringInfo *) NULL)
+              (void) SetImageProfile(_images,_image_info->magick,profile,_exception);
             arg2=DestroyString((char *)arg2);
           }
+        if (profile != (StringInfo *) NULL)
+            profile=DestroyStringInfo(profile);
         MagickResetIterator(&cli_wand->wand);
         arg1=DestroyString((char *)arg1);
         break;
@@ -5199,18 +5212,20 @@ WandPrivate void CLINoImageOperator(MagickCLI *cli_wand,
         ListMagickVersion(stdout);
         break;
       }
-    if (LocaleCompare("list",option+1) == 0) {
+    if (LocaleCompare("list",option+1) == 0)
+      {
+        ssize_t
+          list;
+
       /*
          FUTURE: This 'switch' should really be part of MagickCore
       */
-      ssize_t
-        list;
-
       list=ParseCommandOption(MagickListOptions,MagickFalse,arg1);
-      if ( list < 0 ) {
-        CLIWandExceptionArg(OptionError,"UnrecognizedListType",option,arg1);
-        break;
-      }
+      if (list < 0)
+        {
+          CLIWandExceptionArg(OptionError,"UnrecognizedListType",option,arg1);
+          break;
+        }
       switch (list)
       {
         case MagickCoderOptions:
@@ -5255,6 +5270,9 @@ WandPrivate void CLINoImageOperator(MagickCLI *cli_wand,
           break;
         case MagickModuleOptions:
           (void) ListModuleInfo((FILE *) NULL,_exception);
+          break;
+        case MagickPagesizeOptions:
+          (void) ListPagesizes((FILE *) NULL,_exception);
           break;
         case MagickPolicyOptions:
           (void) ListPolicyInfo((FILE *) NULL,_exception);
