@@ -56,6 +56,7 @@
 #include "MagickCore/blob-private.h"
 #include "MagickCore/color-private.h"
 #include "MagickCore/composite-private.h"
+#include "MagickCore/geometry-private.h"
 #include "MagickCore/image-private.h"
 #include "MagickCore/monitor-private.h"
 #include "MagickCore/string-private.h"
@@ -2707,7 +2708,24 @@ WandExport MagickBooleanType MogrifyImage(ImageInfo *image_info,const int argc,
                   (void) SetImageArtifact(*image,argv[i+1]+7,value);
                 }
               else
-                (void) SetImageProperty(*image,argv[i+1],value,exception);
+                if (LocaleCompare(argv[i+1],"profile") == 0)
+                  {
+                    StringInfo
+                      *profile = (StringInfo *) NULL;
+
+                    (void) CopyMagickString(image_info->filename,value,MagickPathExtent);
+                    (void) SetImageInfo(image_info,1,exception);
+                    if (LocaleCompare(image_info->filename,"-") != 0)
+                      profile=FileToStringInfo(image_info->filename,~0UL,exception);
+                    if (profile != (StringInfo *) NULL)
+                      {
+                        status=SetImageProfile(*image,image_info->magick,profile,
+                          exception);
+                        profile=DestroyStringInfo(profile);
+                      }
+                  }
+                else
+                  (void) SetImageProperty(*image,argv[i+1],value,exception);
             value=DestroyString(value);
             break;
           }
@@ -7201,6 +7219,11 @@ WandExport MagickBooleanType MogrifyImageInfo(ImageInfo *image_info,
               case MagickModuleOptions:
               {
                 (void) ListModuleInfo((FILE *) NULL,exception);
+                break;
+              }
+              case MagickPagesizeOptions:
+              {
+                (void) ListPagesizes((FILE *) NULL,exception);
                 break;
               }
               case MagickPolicyOptions:
