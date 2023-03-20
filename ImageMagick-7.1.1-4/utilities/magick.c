@@ -43,6 +43,7 @@
 */
 #include "MagickWand/studio.h"
 #include "MagickWand/MagickWand.h"
+#include "MagickCore/resource-private.h"
 
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -181,17 +182,24 @@ int main(int argc,char **argv)
   return(MagickMain(argc,argv));
 }
 #else
+static LONG WINAPI NTUncaughtException(EXCEPTION_POINTERS *info)
+{
+  magick_unreferenced(info);
+  AsynchronousResourceComponentTerminus();
+  return(EXCEPTION_CONTINUE_SEARCH);
+}
+
 int wmain(int argc,wchar_t *argv[])
 {
   char
     **utf8;
 
   int
+    i,
     status;
 
-  int
-    i;
-
+  SetUnhandledExceptionFilter(NTUncaughtException);
+  SetConsoleOutputCP(CP_UTF8);
   utf8=NTArgvToUTF8(argc,argv);
   status=MagickMain(argc,utf8);
   for (i=0; i < argc; i++)

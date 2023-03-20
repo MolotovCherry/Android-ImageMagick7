@@ -141,11 +141,6 @@ const registry_roots[2] =
 /*
   External declarations.
 */
-#if !defined(MAGICKCORE_WINDOWS_SUPPORT)
-extern "C" BOOL WINAPI
-  DllMain(HINSTANCE handle,DWORD reason,LPVOID lpvReserved);
-#endif
-
 static void MagickDLLCall NTGhostscriptDeleteInstance(
   gs_main_instance *instance)
 {
@@ -547,37 +542,6 @@ MagickPrivate int NTCloseLibrary(void *handle)
   return(!(FreeLibrary((HINSTANCE) handle)));
 }
 
-/*
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                             %
-%                                                                             %
-%                                                                             %
-%   N T C o n t r o l H a n d l e r                                           %
-%                                                                             %
-%                                                                             %
-%                                                                             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%  NTControlHandler() registers a control handler that is activated when, for
-%  example, a ctrl-c is received.
-%
-%  The format of the NTControlHandler method is:
-%
-%      int NTControlHandler(void)
-%
-*/
-
-static BOOL ControlHandler(DWORD type)
-{
-  (void) type;
-  AsynchronousResourceComponentTerminus();
-  return(FALSE);
-}
-
-MagickPrivate int NTControlHandler(void)
-{
-  return(SetConsoleCtrlHandler((PHANDLER_ROUTINE) ControlHandler,TRUE));
-}
 
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2611,20 +2575,11 @@ MagickPrivate void NTWarningHandler(const ExceptionType severity,
 %
 */
 
-static LONG WINAPI NTUncaughtException(EXCEPTION_POINTERS *info)
-{
-  magick_unreferenced(info);
-  AsynchronousResourceComponentTerminus();
-  return(EXCEPTION_CONTINUE_SEARCH);
-}
-
 MagickPrivate void NTWindowsGenesis(void)
 {
   char
     *mode;
 
-  SetUnhandledExceptionFilter(NTUncaughtException);
-  SetConsoleOutputCP(CP_UTF8);
   mode=GetEnvironmentValue("MAGICK_ERRORMODE");
   if (mode != (char *) NULL)
     {

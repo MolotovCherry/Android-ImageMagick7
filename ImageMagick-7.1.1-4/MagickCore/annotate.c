@@ -1276,25 +1276,35 @@ cleanup:
 
 static void FreetypeCloseStream(FT_Stream stream)
 {
-  FILE *file = (FILE *) stream->descriptor.pointer;
+  FILE
+    *file;
+
+  file=(FILE *) stream->descriptor.pointer;
   if (file != (FILE *) NULL)
-    (void) fclose(file);  
+    (void) fclose(file);
   stream->descriptor.pointer=NULL;
 }
 
 static unsigned long FreetypeReadStream(FT_Stream stream,unsigned long offset,
   unsigned char *buffer,unsigned long count)
 {
-  FILE *file = (FILE *) stream->descriptor.pointer;
+  FILE
+    *file;
+
+  unsigned long
+    result;
+
+  file=(FILE *) stream->descriptor.pointer;
   if (file == (FILE *) NULL)
     return(0);
+  if (offset > stream->size)
+    result=1;
+  else
+    result=(unsigned long) fseek(file,(off_t) offset,SEEK_SET);
   if (count == 0) /* seek operation */
-    {
-      if (offset > stream->size)
-        return(1);
-
-      return((unsigned long) fseek(file,(off_t) offset,SEEK_SET));
-    }
+    return(result);
+  if (result != 0)
+    return(0);
   return((unsigned long) fread(buffer,1,count,file));
 }
 
