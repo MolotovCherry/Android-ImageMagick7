@@ -1887,13 +1887,14 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
       case ReadStripMethod:
       {
         size_t
-          extent;
+          extent,
+          length;
 
         ssize_t
           stride,
           strip_id;
 
-        tsize_t
+        tmsize_t
           strip_size;
 
         unsigned char
@@ -1903,14 +1904,17 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
         /*
           Convert stripped TIFF image.
         */
-        extent=4*MagickMax(image->columns*(samples_per_pixel+extra_samples)*
-          (image->depth+7)/8,(size_t) TIFFStripSize(tiff));
+        strip_size=TIFFStripSize(tiff);
+        stride=(ssize_t) TIFFVStripSize(tiff,1);
+        extent=(size_t) (samples_per_pixel*strip_size);
+        length=GetQuantumExtent(image,quantum_info,quantum_type);
+        if (length > stride)
+          extent+=length;
         strip_pixels=(unsigned char *) AcquireQuantumMemory(extent,
           sizeof(*strip_pixels));
         if (strip_pixels == (unsigned char *) NULL)
           ThrowTIFFException(ResourceLimitError,"MemoryAllocationFailed");
         (void) memset(strip_pixels,0,extent*sizeof(*strip_pixels));
-        stride=TIFFVStripSize(tiff,1);
         strip_id=0;
         p=strip_pixels;
         for (i=0; i < (ssize_t) samples_per_pixel; i++)
@@ -1945,14 +1949,14 @@ static Image *ReadTIFFImage(const ImageInfo *image_info,
               break;
             if (rows_remaining == 0)
               {
-                strip_size=TIFFReadEncodedStrip(tiff,strip_id,strip_pixels,
-                  TIFFStripSize(tiff));
-                if (strip_size == -1)
+                tmsize_t
+                  size;
+
+                size=TIFFReadEncodedStrip(tiff,strip_id,strip_pixels,
+                  strip_size);
+                if (size == -1)
                   break;
                 rows_remaining=rows_per_strip;
-                if ((y+rows_per_strip) > (ssize_t) image->rows)
-                  rows_remaining=(rows_per_strip-(y+rows_per_strip-
-                    image->rows));
                 p=strip_pixels;
                 strip_id++;
               }
@@ -2249,8 +2253,8 @@ static void TIFFIgnoreTags(TIFF *tiff)
   ssize_t
     i;
 
-  static
-    char *dummy_name = (char *) "";
+  static const
+    char *dummy_name = "";
 
   TIFFFieldInfo
     *ignore;
@@ -2295,7 +2299,7 @@ static void TIFFIgnoreTags(TIFF *tiff)
       p++;
 
     ignore[i].field_tag=(ttag_t) strtol(p,&q,10);
-    ignore[i].field_name=dummy_name;
+    ignore[i].field_name=(char *) dummy_name;
 
     p=q;
     i++;

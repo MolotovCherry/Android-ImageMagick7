@@ -69,20 +69,14 @@
 #include "MagickCore/token.h"
 #include "MagickCore/utility.h"
 #if defined(MAGICKCORE_LCMS_DELEGATE)
-#if defined(MAGICKCORE_HAVE_LCMS_LCMS2_H)
 #include <wchar.h>
+#if defined(MAGICKCORE_HAVE_LCMS_LCMS2_H)
 #include <lcms/lcms2.h>
 #else
-#include <wchar.h>
 #include "lcms2.h"
 #endif
 #endif
 #if defined(MAGICKCORE_XML_DELEGATE)
-#  if defined(MAGICKCORE_WINDOWS_SUPPORT)
-#    if !defined(__MINGW32__)
-#      include <win32config.h>
-#    endif
-#  endif
 #  include <libxml/parser.h>
 #  include <libxml/tree.h>
 #endif
