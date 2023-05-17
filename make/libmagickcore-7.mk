@@ -75,6 +75,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/debug.c \
     $(IMAGE_MAGICK)/coders/dib.c \
     $(IMAGE_MAGICK)/coders/djvu.c \
+    $(IMAGE_MAGICK)/coders/dmr.c \
     $(IMAGE_MAGICK)/coders/dng.c \
     $(IMAGE_MAGICK)/coders/dot.c \
     $(IMAGE_MAGICK)/coders/dps.c \
