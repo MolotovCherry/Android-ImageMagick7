@@ -109,6 +109,9 @@ MagickExport const char *GetMagickDelegates(void)
 #if defined(MAGICKCORE_CAIRO_DELEGATE)
   "cairo "
 #endif
+#if defined(MAGICKCORE_DMR_DELEGATE)
+  "dmr "
+#endif
 #if defined(MAGICKCORE_DJVU_DELEGATE)
   "djvu "
 #endif

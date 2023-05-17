@@ -8371,6 +8371,8 @@ static MagickBooleanType WriteOnePNGImage(MngWriteInfo *mng_info,
   number_opaque = (int) image->colors;
   number_transparent = 0;
   number_semitransparent = 0;
+  if (IdentifyImageCoderGray(image,exception) != MagickFalse)
+    ping_have_color=MagickFalse;
 
   if (mng_info->colortype &&
      (mng_info->colortype > 4 || (mng_info->depth >= 8 &&
@@ -10591,7 +10593,7 @@ static MagickBooleanType WriteOnePNGImage(MngWriteInfo *mng_info,
           */
           if (logging != MagickFalse)
             (void) LogMagickEvent(CoderEvent,GetMagickModule(),
-              "  Setting up gAMA chunk");
+              "  Setting up gAMA chunk (%.20g)",image->gamma);
 
           png_set_gAMA(ping,ping_info,image->gamma);
         }
