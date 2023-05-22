@@ -280,7 +280,7 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
     *image;
 
   JxlBasicInfo
-    basic_info = { 0 };
+    basic_info;
 
   JxlDecoder
     *jxl_info;
@@ -293,7 +293,7 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
     memory_manager;
 
   JxlPixelFormat
-    pixel_format = { 0 };
+    pixel_format;
 
   MagickBooleanType
     status;
@@ -337,6 +337,8 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
   /*
     Initialize JXL delegate library.
   */
+  memset(&basic_info,0,sizeof(basic_info));
+  memset(&pixel_format,0,sizeof(pixel_format));
   JXLSetMemoryManager(&memory_manager,&memory_manager_info,image,exception);
   jxl_info=JxlDecoderCreate(&memory_manager);
   if (jxl_info == (JxlDecoder *) NULL)
@@ -436,7 +438,7 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
       case JXL_DEC_COLOR_ENCODING:
       {
         JxlColorEncoding
-          color_encoding = { 0 };
+          color_encoding;
 
         size_t
           profile_size;
@@ -444,6 +446,7 @@ static Image *ReadJXLImage(const ImageInfo *image_info,ExceptionInfo *exception)
         StringInfo
           *profile;
 
+        memset(&color_encoding,0,sizeof(color_encoding));
         JXLSetFormat(image,&pixel_format,exception);
         jxl_status=JxlDecoderGetColorAsEncodedProfile(jxl_info,&pixel_format,
           JXL_COLOR_PROFILE_TARGET_DATA,&color_encoding);
@@ -868,7 +871,7 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
     *xmp_profile = (StringInfo *) NULL;
 
   JxlBasicInfo
-    basic_info = { 0 };
+    basic_info;
 
   JxlEncoder
     *jxl_info;
@@ -880,13 +883,13 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
     jxl_status;
 
   JxlFrameHeader
-    frame_header = { 0 };
+    frame_header;
 
   JxlMemoryManager
     memory_manager;
 
   JxlPixelFormat
-    pixel_format = { 0 };
+    pixel_format;
 
   MagickBooleanType
     status;
@@ -926,6 +929,9 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
   /*
     Initialize JXL delegate library.
   */
+  memset(&basic_info,0,sizeof(basic_info));
+  memset(&frame_header,0,sizeof(frame_header));
+  memset(&pixel_format,0,sizeof(pixel_format));
   JXLSetMemoryManager(&memory_manager,&memory_manager_info,image,exception);
   jxl_info=JxlEncoderCreate(&memory_manager);
   if (jxl_info == (JxlEncoder *) NULL)
@@ -1063,7 +1069,7 @@ static MagickBooleanType WriteJXLImage(const ImageInfo *image_info,Image *image,
      sizeof(char));
   if (IsGrayColorspace(image->colorspace) != MagickFalse)
     bytes_per_row=image->columns*
-      (((image->alpha_trait &= BlendPixelTrait) != 0) ? 2 : 1)*
+      (((image->alpha_trait & BlendPixelTrait) != 0) ? 2 : 1)*
       ((pixel_format.data_type == JXL_TYPE_FLOAT) ? sizeof(float) :
        (pixel_format.data_type == JXL_TYPE_UINT16) ? sizeof(short) :
        sizeof(char));
