@@ -341,7 +341,7 @@ MagickExport MagickBooleanType AnnotateImage(Image *image,
     (void) CloneString(&annotate->text,textlist[i]);
     if ((metrics.width == 0) || (annotate->gravity != NorthWestGravity))
       (void) GetTypeMetrics(image,annotate,&metrics,exception);
-    height=(size_t) floor(metrics.ascent-metrics.descent+0.5);
+    height=CastDoubleToUnsigned(metrics.ascent-metrics.descent+0.5);
     if (height == 0)
       height=draw_info->pointsize;
     height+=(size_t) floor(draw_info->interline_spacing+0.5);
@@ -673,7 +673,7 @@ MagickExport ssize_t FormatMagickCaption(Image *image,DrawInfo *draw_info,
     status=GetTypeMetrics(image,draw_info,metrics,exception);
     if (status == MagickFalse)
       break;
-    width=(size_t) floor(metrics->width+draw_info->stroke_width+0.5);
+    width=CastDoubleToUnsigned(metrics->width+draw_info->stroke_width+0.5);
     if (width <= image->columns)
       continue;
     if (s != (char *) NULL)
@@ -1872,13 +1872,13 @@ static MagickBooleanType RenderFreetype(Image *image,const DrawInfo *draw_info,
     if (ft_status != 0)
       continue;
     if ((bounds.xMin < metrics->bounds.x1) && (bounds.xMin != 0))
-        metrics->bounds.x1=(double) bounds.xMin;
+      metrics->bounds.x1=(double) bounds.xMin;
     if ((bounds.yMin < metrics->bounds.y1) && (bounds.yMin != 0))
-        metrics->bounds.y1=(double) bounds.yMin;
+      metrics->bounds.y1=(double) bounds.yMin;
     if ((bounds.xMax > metrics->bounds.x2) && (bounds.xMax != 0))
-        metrics->bounds.x2=(double) bounds.xMax;
+      metrics->bounds.x2=(double) bounds.xMax;
     if ((bounds.yMax > metrics->bounds.y2) && (bounds.yMax != 0))
-        metrics->bounds.y2=(double) bounds.yMax;
+      metrics->bounds.y2=(double) bounds.yMax;
     if (((draw_info->stroke.alpha != TransparentAlpha) ||
          (draw_info->stroke_pattern != (Image *) NULL)) &&
         ((status != MagickFalse) && (draw_info->render != MagickFalse)))
