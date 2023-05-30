@@ -96,19 +96,6 @@
 #define MAGICKCORE_HAVE_DISTRIBUTE_CACHE 1
 #define MAGICKCORE_HAVE_WINSOCK2 1
 #endif
-#else
-#ifdef __VMS
-#define CLOSE_SOCKET(socket) (void) close(socket)
-#else
-#define CLOSE_SOCKET(socket)
-#endif
-#define HANDLER_RETURN_TYPE  void *
-#define HANDLER_RETURN_VALUE  (void *) NULL
-#define SOCKET_TYPE  int
-#undef send
-#undef recv
-#define send(file,buffer,length,flags)  0
-#define recv(file,buffer,length,flags)  0
 #endif
 
 /*
@@ -156,6 +143,17 @@ static WSADATA
 %
 */
 
+#if !defined(MAGICKCORE_HAVE_DISTRIBUTE_CACHE)
+static inline MagickOffsetType dpc_read(int magick_unused(file),
+  const MagickSizeType magick_unused(length),
+  unsigned char *magick_restrict magick_unused(message))
+{
+  magick_unreferenced(file);
+  magick_unreferenced(length);
+  magick_unreferenced(message);
+  return(-1);
+}
+#else
 static inline MagickOffsetType dpc_read(int file,const MagickSizeType length,
   unsigned char *magick_restrict message)
 {
@@ -164,11 +162,6 @@ static inline MagickOffsetType dpc_read(int file,const MagickSizeType length,
 
   ssize_t
     count;
-
-#if !defined(MAGICKCORE_HAVE_DISTRIBUTE_CACHE)
-  magick_unreferenced(file);
-  magick_unreferenced(message);
-#endif
   count=0;
   for (i=0; i < (MagickOffsetType) length; i+=count)
   {
@@ -183,6 +176,7 @@ static inline MagickOffsetType dpc_read(int file,const MagickSizeType length,
   }
   return(i);
 }
+#endif
 
 #if defined(MAGICKCORE_HAVE_WINSOCK2)
 static void InitializeWinsock2(MagickBooleanType use_lock)
@@ -204,10 +198,22 @@ static void InitializeWinsock2(MagickBooleanType use_lock)
 }
 #endif
 
+#if !defined(MAGICKCORE_HAVE_DISTRIBUTE_CACHE)
+static int ConnectPixelCacheServer(const char *magick_unused(hostname),
+  const int magick_unused(port),size_t *magick_unused(session_key),
+  ExceptionInfo *exception)
+{
+  magick_unreferenced(hostname);
+  magick_unreferenced(port);
+  magick_unreferenced(session_key);
+  (void) ThrowMagickException(exception,GetMagickModule(),MissingDelegateError,
+    "DelegateLibrarySupportNotBuiltIn","distributed pixel cache");
+  return(MagickFalse);
+}
+#else
 static int ConnectPixelCacheServer(const char *hostname,const int port,
   size_t *session_key,ExceptionInfo *exception)
 {
-#if defined(MAGICKCORE_HAVE_DISTRIBUTE_CACHE)
   char
     service[MagickPathExtent],
     *shared_secret;
@@ -295,15 +301,8 @@ static int ConnectPixelCacheServer(const char *hostname,const int port,
   shared_secret=DestroyString(shared_secret);
   nonce=DestroyStringInfo(nonce);
   return(client_socket);
-#else
-  magick_unreferenced(hostname);
-  magick_unreferenced(port);
-  magick_unreferenced(session_key);
-  (void) ThrowMagickException(exception,GetMagickModule(),MissingDelegateError,
-    "DelegateLibrarySupportNotBuiltIn","distributed pixel cache");
-  return(MagickFalse);
-#endif
 }
+#endif
 
 static char *GetHostname(int *port,ExceptionInfo *exception)
 {
@@ -426,8 +425,10 @@ MagickPrivate DistributeCacheInfo *DestroyDistributeCacheInfo(
 {
   assert(server_info != (DistributeCacheInfo *) NULL);
   assert(server_info->signature == MagickCoreSignature);
+#if defined(MAGICKCORE_HAVE_DISTRIBUTE_CACHE)
   if (server_info->file > 0)
     CLOSE_SOCKET(server_info->file);
+#endif
   server_info->signature=(~MagickCoreSignature);
   server_info=(DistributeCacheInfo *) RelinquishMagickMemory(server_info);
   return(server_info);
@@ -459,17 +460,23 @@ MagickPrivate DistributeCacheInfo *DestroyDistributeCacheInfo(
 %
 */
 
+#if !defined(MAGICKCORE_HAVE_DISTRIBUTE_CACHE)
+static inline MagickOffsetType dpc_send(int magick_unused(file),
+  const MagickSizeType magick_unused(length),
+  const void *magick_restrict magick_unused(message))
+{
+  magick_unreferenced(file);
+  magick_unreferenced(length);
+  magick_unreferenced(message);
+  return(-1);
+}
+#else
 static inline MagickOffsetType dpc_send(int file,const MagickSizeType length,
   const void *magick_restrict message)
 {
   MagickOffsetType
     count,
     i;
-
-#if !defined(MAGICKCORE_HAVE_DISTRIBUTE_CACHE)
-  magick_unreferenced(file);
-  magick_unreferenced(message);
-#endif
 
   /*
     Ensure a complete message is sent.
@@ -488,10 +495,11 @@ static inline MagickOffsetType dpc_send(int file,const MagickSizeType length,
   }
   return(i);
 }
+#endif
 
 #if !defined(MAGICKCORE_HAVE_DISTRIBUTE_CACHE)
-MagickExport void DistributePixelCacheServer(const int port,
-  ExceptionInfo *exception)
+MagickExport void DistributePixelCacheServer(const int magick_unused(port),
+  ExceptionInfo *magick_unused(exception))
 {
   magick_unreferenced(port);
   magick_unreferenced(exception);
