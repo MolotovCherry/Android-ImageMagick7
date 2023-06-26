@@ -428,11 +428,11 @@ static boolean ReadProfileData(j_decompress_ptr jpeg_info,const int index,
   JPEGClientInfo
     *client_info;
 
-  unsigned char
-    *p;
-
   ssize_t
     i;
+
+  unsigned char
+    *p;
 
   client_info=(JPEGClientInfo *) jpeg_info->client_data;
   exception=client_info->exception;
@@ -549,6 +549,27 @@ static boolean ReadICCProfile(j_decompress_ptr jpeg_info)
   magick[i]='\0';
   if (LocaleCompare(magick,ICC_PROFILE) != 0)
     {
+      if (LocaleCompare(magick,"MPF") == 0)
+        {
+          boolean
+            status;
+
+          JPEGClientInfo
+            *client_info;
+
+          /*
+            Multi-picture support (Future).
+          */
+          status=ReadProfileData(jpeg_info,ICC_INDEX,length-12);
+          if (status == FALSE)
+            return(status);
+          client_info=(JPEGClientInfo *) jpeg_info->client_data;
+          status=SetImageProfile(client_info->image,"MPF",
+            client_info->profiles[ICC_INDEX],client_info->exception);
+          client_info->profiles[ICC_INDEX]=DestroyStringInfo(
+            client_info->profiles[ICC_INDEX]);
+          return(TRUE);
+        }
       /*
         Not a ICC profile, return.
       */
@@ -652,14 +673,14 @@ static boolean ReadXMPProfile(j_decompress_ptr jpeg_info)
   MagickBooleanType
     status;
 
-  unsigned char
-    *p;
-
   size_t
     length;
 
   StringInfo
     *profile;
+
+  unsigned char
+    *p;
 
   GetProfileLength(jpeg_info,length);
   if (length <= 2)
@@ -961,7 +982,7 @@ static void JPEGDestroyDecompress(j_decompress_ptr jpeg_info)
     i;
 
   client_info=(JPEGClientInfo *) jpeg_info->client_data;
-  for (i=0; i < 16; i++)
+  for (i=0; i < MaxJPEGProfiles; i++)
   {
     if (client_info->profiles[i] != (StringInfo *) NULL)
       client_info->profiles[i]=DestroyStringInfo(client_info->profiles[i]);
@@ -980,19 +1001,19 @@ static MagickBooleanType JPEGSetImageProfiles(JPEGClientInfo *client_info)
   MagickBooleanType
     status;
 
-  unsigned char
-    *p;
-
   ssize_t
     i;
 
   StringInfo
     *profile;
 
+  unsigned char
+    *p;
+
   exception=client_info->exception;
   image=client_info->image;
   status=MagickTrue;
-  for (i=0; i < 16; i++)
+  for (i=0; i < MaxJPEGProfiles; i++)
   {
     profile=client_info->profiles[i];
     if (profile == (StringInfo *) NULL)
@@ -1035,7 +1056,7 @@ static MagickBooleanType JPEGSetImageProfiles(JPEGClientInfo *client_info)
   return(status);
 }
 
-static Image *ReadJPEGImage_(const ImageInfo *image_info,
+static Image *ReadOneJPEGImage(const ImageInfo *image_info,
   struct jpeg_decompress_struct *jpeg_info,ExceptionInfo *exception)
 {
 #define ThrowJPEGReaderException(exception,message) \
@@ -1089,6 +1110,7 @@ static Image *ReadJPEGImage_(const ImageInfo *image_info,
     *p;
 
   size_t
+    max_memory_to_use,
     units;
 
   ssize_t
@@ -1097,13 +1119,6 @@ static Image *ReadJPEGImage_(const ImageInfo *image_info,
   /*
     Open image file.
   */
-  assert(image_info != (const ImageInfo *) NULL);
-  assert(image_info->signature == MagickCoreSignature);
-  assert(exception != (ExceptionInfo *) NULL);
-  assert(exception->signature == MagickCoreSignature);
-  if (IsEventLogging() != MagickFalse)
-    (void) LogMagickEvent(TraceEvent,GetMagickModule(),"%s",
-      image_info->filename);
   image=AcquireImage(image_info,exception);
   status=OpenBlob(image_info,image,ReadBinaryBlobMode,exception);
   if (status == MagickFalse)
@@ -1143,8 +1158,9 @@ static Image *ReadJPEGImage_(const ImageInfo *image_info,
     }
   jpeg_info->client_data=(void *) client_info;
   jpeg_create_decompress(jpeg_info);
-  if (GetMaxMemoryRequest() != ~0UL)
-    jpeg_info->mem->max_memory_to_use=(long) GetMaxMemoryRequest();
+  max_memory_to_use=GetMaxMemoryRequest();
+  if (max_memory_to_use < (size_t) LONG_MAX)
+    jpeg_info->mem->max_memory_to_use=(long) max_memory_to_use;
   jpeg_progress.progress_monitor=(void (*)(j_common_ptr)) JPEGProgressHandler;
   jpeg_info->progress=(&jpeg_progress);
   JPEGSourceManager(jpeg_info,image);
@@ -1154,11 +1170,11 @@ static Image *ReadJPEGImage_(const ImageInfo *image_info,
     jpeg_set_marker_processor(jpeg_info,ICC_MARKER,ReadICCProfile);
   if (IsOptionMember("IPTC",option) == MagickFalse)
     jpeg_set_marker_processor(jpeg_info,IPTC_MARKER,ReadIPTCProfile);
-  if (IsOptionMember("APP",option) == MagickFalse)
+  if (IsOptionMember("XMP",option) == MagickFalse)
     jpeg_set_marker_processor(jpeg_info,XML_MARKER,ReadXMPProfile);
-  for (i=3; i < 16; i++)
+  for (i=3; i < MaxJPEGProfiles; i++)
     /* APP14 is ignored because this will change the colors of the image */
-    if (i != IPTC_INDEX && i != 14)
+    if ((i != IPTC_INDEX) && (i != 14))
       if (IsOptionMember("APP",option) == MagickFalse)
         jpeg_set_marker_processor(jpeg_info,(int) (JPEG_APP0+i),ReadProfile);
   i=(ssize_t) jpeg_read_header(jpeg_info,TRUE);
@@ -1567,13 +1583,144 @@ static Image *ReadJPEGImage_(const ImageInfo *image_info,
   return(GetFirstImageInList(image));
 }
 
+static MagickBooleanType ReadMPOImages(const ImageInfo *image_info,
+  struct jpeg_decompress_struct *jpeg_info,Image *images,
+  ExceptionInfo *exception)
+{
+#define BUFFER_SIZE  8192
+
+  FILE
+    *file = (FILE *) NULL;
+
+  Image
+    *image;
+
+  ImageInfo
+    *clone_info;
+
+  int
+    unique_file;
+
+  MagickBooleanType
+    status;
+
+  ssize_t
+    count,
+    j = 0,
+    n = 0,
+    signatureSize;
+
+  unsigned char
+    alt_signature[] = {0xff, 0xd8, 0xff, 0xe1}, 
+    buffer[BUFFER_SIZE],
+    signature[] = {0xff, 0xd8, 0xff, 0xe0};
+
+  /*
+    Read multi-picture object images.
+  */
+  image=AcquireImage(image_info,exception);
+  status=OpenBlob(image_info,image,ReadBinaryBlobMode,exception);
+  if (status == MagickFalse)
+    {
+      image=DestroyImageList(image);
+      return(MagickFalse);
+    }
+  clone_info=CloneImageInfo(image_info);
+  unique_file=AcquireUniqueFileResource(clone_info->filename);
+  if (unique_file != -1)
+    file=fdopen(unique_file,"wb");
+  if ((unique_file == -1) || (file == (FILE *) NULL))
+    {
+      (void) ThrowMagickException(exception,GetMagickModule(),FileOpenError,
+        "UnableToCreateTemporaryFile","`%s'",image->filename);
+      clone_info=DestroyImageInfo(clone_info);
+      image=DestroyImageList(image);
+      return(MagickFalse);
+    }
+  signatureSize=sizeof(signature)/sizeof(*signature);
+  while ((count=ReadBlob(image,BUFFER_SIZE,buffer)) != 0)
+  {
+    size_t
+      length;
+
+    ssize_t
+      i,
+      offset;
+
+    offset=0;
+    for (i=0; i < count; i++)
+      if ((buffer[i] != signature[j]) && (buffer[i] != alt_signature[j]))
+        j=0;
+      else
+        if (++j == signatureSize)
+          {
+            Image
+              *jpeg_image;
+
+            if (n++ != 0)
+              {
+                /*
+                  Read one MPO image from the image sequence.
+                */
+                offset=i-signatureSize+1;
+                length=fwrite(buffer,1,offset,file);
+                if ((ssize_t) length != offset)
+                  break;
+                (void) fflush(file);
+                jpeg_image=ReadOneJPEGImage(clone_info,jpeg_info,exception);
+                if (jpeg_image != (Image *) NULL)
+                  {
+                    (void) strcpy(jpeg_image->filename,image->filename);
+                    AppendImageToList(&images,jpeg_image);              
+                  }
+              }
+            (void) fseek(file,0,SEEK_SET);
+            j=0;
+          }
+    length=fwrite(buffer+offset,1,count-offset,file);
+    if ((ssize_t) length != (count-offset))
+      break;
+  }
+  if (ferror(file) != 0)
+    (void) ThrowMagickException(exception,GetMagickModule(),CorruptImageError,
+      "AnErrorHasOccurredWritingToFile","`%s'",image->filename);
+  (void) fclose(file);
+  (void) RelinquishUniqueFileResource(clone_info->filename);
+  clone_info=DestroyImageInfo(clone_info);
+  image=DestroyImageList(image);
+  return(MagickTrue);
+}
+
 static Image *ReadJPEGImage(const ImageInfo *image_info,
   ExceptionInfo *exception)
 {
+  Image
+    *images;
+
   struct jpeg_decompress_struct
     jpeg_info;
 
-  return(ReadJPEGImage_(image_info,&jpeg_info,exception));
+  assert(image_info != (const ImageInfo *) NULL);
+  assert(image_info->signature == MagickCoreSignature);
+  assert(exception != (ExceptionInfo *) NULL);
+  assert(exception->signature == MagickCoreSignature);
+  if (IsEventLogging() != MagickFalse)
+    (void) LogMagickEvent(TraceEvent,GetMagickModule(),"%s",
+      image_info->filename);
+  images=ReadOneJPEGImage(image_info,&jpeg_info,exception);
+  if (images != (Image *) NULL)
+    {
+      const StringInfo
+        *profile;
+
+      /*
+        Check for multi-picture object.
+      */
+      profile=GetImageProfile(images,"MPF");
+      if (profile != (const StringInfo *) NULL)
+        (void) ReadMPOImages(image_info,&jpeg_info,images,exception);
+    }
+  return(images);
 }
 #endif
 
@@ -1681,6 +1828,20 @@ ModuleExport size_t RegisterJPEGImage(void)
     entry->version=ConstantString(version);
   entry->mime_type=ConstantString("image/jpeg");
   (void) RegisterMagickInfo(entry);
+  entry=AcquireMagickInfo("JPEG","MPO",JPEGDescription);
+#if (JPEG_LIB_VERSION < 80) && !defined(LIBJPEG_TURBO_VERSION)
+  entry->flags^=CoderDecoderThreadSupportFlag;
+#endif
+#if defined(MAGICKCORE_JPEG_DELEGATE)
+  entry->decoder=(DecodeImageHandler *) ReadJPEGImage;
+#endif
+  entry->magick=(IsImageFormatHandler *) IsJPEG;
+  entry->flags|=CoderDecoderSeekableStreamFlag;
+  entry->flags^=CoderUseExtensionFlag;
+  if (*version != '\0')
+    entry->version=ConstantString(version);
+  entry->mime_type=ConstantString("image/jpeg");
+  (void) RegisterMagickInfo(entry);
   entry=AcquireMagickInfo("JPEG","PJPEG",JPEGDescription);
 #if (JPEG_LIB_VERSION < 80) && !defined(LIBJPEG_TURBO_VERSION)
   entry->flags^=CoderDecoderThreadSupportFlag;
@@ -1721,6 +1882,7 @@ ModuleExport size_t RegisterJPEGImage(void)
 ModuleExport void UnregisterJPEGImage(void)
 {
   (void) UnregisterMagickInfo("PJPG");
+  (void) UnregisterMagickInfo("MPO");
   (void) UnregisterMagickInfo("JPS");
   (void) UnregisterMagickInfo("JPG");
   (void) UnregisterMagickInfo("JPEG");
@@ -2089,11 +2251,11 @@ static void WriteProfiles(j_compress_ptr jpeg_info,Image *image,
     if (((LocaleCompare(name,"IPTC") == 0) ||
         (LocaleCompare(name,"8BIM") == 0)) && (iptc == MagickFalse))
       {
-        unsigned char
-          *p;
-
         size_t
           roundup;
+
+        unsigned char
+          *p;
 
         iptc=MagickTrue;
         p=GetStringInfoDatum(custom_profile);
