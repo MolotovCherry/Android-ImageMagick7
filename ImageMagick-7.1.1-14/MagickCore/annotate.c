@@ -123,7 +123,8 @@ typedef struct _GraphemeInfo
     index,
     x_offset,
     x_advance,
-    y_offset;
+    y_offset,
+    y_advance;
 
   size_t
     cluster;
@@ -1155,11 +1156,11 @@ static size_t ComplexRaqmTextLayout(const Image *image,
   raqm_glyph_t
     *glyphs;
 
-  ssize_t
-    i;
-
   size_t
     extent;
+
+  ssize_t
+    i;
 
   extent=0;
   rq=raqm_create();
@@ -1220,6 +1221,7 @@ static size_t ComplexRaqmTextLayout(const Image *image,
     (*grapheme)[i].x_offset=glyphs[i].x_offset;
     (*grapheme)[i].x_advance=glyphs[i].x_advance;
     (*grapheme)[i].y_offset=glyphs[i].y_offset;
+    (*grapheme)[i].y_advance=glyphs[i].y_advance;
     (*grapheme)[i].cluster=glyphs[i].cluster;
   }
 
@@ -1272,6 +1274,7 @@ static size_t ComplexTextLayout(const DrawInfo *draw_info,const char *text,
       }
     (void) FT_Load_Glyph(face,(FT_UInt) (*grapheme)[i].index,flags);
     (*grapheme)[i].x_advance=face->glyph->advance.x;
+    (*grapheme)[i].y_advance=face->glyph->advance.y;
     (*grapheme)[i].cluster=p-text;
     last_glyph=(*grapheme)[i].index;
   }
@@ -2050,6 +2053,7 @@ static MagickBooleanType RenderFreetype(Image *image,const DrawInfo *draw_info,
         origin.x+=MagickMax((FT_Pos) grapheme[i].x_advance,bounds.xMax);
       else
         origin.x+=(FT_Pos) grapheme[i].x_advance;
+    origin.y+=(FT_Pos) grapheme[i].y_advance;
     metrics->origin.x=(double) origin.x;
     metrics->origin.y=(double) origin.y;
     if (metrics->origin.x > metrics->width)
