@@ -1,5 +1,5 @@
 
-# Android ImageMagick 7.1.1-14
+# Android ImageMagick 7.1.1-15
 
 [![Build](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/MolotovCherry/Android-ImageMagick7?style=plastic)
 
