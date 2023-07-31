@@ -187,6 +187,41 @@ static Image *ReadFL32Image(const ImageInfo *image_info,
       (image->number_channels == 0) ||
       (image->number_channels >= MaxPixelChannels))
     ThrowReaderException(CorruptImageError,"ImproperImageHeader");
+  switch (image->number_channels)
+  {
+    case 1:
+    {
+      quantum_type=GrayQuantum;
+      image->colorspace=GRAYColorspace;
+      break;
+    }
+    case 2:
+    {
+      image->alpha_trait=BlendPixelTrait;
+      image->colorspace=GRAYColorspace;
+      quantum_type=GrayAlphaQuantum;
+      break;
+    }
+    case 3:
+    {
+      image->colorspace=sRGBColorspace;
+      quantum_type=RGBQuantum;
+      break;
+    }
+    case 4:
+    {
+      image->colorspace=sRGBColorspace;
+      image->alpha_trait=BlendPixelTrait;
+      quantum_type=RGBAQuantum;
+      break;
+    }
+    default:
+    {
+      image->number_meta_channels=image->number_channels-3;
+      quantum_type=RGBQuantum;
+      break;
+    }
+  }
   if (image_info->ping != MagickFalse)
     {
       (void) CloseBlob(image);
@@ -195,40 +230,6 @@ static Image *ReadFL32Image(const ImageInfo *image_info,
   status=SetImageExtent(image,image->columns,image->rows,exception);
   if (status == MagickFalse)
     return(DestroyImageList(image));
-  switch (image->number_channels)
-  {
-    case 1:
-    {
-      (void) SetImageColorspace(image,GRAYColorspace,exception);
-      quantum_type=GrayQuantum;
-      break;
-    }
-    case 2:
-    {
-      (void) SetImageColorspace(image,GRAYColorspace,exception);
-      image->alpha_trait=BlendPixelTrait;
-      quantum_type=GrayAlphaQuantum;
-      break;
-    }
-    case 3:
-    {
-      quantum_type=RGBQuantum;
-      break;
-    }
-    case 4:
-    {
-      image->alpha_trait=BlendPixelTrait;
-      quantum_type=RGBAQuantum;
-      break;
-    }
-    default:
-    {
-      quantum_type=RGBQuantum;
-      image->number_meta_channels=image->number_channels-3;
-      break;
-    }
-  }
-  (void) ResetImagePixels(image,exception);
   /*
     Convert FL32 image to pixel packets.
   */
@@ -375,6 +376,7 @@ static MagickBooleanType WriteFL32Image(const ImageInfo *image_info,
     quantum_type;
 
   size_t
+    channels,
     extent;
 
   ssize_t
@@ -398,13 +400,15 @@ static MagickBooleanType WriteFL32Image(const ImageInfo *image_info,
   status=OpenBlob(image_info,image,WriteBinaryBlobMode,exception);
   if (status == MagickFalse)
     return(status);
+  if (IssRGBCompatibleColorspace(image->colorspace) == MagickFalse)
+    (void) TransformImageColorspace(image,sRGBColorspace,exception);
   (void) WriteBlobLSBLong(image,842222662U);
   (void) WriteBlobLSBLong(image,(unsigned int) image->rows);
   (void) WriteBlobLSBLong(image,(unsigned int) image->columns);
-  (void) WriteBlobLSBLong(image,(unsigned int) image->number_channels);
   image->endian=LSBEndian;
   image->depth=32;
-  switch (GetImageChannels(image))
+  channels=GetImageChannels(image);
+  switch (channels)
   {
     case 1:
     {
@@ -413,22 +417,34 @@ static MagickBooleanType WriteFL32Image(const ImageInfo *image_info,
     }
     case 2:
     {
-      quantum_type=GrayAlphaQuantum;
+      if (image->alpha_trait != UndefinedPixelTrait)
+        {
+          quantum_type=GrayAlphaQuantum;
+          break;
+        }
+      quantum_type=GrayQuantum;
+      channels=1;
       break;
     }
     case 3:
     {
-      quantum_type=RGBQuantum;
       if (image->alpha_trait != UndefinedPixelTrait)
-        quantum_type=RGBAQuantum;
+        {
+          quantum_type=RGBAQuantum;
+          break;
+        }
+      quantum_type=RGBQuantum;
+      channels=3;
       break;
     }
     default:
     {
       quantum_type=RGBQuantum;
+      channels=3;
       break;
     }
   }
+  (void) WriteBlobLSBLong(image,(unsigned int) channels);
   quantum_info=AcquireQuantumInfo(image_info,image);
   if (quantum_info == (QuantumInfo *) NULL)
     ThrowWriterException(ImageError,"MemoryAllocationFailed");
