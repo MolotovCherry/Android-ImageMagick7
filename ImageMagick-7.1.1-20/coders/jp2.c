@@ -254,6 +254,18 @@ static OPJ_SIZE_T JP2WriteHandler(void *buffer,OPJ_SIZE_T length,void *context)
   return((OPJ_SIZE_T) count);
 }
 
+static MagickBooleanType JP2ComponentHasAlpha(const ImageInfo* image_info,
+  opj_image_comp_t comp)
+{
+  const char
+    *option;
+
+  if (comp.alpha != 0)
+    return(MagickTrue);
+  option=GetImageOption(image_info, "jp2:assume-alpha");
+  return(IsStringTrue(option));
+}
+
 static Image *ReadJP2Image(const ImageInfo *image_info,ExceptionInfo *exception)
 {
   const char
@@ -397,6 +409,8 @@ static Image *ReadJP2Image(const ImageInfo *image_info,ExceptionInfo *exception)
       opj_image_destroy(jp2_image);
       ThrowReaderException(DelegateError,"UnableToDecodeImageFile");
     }
+  if (jp2_image->numcomps >= MaxPixelChannels)
+    ThrowReaderException(CorruptImageError,"ImproperImageHeader");
   for (i=0; i < (ssize_t) jp2_image->numcomps; i++)
   {
     if ((jp2_image->comps[i].dx == 0) || (jp2_image->comps[i].dy == 0) ||
@@ -437,9 +451,28 @@ static Image *ReadJP2Image(const ImageInfo *image_info,ExceptionInfo *exception)
     else
       if (jp2_image->color_space == 3)
         SetImageColorspace(image,Rec601YCbCrColorspace,exception);
-  for (i=0; i < (ssize_t) jp2_image->numcomps; i++)
-    if (jp2_image->comps[i].alpha != 0)
-      image->alpha_trait=BlendPixelTrait;
+  if (jp2_image->numcomps > 3)
+    {
+      size_t
+        number_meta_channels;
+
+      number_meta_channels=jp2_image->numcomps-3;
+      if (JP2ComponentHasAlpha(image_info,jp2_image->comps[3]) != MagickFalse)
+        {
+          image->alpha_trait=BlendPixelTrait;
+          number_meta_channels-=1;
+        }
+      if (number_meta_channels > 0)
+        (void) SetPixelMetaChannels(image,(size_t) number_meta_channels,
+          exception);
+    }
+  else if (jp2_image->numcomps == 2)
+    {
+      if (JP2ComponentHasAlpha(image_info,jp2_image->comps[1]) != MagickFalse)
+        image->alpha_trait=BlendPixelTrait;
+    }
+  else if ((jp2_image->numcomps == 1) && (jp2_image->comps[0].alpha != 0))
+    image->alpha_trait=BlendPixelTrait;
   if (jp2_image->icc_profile_buf != (unsigned char *) NULL)
     {
       StringInfo
@@ -507,42 +540,53 @@ static Image *ReadJP2Image(const ImageInfo *image_info,ExceptionInfo *exception)
           (jp2_image->comps[i].prec-1) : 0));
         switch (i)
         {
-           case 0:
-           {
-             if (jp2_image->numcomps == 1)
-               {
-                 SetPixelGray(image,ClampToQuantum(pixel),q);
-                 if ((image->alpha_trait & BlendPixelTrait) != 0)
-                   break;
-               }
-             SetPixelRed(image,ClampToQuantum(pixel),q);
-             SetPixelGreen(image,ClampToQuantum(pixel),q);
-             SetPixelBlue(image,ClampToQuantum(pixel),q);
-             if ((image->alpha_trait & BlendPixelTrait) != 0)
-               SetPixelAlpha(image,OpaqueAlpha,q);
-             break;
-           }
-           case 1:
-           {
-             if ((image->alpha_trait & BlendPixelTrait) != 0)
-               {
-                 SetPixelAlpha(image,ClampToQuantum(pixel),q);
-                 break;
-               }
-             SetPixelGreen(image,ClampToQuantum(pixel),q);
-             break;
-           }
-           case 2:
-           {
-             SetPixelBlue(image,ClampToQuantum(pixel),q);
-             break;
-           }
-           case 3:
-           {
-             if ((image->alpha_trait & BlendPixelTrait) != 0)
-               SetPixelAlpha(image,ClampToQuantum(pixel),q);
-             break;
-           }
+          case 0:
+          {
+            if (jp2_image->numcomps == 1)
+              {
+                SetPixelGray(image,ClampToQuantum(pixel),q);
+                if (jp2_image->comps[i].alpha != 0)
+                  SetPixelAlpha(image,ClampToQuantum(pixel),q);
+                break;
+              }
+            SetPixelRed(image,ClampToQuantum(pixel),q);
+            SetPixelGreen(image,ClampToQuantum(pixel),q);
+            SetPixelBlue(image,ClampToQuantum(pixel),q);
+            break;
+          }
+          case 1:
+          {
+            if ((jp2_image->numcomps == 2) && (jp2_image->comps[i].alpha != 0))
+              {
+                SetPixelAlpha(image,ClampToQuantum(pixel),q);
+                break;
+              }
+            SetPixelGreen(image,ClampToQuantum(pixel),q);
+            break;
+          }
+          case 2:
+          {
+            SetPixelBlue(image,ClampToQuantum(pixel),q);
+            break;
+          }
+          case 3:
+          {
+            if ((image->alpha_trait & BlendPixelTrait) != 0)
+              SetPixelAlpha(image,ClampToQuantum(pixel),q);
+            else
+              SetPixelChannel(image,MetaPixelChannels,ClampToQuantum(pixel),q);
+            break;
+          }
+          default:
+          {
+            size_t
+              offset=MetaPixelChannels+i-3;
+
+            if ((image->alpha_trait & BlendPixelTrait) != 0)
+              offset--;
+            SetPixelChannel(image,(PixelChannel) offset,ClampToQuantum(pixel),q);
+            break;
+          }
         }
       }
       q+=GetPixelChannels(image);
