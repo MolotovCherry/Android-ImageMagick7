@@ -158,9 +158,6 @@ static SemaphoreInfo
 
 static ssize_t
   cache_anonymous_memory = (-1);
-
-static time_t
-  cache_epoch = 0;
 
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1694,35 +1691,25 @@ static Cache GetImagePixelCache(Image *image,const MagickBooleanType clone,
     status;
 
   static MagickSizeType
-    cache_timelimit = MagickResourceInfinity,
     cpu_throttle = MagickResourceInfinity,
     cycles = 0;
 
   status=MagickTrue;
   if (cpu_throttle == MagickResourceInfinity)
     cpu_throttle=GetMagickResourceLimit(ThrottleResource);
-  if ((cpu_throttle != 0) && ((cycles++ % 4096) == 0))
-    MagickDelay(cpu_throttle);
-  if (cache_epoch == 0)
+  if ((cycles++ % 4096) == 0)
     {
-      /*
-        Set the expire time in seconds.
-      */
-      cache_timelimit=GetMagickResourceLimit(TimeResource);
-      cache_epoch=GetMagickTime();
-    }
-  if ((cache_timelimit != MagickResourceInfinity) &&
-      ((MagickSizeType) (GetMagickTime()-cache_epoch) >= cache_timelimit))
-    {
-#if defined(ECANCELED)
-      errno=ECANCELED;
-#endif
-      cache_info=(CacheInfo *) image->cache;
-      if (cache_info->file != -1)
-        (void) ClosePixelCacheOnDisk(cache_info);
-      (void) ThrowMagickException(exception,GetMagickModule(),
-        ResourceLimitFatalError,"TimeLimitExceeded","`%s'",image->filename);
-      return((Cache) NULL);
+      if (GetMagickTTL() <= 0)
+        {
+          cache_info=(CacheInfo *) image->cache;
+          if (cache_info->file != -1)
+            (void) ClosePixelCacheOnDisk(cache_info);
+          (void) ThrowMagickException(exception,GetMagickModule(),
+            ResourceLimitFatalError,"TimeLimitExceeded","`%s'",image->filename);
+          return((Cache) NULL);
+        }
+      if (cpu_throttle != 0)
+        MagickDelay(cpu_throttle);
     }
   LockSemaphoreInfo(image->semaphore);
   assert(image->cache != (Cache) NULL);
@@ -2694,14 +2681,22 @@ static inline ssize_t EdgeY(const ssize_t y,const size_t rows)
   return(y);
 }
 
+static inline MagickBooleanType IsOffsetOverflow(const ssize_t x,
+  const ssize_t y)
+{
+  if (((y > 0) && (x > (MAGICK_SSIZE_MAX-y))) ||
+      ((y < 0) && (x < (MAGICK_SSIZE_MIN-y))))
+    return(MagickFalse);
+  return(MagickTrue);
+}
+
 static inline MagickBooleanType IsValidOffset(const ssize_t y,
   const size_t columns)
 {
   if (columns == 0)
     return(MagickTrue);
-  if (y >= (MAGICK_SSIZE_MAX/(ssize_t) columns))
-    return(MagickFalse);
-  if (y <= (MAGICK_SSIZE_MIN/(ssize_t) columns))
+  if ((y >= (MAGICK_SSIZE_MAX/(ssize_t) columns)) ||
+      (y <= (MAGICK_SSIZE_MIN/(ssize_t) columns)))
     return(MagickFalse);
   return(MagickTrue);
 }
@@ -2802,8 +2797,10 @@ MagickPrivate const Quantum *GetVirtualPixelCacheNexus(const Image *image,
     return((const Quantum *) NULL);
   if (IsValidOffset(nexus_info->region.y,cache_info->columns) == MagickFalse)
     return((const Quantum *) NULL);
-  offset=nexus_info->region.y*(MagickOffsetType) cache_info->columns+
-    nexus_info->region.x;
+  offset=nexus_info->region.y*(MagickOffsetType) cache_info->columns;
+  if (IsOffsetOverflow(offset,nexus_info->region.x) == MagickFalse)
+    return((const Quantum *) NULL);
+  offset+=nexus_info->region.x;
   length=(MagickSizeType) (nexus_info->region.height-1L)*cache_info->columns+
     nexus_info->region.width-1L;
   number_pixels=(MagickSizeType) cache_info->columns*cache_info->rows;
@@ -4852,29 +4849,6 @@ MagickPrivate void ResetPixelCacheChannels(Image *image)
 MagickPrivate void ResetCacheAnonymousMemory(void)
 {
   cache_anonymous_memory=0;
-}
-
-/*
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                             %
-%                                                                             %
-%                                                                             %
-+   R e s e t P i x e l C a c h e E p o c h                                   %
-%                                                                             %
-%                                                                             %
-%                                                                             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%  ResetPixelCacheEpoch() resets the pixel cache epoch.
-%
-%  The format of the ResetPixelCacheEpoch method is:
-%
-%      void ResetPixelCacheEpoch(void)
-%
-*/
-MagickPrivate void ResetPixelCacheEpoch(void)
-{
-  cache_epoch=0;
 }
 
 /*
