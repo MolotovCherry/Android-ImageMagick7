@@ -909,9 +909,7 @@ static MagickBooleanType WriteJP2Image(const ImageInfo *image_info,Image *image,
     *jp2_stream;
 
   ssize_t
-    i;
-
-  ssize_t
+    i,
     y;
 
   unsigned int
@@ -955,11 +953,11 @@ static MagickBooleanType WriteJP2Image(const ImageInfo *image_info,Image *image,
     }
   if (image_info->extract != (char *) NULL)
     {
-      RectangleInfo
-        geometry;
-
       int
         flags;
+
+      RectangleInfo
+        geometry;
 
       /*
         Set tile size.
@@ -1039,19 +1037,28 @@ static MagickBooleanType WriteJP2Image(const ImageInfo *image_info,Image *image,
       parameters->tcp_numlayers=i+1;
       parameters->cp_disto_alloc=OPJ_TRUE;
     }
-  if (image_info->sampling_factor != (const char *) NULL)
-    (void) sscanf(image_info->sampling_factor,"%d:%d",
-      &parameters->subsampling_dx,&parameters->subsampling_dy);
+  if (image_info->sampling_factor != (char *) NULL)
+    {
+      GeometryInfo
+        geometry_info;
+
+      MagickStatusType
+        flags;
+
+      flags=ParseGeometry(image_info->sampling_factor,&geometry_info);
+      if ((flags & RhoValue) != 0)
+        parameters->subsampling_dx=(int) geometry_info.rho;
+      parameters->subsampling_dy=parameters->subsampling_dx;
+      if ((flags & SigmaValue) != 0)
+        parameters->subsampling_dy=(int) geometry_info.sigma;
+    }   
   property=GetImageProperty(image,"comment",exception);
   if (property != (const char *) NULL)
     parameters->cp_comment=(char *) property;
   channels=3;
   jp2_colorspace=OPJ_CLRSPC_SRGB;
   if (image->colorspace == YUVColorspace)
-    {
-      jp2_colorspace=OPJ_CLRSPC_SYCC;
-      parameters->subsampling_dx=2;
-    }
+    jp2_colorspace=OPJ_CLRSPC_SYCC;
   else
     {
       if (IsGrayColorspace(image->colorspace) != MagickFalse)

@@ -17,13 +17,15 @@
 #include "coders/coders-private.h"
 
 #define MagickDNGHeaders \
-  MagickCoderHeader("CR2", 0, "\115\115\000\052\000\020\000\000\122\103\002") \
-  MagickCoderHeader("CR2", 0, "\111\111\052\000\020\000\000\000\103\122\002") \
+  MagickCoderHeader("CR2", 0, "MM\x00\x2a\x00\x10\x00\x00RC\x02") \
+  MagickCoderHeader("CR2", 0, "II\x2a\x00\x10\x00\x00\x00CR\x02") \
   MagickCoderHeader("CR3", 4, "ftypcrx ") \
   MagickCoderHeader("CRW", 0, "II\x1a\x00\x00\x00HEAPCCDR") \
   MagickCoderHeader("ORF", 0, "IIRO\x08\x00\x00\x00") \
   MagickCoderHeader("MRW", 0, "\x00MRM") \
-  MagickCoderHeader("RAF", 0, "FUJIFILMCCD-RAW ")
+  MagickCoderHeader("RAF", 0, "FUJIFILMCCD-RAW ") \
+  MagickCoderHeader("RAW", 0, "IIU\x00\x08\x00\x00\x00") \
+  MagickCoderHeader("RW2", 0, "IIU\x00\x18\x00\x00\x00")
 
 #define MagickDNGAliases \
   MagickCoderAlias("DNG", "3FR") \
