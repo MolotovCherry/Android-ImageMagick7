@@ -2818,9 +2818,6 @@ static ChannelStatistics *CollectOneImgStats (FxInfo * pfx, Image * img)
     cs[ch].maxima *= QuantumScale;
     cs[ch].minima *= QuantumScale;
     cs[ch].standard_deviation *= QuantumScale;
-    cs[ch].kurtosis *= QuantumScale;
-    cs[ch].skewness *= QuantumScale;
-    cs[ch].entropy *= QuantumScale;
   }
 
   return cs;
@@ -3174,12 +3171,15 @@ static MagickBooleanType ExecuteRPN (FxInfo * pfx, fxRtT * pfxrt, fxFltType *res
   }
 
   for (i=0; i < pfx->usedElements; i++) {
+    ElementT
+      *pel;
+
     if (i < 0) {
       (void) ThrowMagickException (
         pfx->exception, GetMagickModule(), OptionError,
         "Bad run-time address", "%i", i);
     }
-    ElementT *pel = &pfx->Elements[i];
+    pel=&pfx->Elements[i];
     switch (pel->nArgs) {
         case 0:
           break;

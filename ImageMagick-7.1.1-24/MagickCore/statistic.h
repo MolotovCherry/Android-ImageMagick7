@@ -46,6 +46,13 @@ typedef struct _ChannelStatistics
     skewness,
     entropy,
     median;
+
+  long double
+    sumLD,
+    M1,
+    M2,
+    M3,
+    M4;
 } ChannelStatistics;
 
 typedef struct _ChannelMoments
