@@ -5,7 +5,7 @@
 
 *This is a developement libary, NOT an app. There is no "APK". There are binaries you can use however. If you want an app, termux has their own imagemagick package*
 
-*Note: This repo is no longer developed. While it will continue to update itself (until the scripts eventually break), it won't receive any new fixes if anything should arise. The project is on hold indefinitely. If you are someone who is interested in the project and want to take over maintainership, feel free to contact me.*
+*Note: This repo is no longer developed. The project is on hold indefinitely. If you are someone who is interested in the project and want to take over maintainership, feel free to contact me.*
 
 This is a fully featured imagemagick build compatible with android [__and has Kotlin bindings__](https://github.com/MolotovCherry/kmagick) (check out KMagick below). All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
 
