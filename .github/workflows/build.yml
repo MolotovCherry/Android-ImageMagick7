@@ -1,7 +1,17 @@
-name: Build
+name: local Build
 
 on:
   workflow_dispatch:
+    inputs:
+      abi:
+        description: "Select target ABI for the build"
+        required: false
+        default: "arm64-v8a"
+        options:
+          - arm64-v8a
+          - armeabi-v7a
+          - x86
+          - x86_64
   pull_request:
 
 jobs:
@@ -17,59 +27,111 @@ jobs:
         with:
           ndk-version: r27c
 
+      - name: Set ABI environment variable
+        run: |
+          echo "ABI=${{ github.event.inputs.abi || 'arm64-v8a' }}" >> $env:GITHUB_ENV
+
+      - name: Configure Build ABI
+        run: |
+          Write-Host "Setting ABI to $env:ABI"
+          $file = "Application.mk"
+          $line = "APP_ABI := $env:ABI"
+
+          # Read the file and replace or add the line
+          $content = Get-Content $file
+          $content = $content -replace "APP_ABI :=.*", $line
+          if ($content -eq (Get-Content $file)) {
+              $content += $line
+          }
+
+          # Write the modified content back to the file
+          $content | Set-Content $file
+
       # This must be run as cmd /c to redirect output properly
       # because powershell considers stderr an error and doesn't
       # log it into the output properly
-      - name: build
-        id: build
+      - name: Build Static Library
+        id: build-static
         continue-on-error: true
         run: |
-          ./.github-deps/change-to-shared-lib.ps1
-          cmd /c "build-release 2> errors.txt"
+          # Build the static library using build-release
+          cmd /c "build-release 2> errors-static.txt"
+          # Move static library files to the appropriate directory
+          mv jniLibs static_libs
 
-      - name: Set error-log to var
-        uses: actions/github-script@v4
-        id: error-log
-        if: steps.build.outcome != 'success'
+      - name: Build Shared Library
+        id: build-shared
+        continue-on-error: true
+        run: |
+          # Change to shared library mode before building
+          ./.github-deps/change-to-shared-lib.ps1
+          # Build the shared library using build-release
+          cmd /c "build-release 2> errors-shared.txt"
+          # Move static library files to the appropriate directory
+          mv jniLibs shared_libs
+
+      - name: Set error-log to var (Static Build)
+        uses: actions/github-script@v7
+        id: error-log-static
+        if: steps.build-static.outcome != 'success'
         with:
           script: |
             const fs = require('fs');
-            return fs.readFileSync('errors.txt','utf8').toString();
+            return fs.readFileSync('errors-static.txt', 'utf8').toString();
+          result-encoding: string
+
+      - name: Set error-log to var (Shared Build)
+        uses: actions/github-script@v7
+        id: error-log-shared
+        if: steps.build-shared.outcome != 'success'
+        with:
+          script: |
+            const fs = require('fs');
+            return fs.readFileSync('errors-shared.txt', 'utf8').toString();
           result-encoding: string
 
       - uses: actions/upload-artifact@v4
-        if: steps.build.outcome == 'success'
+        if: steps.build-static.outcome == 'success'
         with:
-          name: imagemagick-7-android
-          path: jniLibs
-      
-      - uses: mshick/add-pr-comment@v1
+          name: imagemagick-7-android-${{ env.ABI }}-static
+          path: static_libs
+
+      - uses: actions/upload-artifact@v4
+        if: steps.build-shared.outcome == 'success'
+        with:
+          name: imagemagick-7-android-${{ env.ABI }}-shared
+          path: shared_libs
+
+      - uses: mshick/add-pr-comment@v2
         name: Add error log to PR
-        if: github.event_name == 'pull_request' && steps.build.outcome != 'success'
+        if: github.event_name == 'pull_request' && (steps.build-static.outcome != 'success' || steps.build-shared.outcome != 'success')
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           allow-repeats: true
           message: |
             The build just failed compilation :weary:
-            
+
             Here is the error log from the build :confused: Please check it and fix any problems in your code :open_mouth:
-            
+
             <details>
-            <summary>
-            Expand Stderr Log
-            </summary>
-
-            ```
-            ${{ steps.error-log.outputs.result }}
-            ```
-
+            <summary>Expand Stderr Log (Static)</summary>
+            ${{ steps.error-log-static.outputs.result }}
+            </details>
+            <details>
+            <summary>Expand Stderr Log (Shared)</summary>
+            ${{ steps.error-log-shared.outputs.result }}
             </details>
 
       - name: Show build errors
-        if: steps.build.outcome != 'success'
-        uses: actions/github-script@v4
+        if: steps.build-static.outcome != 'success' || steps.build-shared.outcome != 'success'
+        uses: actions/github-script@v7
         with:
           script: |
-              const fs = require('fs');
-              console.log(fs.readFileSync('errors.txt','utf8').toString());
-              core.setFailed('Build failed');
+            const fs = require('fs');
+            if (fs.existsSync('errors-static.txt')) {
+                console.log(fs.readFileSync('errors-static.txt', 'utf8').toString());
+            }
+            if (fs.existsSync('errors-shared.txt')) {
+                console.log(fs.readFileSync('errors-shared.txt', 'utf8').toString());
+            }
+            core.setFailed('Build failed'); 

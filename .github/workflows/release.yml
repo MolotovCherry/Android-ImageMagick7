@@ -2,40 +2,77 @@ name: Handle Release
 
 on:
   workflow_dispatch:
+    inputs:
+      abi:
+        description: "Select target ABI for the release build"
+        required: false
+        default: "arm64-v8a"
+        options:
+          - arm64-v8a
+          - armeabi-v7a
+          - x86
+          - x86_64
   release:
     types: [created]
   pull_request:
-    branches: [ master ]
-    types: [ closed ]
+    branches: [master]
+    types: [closed]
 
 jobs:
   build:
     runs-on: windows-latest
-    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'blackhat2233' && github.head_ref == 'imupdate') || github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && 
+       github.actor == 'blackhat2233' && github.head_ref == 'imupdate') || 
+       github.event_name == 'release' || github.event_name == 'workflow_dispatch'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
       - uses: nttld/setup-ndk@v1
         with:
           ndk-version: r27c
 
-      - name: Release build
+      - name: Set ABI environment variable
+        run: |
+          echo "ABI=${{ github.event.inputs.abi || 'arm64-v8a' }}" >> $env:GITHUB_ENV
+
+      - name: Configure ABI for Release Build
+        run: |
+          Write-Host "Setting ABI to $env:ABI"
+          $file = "Application.mk"
+          $line = "APP_ABI := $env:ABI"
+
+          # Read the file and replace or add the line
+          $content = Get-Content $file
+          $content = $content -replace "APP_ABI :=.*", $line
+          if ($content -eq (Get-Content $file)) {
+              $content += $line
+          }
+
+          # Write the modified content back to the file
+          $content | Set-Content $file
+
+      - name: Build and Archive Static Library
         run: |
           ./build-release
           $targetDir = Get-ChildItem -Path "jniLibs" -Directory | Select-Object -ExpandProperty FullName
-          Compress-Archive -CompressionLevel Optimal -Path $targetDir -DestinationPath "imagemagick-7-android-static.zip"
+          Compress-Archive -CompressionLevel Optimal -Path $targetDir -DestinationPath "imagemagick-7-android-${{ env.ABI }}-static.zip"
           rm -r jniLibs
+
+      - name: Build and Archive Shared Library
+        run: |
           ./.github-deps/change-to-shared-lib.ps1
           ./build-release
           $targetDir = Get-ChildItem -Path "jniLibs" -Directory | Select-Object -ExpandProperty FullName
-          Compress-Archive -CompressionLevel Optimal -Path $targetDir -DestinationPath "imagemagick-7-android-shared.zip"
+          Compress-Archive -CompressionLevel Optimal -Path $targetDir -DestinationPath "imagemagick-7-android-${{ env.ABI }}-shared.zip"
 
       - name: Get Latest Release Info
         if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         id: latest_release
         uses: kaliber5/action-get-release@v1
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           latest: true
 
       - name: Update Release Artifacts
@@ -44,7 +81,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: 'imagemagick-7-android-*.zip'
+          file: 'imagemagick-7-android-${{ env.ABI }}-*.zip'
           release_id: ${{ steps.latest_release.outputs.id }}
           overwrite: true
           draft: false
@@ -62,11 +99,11 @@ jobs:
         if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
         with:
           name: Android ImageMagick ${{ steps.tag.outputs.TAG }}
-          artifacts: 'imagemagick-7-android-*.zip'
+          artifacts: 'imagemagick-7-android-${{ env.ABI }}-*.zip'
           body: |
             Library built using default config.
-            
-            If you need a different config than default, please follow compilation instructions on main page to manually build it (or, fork the project, change the config file, and use github actions to build it)
+
+            If you need a different config than default, please follow compilation instructions on the main page to manually build it (or, fork the project, change the config file, and use GitHub Actions to build it).
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ github.sha }}
           tag: ${{ steps.tag.outputs.TAG }}
