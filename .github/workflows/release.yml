@@ -22,11 +22,13 @@ jobs:
       - name: Release build
         run: |
           ./build-release
-          Compress-Archive -CompressionLevel Optimal -Path "jniLibs/arm64-v8a" -DestinationPath "imagemagick-7-android-static.zip"
+          $targetDir = Get-ChildItem -Path "jniLibs" -Directory | Select-Object -ExpandProperty FullName
+          Compress-Archive -CompressionLevel Optimal -Path $targetDir -DestinationPath "imagemagick-7-android-static.zip"
           rm -r jniLibs
           ./.github-deps/change-to-shared-lib.ps1
           ./build-release
-          Compress-Archive -CompressionLevel Optimal -Path "jniLibs/arm64-v8a" -DestinationPath "imagemagick-7-android-shared.zip"
+          $targetDir = Get-ChildItem -Path "jniLibs" -Directory | Select-Object -ExpandProperty FullName
+          Compress-Archive -CompressionLevel Optimal -Path $targetDir -DestinationPath "imagemagick-7-android-shared.zip"
 
       - name: Get Latest Release Info
         if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
