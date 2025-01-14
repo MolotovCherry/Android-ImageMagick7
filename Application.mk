@@ -38,7 +38,7 @@ NDK_TOOLCHAIN_VERSION := clang
 # A future NDK release will remove the other options.
 APP_STL := c++_shared
 
-APP_CFLAGS   += -O3
+APP_CFLAGS   += -O3 -Wno-error=unused-but-set-variable -Wno-error=implicit-const-int-float-conversion
 
 APP_CPPFLAGS += -O3
 
