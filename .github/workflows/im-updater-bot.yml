@@ -49,7 +49,7 @@ jobs:
           labels: |
             update
             automated pr
-          assignees: molotovcherry
+          assignees: blackhat2233
           draft: false
 
       - name: Check outputs

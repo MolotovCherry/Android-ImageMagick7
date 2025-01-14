@@ -1,6 +1,7 @@
 name: Handle Release
 
 on:
+  workflow_dispatch:
   release:
     types: [created]
   pull_request:
@@ -10,13 +11,13 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'molotovcherry' && github.head_ref == 'imupdate') || github.event_name == 'release'
+    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.actor == 'blackhat2233' && github.head_ref == 'imupdate') || github.event_name == 'release' || github.event_name == 'workflow_dispatch'
 
     steps:
       - uses: actions/checkout@v2
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r23
+          ndk-version: r27c
 
       - name: Release build
         run: |
@@ -67,11 +68,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ github.sha }}
           tag: ${{ steps.tag.outputs.TAG }}
-             
-      - name: KMagick Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.REPO_SCOPED_TOKEN }}
-          repository: molotovcherry/kmagick
-          event-type: new-release
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ steps.tag.outputs.TAG }}"}'

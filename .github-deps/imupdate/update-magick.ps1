@@ -95,8 +95,7 @@ Get-ChildItem -File | Foreach-Object {Remove-Item $_.FullName}
 $DelDirs = @(
     ".git", ".github", "api_examples", "app-image", "config",
     "images", "m4", "PerlMagick", "scripts", "tests",
-    "www", "MagickWand\tests", "Magick++\bin", "Magick++\demo",
-    "Magick++\tests", "Magick++\fuzz"
+    "www", "MagickWand\tests"
 )
 
 $ExcludeFileTypes = @(
@@ -106,6 +105,9 @@ $ExcludeFileTypes = @(
 ForEach ($d in $DelDirs) {
     Remove-Item -Path "$TmpPath\$d" -Force -Recurse
 }
+
+$magickpp_folders = Get-ChildItem -Path "$TmpPath\Magick++" -Directory | Where-Object { $_.Name -ne "lib" }
+$magickpp_folders | Remove-Item -Recurse -Force
 
 # remove all non c or non h files
 $items = Get-ChildItem -File -Path "$TmpPath" -Exclude $ExcludeFileTypes -Recurse
@@ -180,27 +182,33 @@ Copy-Item -Path "$TmpPath\*" -Destination "$newIm" -Recurse
 
 Remove-Item -Path "$TmpPath" -Force -Recurse
 
-# now update version files
-$file = "$newIm\configs\arm64\MagickCore\magick-baseconfig.h"
-(Get-Content -Path $file) -replace "$version", "$tag" | Set-Content $file
+# now update version files for arm64, arm, x86, and x86_64
+$architectures = @("arm64", "arm", "x86", "x86_64")
 
-$file = "$newIm\configs\arm64\MagickCore\version.h"
-$content = Get-Content -Path $file
+foreach ($arch in $architectures) {
+    $file = "$newIm\configs\$arch\MagickCore\magick-baseconfig.h"
+    (Get-Content -Path $file) -replace "$version", "$tag" | Set-Content $file
 
-$content = $content -replace "#define MagickCopyright\s+`"[^`"]+`"", "#define MagickCopyright  `"$magick_copyright`""
-$content = $content -replace "#define MagickLibVersion\s+[^\s]+", "#define MagickLibVersion  $package_lib_version"
-$content = $content -replace "#define MagickLibVersionText\s+[^\s]+", "#define MagickLibVersionText  `"$magick_lib_version_text`""
-$content = $content -replace "#define MagickLibVersionNumber\s+[^\s]+", "#define MagickLibVersionNumber  $magick_lib_version_number"
-$content = $content -replace "#define MagickLibAddendum\s+[^\s]+", "#define MagickLibAddendum  `"$package_version_addendum`""
-$content = $content -replace "#define MagickLibInterface\s+[^\s]+", "#define MagickLibInterface  $magick_library_current"
-$content = $content -replace "#define MagickLibMinInterface\s+[^\s]+", "#define MagickLibMinInterface  $magick_library_current_min"
-$content = $content -replace "#define MagickppLibVersionText\s+[^\s]+", "#define MagickppLibVersionText  `"$magickpp_lib_version_text`""
-$content = $content -replace "#define MagickppLibVersionNumber\s+[^\s]+", "#define MagickppLibVersionNumber  $magickpp_library_version_info"
-$content = $content -replace "#define MagickppLibAddendum\s+[^\s]+", "#define MagickppLibAddendum  `"$package_version_addendum`""
-$content = $content -replace "#define MagickppLibInterface\s+[^\s]+", "#define MagickppLibInterface  $magickpp_library_current"
-$content = $content -replace "#define MagickppLibMinInterface\s+[^\s]+", "#define MagickppLibMinInterface  $magickpp_library_current_min"
-$content = $content -replace "#define MagickReleaseDate\s+[^\s]+", "#define MagickReleaseDate  `"$magick_release_date`""
-$content | Set-Content $file
+    $file = "$newIm\configs\$arch\MagickCore\version.h"
+    $content = Get-Content -Path $file
+
+    $content = $content -replace "#define MagickCopyright\s+`"[^`"]+`"", "#define MagickCopyright  `"$magick_copyright`""
+    $content = $content -replace "#define MagickLibVersion\s+[^\s]+", "#define MagickLibVersion  $package_lib_version"
+    $content = $content -replace "#define MagickLibVersionText\s+[^\s]+", "#define MagickLibVersionText  `"$magick_lib_version_text`""
+    $content = $content -replace "#define MagickLibVersionNumber\s+[^\s]+", "#define MagickLibVersionNumber  $magick_lib_version_number"
+    $content = $content -replace "#define MagickLibAddendum\s+[^\s]+", "#define MagickLibAddendum  `"$package_version_addendum`""
+    $content = $content -replace "#define MagickLibInterface\s+[^\s]+", "#define MagickLibInterface  $magick_library_current"
+    $content = $content -replace "#define MagickLibMinInterface\s+[^\s]+", "#define MagickLibMinInterface  $magick_library_current_min"
+    $content = $content -replace "#define MagickppLibVersionText\s+[^\s]+", "#define MagickppLibVersionText  `"$magickpp_lib_version_text`""
+    $content = $content -replace "#define MagickppLibVersionNumber\s+[^\s]+", "#define MagickppLibVersionNumber  $magickpp_library_version_info"
+    $content = $content -replace "#define MagickppLibAddendum\s+[^\s]+", "#define MagickppLibAddendum  `"$package_version_addendum`""
+    $content = $content -replace "#define MagickppLibInterface\s+[^\s]+", "#define MagickppLibInterface  $magickpp_library_current"
+    $content = $content -replace "#define MagickppLibMinInterface\s+[^\s]+", "#define MagickppLibMinInterface  $magickpp_library_current_min"
+    $content = $content -replace "#define MagickReleaseDate\s+[^\s]+", "#define MagickReleaseDate  `"$magick_release_date`""
+
+    # Save to architecture specific files
+    $content | Set-Content $file
+}
 
 Write-Host Updating README`n
 

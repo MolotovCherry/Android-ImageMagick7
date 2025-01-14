@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/powershell:lts-nanoserver-2004
 
-ENV NDK=android-ndk-r23
+ENV NDK=android-ndk-r27c
 ENV NDK_PLATFORM=windows
 ENV NDK_FILE=$NDK-$NDK_PLATFORM.zip
 ENV POWERSHELL_TELEMETRY_OPTOUT=1

@@ -12,13 +12,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r23
+          ndk-version: r27c
 
       # This must be run as cmd /c to redirect output properly
       # because powershell considers stderr an error and doesn't
@@ -40,7 +40,7 @@ jobs:
             return fs.readFileSync('errors.txt','utf8').toString();
           result-encoding: string
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: steps.build.outcome == 'success'
         with:
           name: imagemagick-7-android
