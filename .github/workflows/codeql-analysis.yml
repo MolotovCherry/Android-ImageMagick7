@@ -12,9 +12,6 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     types: [opened]
   schedule:
