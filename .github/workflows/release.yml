@@ -28,16 +28,16 @@ jobs:
           ./build-release
           Compress-Archive -CompressionLevel Optimal -Path "jniLibs/arm64-v8a" -DestinationPath "imagemagick-7-android-shared.zip"
 
-      - name: Get latest release
-        if: github.event_name == 'release'
+      - name: Get Latest Release Info
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         id: latest_release
         uses: kaliber5/action-get-release@v1
         with:
           token: ${{ github.token }}
           latest: true
 
-      - name: Update release artifacts
-        if: github.event_name == 'release'
+      - name: Update Release Artifacts
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,8 +48,8 @@ jobs:
           draft: false
           tag_name: ${{ steps.latest_release.outputs.tag_name }}
 
-      - name: Get latest release tag
-        if: github.event_name == 'pull_request'
+      - name: Get Latest Release Tag
+        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
         id: tag
         run: |
           $dir = Get-ChildItem -Directory -Path "ImageMagick-*" | Select-Object -Last 1
@@ -57,7 +57,7 @@ jobs:
           Write-Host "::set-output name=TAG::$tag"
 
       - uses: ncipollo/release-action@v1
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
         with:
           name: Android ImageMagick ${{ steps.tag.outputs.TAG }}
           artifacts: 'imagemagick-7-android-*.zip'
