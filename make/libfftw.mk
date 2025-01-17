@@ -46,117 +46,93 @@ else ifeq ($(TARGET_ARCH_ABI),x86)
     LOCAL_EXPORT_C_INCLUDES += $(FFTW_LIB_PATH)/configs/x86
     LOCAL_C_INCLUDES += $(FFTW_LIB_PATH)/configs/x86
 
+    # Add required compiler flags for SIMD optimizations on x86
+    LOCAL_CFLAGS += -mavx -mavx2 -DHAVE_AVX2 -mfma -mfma4 \
+                    -mavx512f -mavx512dq -mavx512bw -mavx512vl \
+                    -msse2 -msse4.2 -mpopcnt \
+
     LOCAL_C_INCLUDES += \
-        $(FFTW_LIB_PATH)/dft/simd/altivec \
         $(FFTW_LIB_PATH)/dft/simd/avx \
         $(FFTW_LIB_PATH)/dft/simd/avx-128-fma \
         $(FFTW_LIB_PATH)/dft/simd/avx2 \
         $(FFTW_LIB_PATH)/dft/simd/avx2-128 \
         $(FFTW_LIB_PATH)/dft/simd/avx512 \
-        $(FFTW_LIB_PATH)/dft/simd/common \
         $(FFTW_LIB_PATH)/dft/simd/generic-simd128 \
         $(FFTW_LIB_PATH)/dft/simd/generic-simd256 \
-        $(FFTW_LIB_PATH)/dft/simd/kcvi \
         $(FFTW_LIB_PATH)/dft/simd/sse2 \
-        $(FFTW_LIB_PATH)/dft/simd/vsx \
-        $(FFTW_LIB_PATH)/rdft/simd/altivec \
         $(FFTW_LIB_PATH)/rdft/simd/avx \
         $(FFTW_LIB_PATH)/rdft/simd/avx-128-fma \
         $(FFTW_LIB_PATH)/rdft/simd/avx2 \
         $(FFTW_LIB_PATH)/rdft/simd/avx2-128 \
         $(FFTW_LIB_PATH)/rdft/simd/avx512 \
-        $(FFTW_LIB_PATH)/rdft/simd/common \
         $(FFTW_LIB_PATH)/rdft/simd/generic-simd128 \
         $(FFTW_LIB_PATH)/rdft/simd/generic-simd256 \
-        $(FFTW_LIB_PATH)/rdft/simd/kcvi \
-        $(FFTW_LIB_PATH)/rdft/simd/neon \
-        $(FFTW_LIB_PATH)/rdft/simd/sse2 \
-        $(FFTW_LIB_PATH)/rdft/simd/vsx
+        $(FFTW_LIB_PATH)/rdft/simd/sse2
 
-        include $(FFTW_LIB_PATH)/dft/simd/altivec/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx-128-fma/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx2/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx2-128/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx512/sources.mk
-        include $(FFTW_LIB_PATH)/dft/simd/common/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/generic-simd128/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/generic-simd256/sources.mk
-        include $(FFTW_LIB_PATH)/dft/simd/kcvi/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/sse2/sources.mk
-        include $(FFTW_LIB_PATH)/dft/simd/vsx/sources.mk
-        include $(FFTW_LIB_PATH)/rdft/simd/altivec/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx-128-fma/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx2/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx2-128/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx512/sources.mk
-        include $(FFTW_LIB_PATH)/rdft/simd/common/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/generic-simd128/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/generic-simd256/sources.mk
-        include $(FFTW_LIB_PATH)/rdft/simd/kcvi/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/sse2/sources.mk
-        include $(FFTW_LIB_PATH)/rdft/simd/vsx/sources.mk
 
 else ifeq ($(TARGET_ARCH_ABI),x86_64)
     LOCAL_EXPORT_C_INCLUDES += $(FFTW_LIB_PATH)/configs/x86-64
     LOCAL_C_INCLUDES += $(FFTW_LIB_PATH)/configs/x86-64
+
+    # Add required compiler flags for full SIMD optimizations on x86_64
+    LOCAL_CFLAGS += -mavx -mavx2 -DHAVE_AVX2 -mfma -mfma4 \
+                    -mavx512f -mavx512dq -mavx512bw -mavx512vl \
+                    -msse2 -msse4.2 -mpopcnt \
 
     ifneq ($(STATIC_BUILD),true)
         LOCAL_LDFLAGS += -latomic
     endif
 
     LOCAL_C_INCLUDES += \
-        $(FFTW_LIB_PATH)/dft/simd/altivec \
         $(FFTW_LIB_PATH)/dft/simd/avx \
         $(FFTW_LIB_PATH)/dft/simd/avx-128-fma \
         $(FFTW_LIB_PATH)/dft/simd/avx2 \
         $(FFTW_LIB_PATH)/dft/simd/avx2-128 \
         $(FFTW_LIB_PATH)/dft/simd/avx512 \
-        $(FFTW_LIB_PATH)/dft/simd/common \
         $(FFTW_LIB_PATH)/dft/simd/generic-simd128 \
         $(FFTW_LIB_PATH)/dft/simd/generic-simd256 \
-        $(FFTW_LIB_PATH)/dft/simd/kcvi \
         $(FFTW_LIB_PATH)/dft/simd/sse2 \
-        $(FFTW_LIB_PATH)/dft/simd/vsx \
-        $(FFTW_LIB_PATH)/rdft/simd/altivec \
         $(FFTW_LIB_PATH)/rdft/simd/avx \
         $(FFTW_LIB_PATH)/rdft/simd/avx-128-fma \
         $(FFTW_LIB_PATH)/rdft/simd/avx2 \
         $(FFTW_LIB_PATH)/rdft/simd/avx2-128 \
         $(FFTW_LIB_PATH)/rdft/simd/avx512 \
-        $(FFTW_LIB_PATH)/rdft/simd/common \
         $(FFTW_LIB_PATH)/rdft/simd/generic-simd128 \
         $(FFTW_LIB_PATH)/rdft/simd/generic-simd256 \
-        $(FFTW_LIB_PATH)/rdft/simd/kcvi \
-        $(FFTW_LIB_PATH)/rdft/simd/neon \
-        $(FFTW_LIB_PATH)/rdft/simd/sse2 \
-        $(FFTW_LIB_PATH)/rdft/simd/vsx
+        $(FFTW_LIB_PATH)/rdft/simd/sse2 
 
-        include $(FFTW_LIB_PATH)/dft/simd/altivec/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx-128-fma/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx2/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx2-128/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/avx512/sources.mk
-        include $(FFTW_LIB_PATH)/dft/simd/common/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/generic-simd128/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/generic-simd256/sources.mk
-        include $(FFTW_LIB_PATH)/dft/simd/kcvi/sources.mk
         include $(FFTW_LIB_PATH)/dft/simd/sse2/sources.mk
-        include $(FFTW_LIB_PATH)/dft/simd/vsx/sources.mk
-        include $(FFTW_LIB_PATH)/rdft/simd/altivec/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx-128-fma/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx2/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx2-128/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/avx512/sources.mk
-        include $(FFTW_LIB_PATH)/rdft/simd/common/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/generic-simd128/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/generic-simd256/sources.mk
-        include $(FFTW_LIB_PATH)/rdft/simd/kcvi/sources.mk
         include $(FFTW_LIB_PATH)/rdft/simd/sse2/sources.mk
-        include $(FFTW_LIB_PATH)/rdft/simd/vsx/sources.mk
 
 endif
 
