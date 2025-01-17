@@ -172,6 +172,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/tim2.c \
     $(IMAGE_MAGICK)/coders/ttf.c \
     $(IMAGE_MAGICK)/coders/txt.c \
+    $(IMAGE_MAGICK)/coders/uhdr.c \
     $(IMAGE_MAGICK)/coders/uil.c \
     $(IMAGE_MAGICK)/coders/url.c \
     $(IMAGE_MAGICK)/coders/uyvy.c \

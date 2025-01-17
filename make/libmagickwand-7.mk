@@ -22,7 +22,6 @@ LOCAL_SRC_FILES := \
     $(IMAGE_MAGICK)/MagickWand/compare.c \
     $(IMAGE_MAGICK)/MagickWand/composite.c \
     $(IMAGE_MAGICK)/MagickWand/conjure.c \
-    $(IMAGE_MAGICK)/MagickWand/convert.c \
     $(IMAGE_MAGICK)/MagickWand/deprecate.c \
     $(IMAGE_MAGICK)/MagickWand/display.c \
     $(IMAGE_MAGICK)/MagickWand/drawing-wand.c \
