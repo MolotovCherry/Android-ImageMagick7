@@ -1114,8 +1114,8 @@
 /* #undef MAGICKCORE_LIBOPENJP2_DELEGATE */
 
 /* Directory where architecture-dependent files live. */
-#ifndef MAGICKCORE_LIBRARY_PATH
-#define MAGICKCORE_LIBRARY_PATH "/usr/local/lib/ImageMagick-7.0.8/"
+#ifndef MAGICKCORE_LIBRARY_ABSOLUTE_PATH
+#define MAGICKCORE_LIBRARY_ABSOLUTE_PATH "/usr/local/lib/ImageMagick-7.0.8/"
 #endif
 
 /* Subdirectory of lib where ImageMagick architecture dependent files are
