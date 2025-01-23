@@ -157,7 +157,7 @@ alloc_funny_pointers(j_decompress_ptr cinfo)
      */
     xbuf = (JSAMPARRAY)
       (*cinfo->mem->alloc_small) ((j_common_ptr)cinfo, JPOOL_IMAGE,
-                                  2 * (rgroup * (M + 4)) * sizeof(JSAMPROW));
+                                  (unsigned long)2 * rgroup * (M + 4) * sizeof(JSAMPROW));
     xbuf += rgroup;             /* want one row group at negative offsets */
     main_ptr->xbuffer[0][ci] = xbuf;
     xbuf += rgroup * (M + 4);
