@@ -28,8 +28,8 @@ tensor *MKTENSOR_IODIMS(int rank, const IODIM *dims, int is, int os)
      if (FINITE_RNK(rank)) {
           for (i = 0; i < rank; ++i) {
                x->dims[i].n = dims[i].n;
-               x->dims[i].is = dims[i].is * is;
-               x->dims[i].os = dims[i].os * os;
+               x->dims[i].is = (INT)dims[i].is * is;
+               x->dims[i].os = (INT)dims[i].os * os;
           }
      }
      return x;
