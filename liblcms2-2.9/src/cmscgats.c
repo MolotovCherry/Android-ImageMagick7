@@ -256,7 +256,7 @@ static PROPERTY PredefinedProperties[] = {
                                                    // needed.
 
         {"SAMPLE_BACKING",   WRITE_STRINGIFY},     // Identifies the backing material used behind the sample during
-                                                   // measurement. Allowed values are “black”, “white”, or {"na".
+                                                   // measurement. Allowed values are Â“blackÂ”, Â“whiteÂ”, or {"na".
                                                   
         {"CHISQ_DOF",        WRITE_STRINGIFY},     // Degrees of freedom associated with the Chi squared statistic
                                                    // below properties are new in recent specs:
@@ -271,7 +271,7 @@ static PROPERTY PredefinedProperties[] = {
                                                    // denote the use of filters such as none, D65, Red, Green or Blue.
                                                   
        {"POLARIZATION",      WRITE_STRINGIFY},     // Identifies the use of a physical polarization filter during measurement. Allowed
-                                                   // values are {"yes”, “white”, “none” or “na”.
+                                                   // values are {"yesÂ”, Â“whiteÂ”, Â“noneÂ” or Â“naÂ”.
 
        {"WEIGHTING_FUNCTION", WRITE_PAIR},         // Indicates such functions as: the CIE standard observer functions used in the
                                                    // calculation of various data parameters (2 degree and 10 degree), CIE standard
@@ -1506,7 +1506,7 @@ void AllocateDataSet(cmsIT8* it8)
     t-> nSamples   = atoi(cmsIT8GetProperty(it8, "NUMBER_OF_FIELDS"));
     t-> nPatches   = atoi(cmsIT8GetProperty(it8, "NUMBER_OF_SETS"));
 
-    t-> Data = (char**)AllocChunk (it8, ((cmsUInt32Number) t->nSamples + 1) * ((cmsUInt32Number) t->nPatches + 1) *sizeof (char*));
+    t-> Data = (char**)AllocChunk (it8, ((cmsUInt32Number)(t->nSamples + 1)) * ((cmsUInt32Number)(t->nPatches + 1)) * sizeof (char*));
     if (t->Data == NULL) {
 
         SynError(it8, "AllocateDataSet: Unable to allocate data array");
