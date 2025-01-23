@@ -101,7 +101,7 @@ int bz_config_ok ( void )
 static
 void* default_bzalloc ( void* opaque, Int32 items, Int32 size )
 {
-   void* v = malloc ( items * size );
+   void* v = malloc ( (size_t)items * size );
    return v;
 }
 
