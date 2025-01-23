@@ -65,7 +65,7 @@ utrie_swap(const UDataSwapper *ds,
     }
 
     dataIs32=(UBool)((trie.options&UTRIE_OPTIONS_DATA_IS_32_BIT)!=0);
-    size=sizeof(UTrieHeader)+trie.indexLength*2+trie.dataLength*(dataIs32?4:2);
+    size=sizeof(UTrieHeader)+trie.indexLength*2+(int64_t)trie.dataLength*(dataIs32?4:2);
 
     if(length>=0) {
         UTrieHeader *outTrie;
