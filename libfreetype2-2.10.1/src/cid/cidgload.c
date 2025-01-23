@@ -110,7 +110,7 @@
 
 
       if ( FT_STREAM_SEEK( cid->data_offset + cid->cidmap_offset +
-                           glyph_index * entry_len )               ||
+                           (unsigned long)glyph_index * entry_len ) ||
            FT_FRAME_ENTER( 2 * entry_len )                         )
         goto Exit;
 
