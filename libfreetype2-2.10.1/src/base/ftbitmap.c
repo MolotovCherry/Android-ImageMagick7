@@ -539,7 +539,7 @@
         if ( old_target_pitch < 0 )
           old_target_pitch = -old_target_pitch;
 
-        old_size = target->rows * (FT_UInt)old_target_pitch;
+        old_size = (FT_ULong)target->rows * (FT_UInt)old_target_pitch;
 
         target->pixel_mode = FT_PIXEL_MODE_GRAY;
         target->rows       = source->rows;
