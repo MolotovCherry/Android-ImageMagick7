@@ -1035,7 +1035,7 @@
           p                    += 4;
         }
 
-        instance_offset = array_start + axis_size * num_axes + 4;
+        instance_offset = array_start + (FT_ULong)axis_size * num_axes + 4;
 
         for ( i = 0; i < num_instances; i++ )
         {
