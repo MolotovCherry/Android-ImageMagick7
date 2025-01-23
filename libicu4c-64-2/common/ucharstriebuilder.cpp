@@ -123,7 +123,9 @@ UCharsTrieBuilder::add(const UnicodeString &s, int32_t value, UErrorCode &errorC
         elements=newElements;
         elementsCapacity=newCapacity;
     }
-    elements[elementsLength++].setTo(s, value, strings, errorCode);
+    if (U_SUCCESS(errorCode)) {
+        elements[elementsLength++].setTo(s, value, strings, errorCode);
+    }
     if(U_SUCCESS(errorCode) && strings.isBogus()) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
