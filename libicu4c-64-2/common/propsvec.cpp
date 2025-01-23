@@ -215,7 +215,7 @@ upvec_setValue(UPropsVectors *pv,
                 *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
                 return;
             }
-            newVectors=(uint32_t *)uprv_malloc(newMaxRows*columns*4);
+            newVectors=(uint32_t *)uprv_malloc((size_t)newMaxRows*columns*4);
             if(newVectors==NULL) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return;
