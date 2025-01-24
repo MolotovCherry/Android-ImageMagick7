@@ -225,7 +225,7 @@ OPJ_BOOL is_allsent(cachemodel_param_t cachemodel)
     TPnum = get_nmax(target->codeidx->tilepart);
 
     if (cachemodel.jppstream) {
-        for (i = 0; i < target->codeidx->SIZ.XTnum * target->codeidx->SIZ.YTnum; i++) {
+        for (i = 0; i < (unsigned long)target->codeidx->SIZ.XTnum * target->codeidx->SIZ.YTnum; i++) {
             if (!cachemodel.th_model[i]) {
                 return OPJ_FALSE;
             }
