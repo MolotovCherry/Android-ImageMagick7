@@ -298,7 +298,7 @@ static int EncodeAlpha(VP8Encoder* const enc,
   const int height = pic->height;
 
   uint8_t* quant_alpha = NULL;
-  const size_t data_size = width * height;
+  const size_t data_size = (size_t)width * height;
   uint64_t sse = 0;
   int ok = 1;
   const int reduce_levels = (quality < 100);
