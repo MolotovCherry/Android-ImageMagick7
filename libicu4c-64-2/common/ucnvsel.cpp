@@ -721,8 +721,8 @@ static UEnumeration *selectForMask(const UConverterSelector* sel,
   if (numOnes > 0) {
     result->index = (int16_t*) uprv_malloc(numOnes * sizeof(int16_t));
 
-    int32_t i, j;
-    int16_t k = 0;
+    int32_t i, j, k = 0;
+
     for (j = 0 ; j < columns; j++) {
       uint32_t v = mask[j];
       for (i = 0 ; i < 32 && k < sel->encodingsCount; i++, k++) {
