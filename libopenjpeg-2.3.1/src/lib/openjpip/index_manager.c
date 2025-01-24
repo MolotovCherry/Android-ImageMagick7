@@ -536,7 +536,7 @@ OPJ_BOOL set_thixdata(box_param_t *cidx_box, index_param_t *jp2idx)
     mhixseqoff = manf_box->offset + (OPJ_OFF_T)manf_box->length;
     pos = 0;
     tile_no = 0;
-    jp2idx->tileheader = (mhixbox_param_t **)opj_malloc(jp2idx->SIZ.XTnum *
+    jp2idx->tileheader = (mhixbox_param_t **)opj_malloc((unsigned long)jp2idx->SIZ.XTnum *
                          jp2idx->SIZ.YTnum * sizeof(mhixbox_param_t *));
 
     while (ptr) {
