@@ -968,9 +968,9 @@ horizontalDifferenceF(float *ip, int n, int stride, uint16 *wp, uint16 *FromLT2)
     float fltsize = Fltsize;
 
 #define  CLAMP(v) ( (v<(float)0.)   ? 0				\
-		  : (v<(float)2.)   ? FromLT2[(int)(v*fltsize)]	\
+		  : (v<(float)2.)   ? FromLT2[(int)((double)v*(double)fltsize)]	\
 		  : (v>(float)24.2) ? 2047			\
-		  : LogK1*log(v*LogK2) + 0.5 )
+		  : LogK1*log((double)v*LogK2) + 0.5 )
 
     mask = CODE_MASK;
     if (n >= stride) {
