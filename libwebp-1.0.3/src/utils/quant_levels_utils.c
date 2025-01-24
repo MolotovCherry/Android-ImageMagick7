@@ -30,7 +30,7 @@ int QuantizeLevels(uint8_t* const data, int width, int height,
   int q_level[NUM_SYMBOLS] = { 0 };
   double inv_q_level[NUM_SYMBOLS] = { 0 };
   int min_s = 255, max_s = 0;
-  const size_t data_size = height * width;
+  const size_t data_size = (size_t)height * width;
   int i, num_levels_in, iter;
   double last_err = 1.e38, err = 0.;
   const double err_threshold = ERROR_THRESHOLD * data_size;
