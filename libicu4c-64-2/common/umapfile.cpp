@@ -222,17 +222,18 @@ typedef HANDLE MemoryMap;
 
         UDataMemory_init(pData); /* Clear the output struct.        */
 
-        /* determine the length of the file */
-        if(stat(path, &mystat)!=0 || mystat.st_size<=0) {
-            return FALSE;
-        }
-        length=mystat.st_size;
-
         /* open the file */
         fd=open(path, O_RDONLY);
         if(fd==-1) {
             return FALSE;
         }
+
+        /* determine the length of the file */
+        if(fstat(fd, &mystat)!=0 || mystat.st_size<=0) {
+            close(fd);
+            return FALSE;
+        }
+        length=mystat.st_size;
 
         /* get a view of the mapping */
 #if U_PLATFORM != U_PF_HPUX
