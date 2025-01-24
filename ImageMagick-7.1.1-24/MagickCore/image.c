@@ -1690,7 +1690,7 @@ MagickExport size_t InterpretImageFilename(const ImageInfo *image_info,
         c=(*q);
         *q='\0';
         (void) FormatLocaleString(filename+(p-format-offset),(size_t)
-          (MagickPathExtent-(p-format-offset)),p,value);
+          (MagickPathExtent-(p-format-offset)),"%s",p);
         offset+=(4-field_width);
         *q=c;
         (void) ConcatenateMagickString(filename,q,MagickPathExtent);
