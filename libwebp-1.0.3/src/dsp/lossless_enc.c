@@ -440,7 +440,7 @@ static WEBP_INLINE void GetEntropyUnrefinedHelper(
     bit_entropy->sum += (*val_prev) * streak;
     bit_entropy->nonzeros += streak;
     bit_entropy->nonzero_code = *i_prev;
-    bit_entropy->entropy -= VP8LFastSLog2(*val_prev) * streak;
+    bit_entropy->entropy -= (double)VP8LFastSLog2(*val_prev) * streak;
     if (bit_entropy->max_val < *val_prev) {
       bit_entropy->max_val = *val_prev;
     }
