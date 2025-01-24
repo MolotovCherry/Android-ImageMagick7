@@ -779,7 +779,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
   VP8EncIterator it;
   VP8EncProba* const proba = &enc->proba_;
   const VP8RDLevel rd_opt = enc->rd_opt_level_;
-  const uint64_t pixel_count = enc->mb_w_ * enc->mb_h_ * 384;
+  const uint64_t pixel_count = (uint64_t)enc->mb_w_ * enc->mb_h_ * 384;
   PassStats stats;
   int ok;
 
