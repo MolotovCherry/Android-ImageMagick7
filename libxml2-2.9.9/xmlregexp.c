@@ -540,7 +540,7 @@ xmlRegEpxFromParse(xmlRegParserCtxtPtr ctxt) {
 #ifdef DEBUG_COMPACTION
 	printf("Final: %d atoms\n", nbatoms);
 #endif
-	transitions = (int *) xmlMalloc((nbstates + 1) *
+	transitions = (int *) xmlMalloc(((unsigned long)(nbstates + 1)) *
 	                                (nbatoms + 1) * sizeof(int));
 	if (transitions == NULL) {
 	    xmlFree(stateRemap);
