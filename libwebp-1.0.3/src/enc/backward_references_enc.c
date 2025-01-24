@@ -536,7 +536,7 @@ static int BackwardReferencesLz77Box(int xsize, int ysize,
   int window_offsets_size = 0;
   int window_offsets_new_size = 0;
   uint16_t* const counts_ini =
-      (uint16_t*)WebPSafeMalloc(xsize * ysize, sizeof(*counts_ini));
+      (uint16_t*)WebPSafeMalloc((uint64_t)xsize * ysize, sizeof(*counts_ini));
   int best_offset_prev = -1, best_length_prev = -1;
   if (counts_ini == NULL) return 0;
 
