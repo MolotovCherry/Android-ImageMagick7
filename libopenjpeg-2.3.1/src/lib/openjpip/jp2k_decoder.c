@@ -196,7 +196,7 @@ static Byte_t * imagetopnm(opj_image_t *image, ihdrbox_param_t **ihdrbox)
         (*ihdrbox)->nc     = (Byte2_t)image->numcomps;
     }
 
-    datasize = (image->numcomps) * (image->comps[0].w) * (image->comps[0].h);
+    datasize = (OPJ_SIZE_T)(image->numcomps) * (OPJ_SIZE_T)(image->comps[0].w) * (OPJ_SIZE_T)(image->comps[0].h);
 
     if (image->comps[0].prec > 8) {
         adjustR = image->comps[0].prec - 8;
