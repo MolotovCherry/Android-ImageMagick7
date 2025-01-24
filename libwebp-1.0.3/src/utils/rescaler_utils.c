@@ -69,7 +69,7 @@ void WebPRescalerInit(WebPRescaler* const wrk, int src_width, int src_height,
   }
   wrk->irow = work;
   wrk->frow = work + num_channels * dst_width;
-  memset(work, 0, 2 * dst_width * num_channels * sizeof(*work));
+  memset(work, 0, (unsigned long)2 * dst_width * num_channels * sizeof(*work));
 
   WebPRescalerDspInit();
 }
