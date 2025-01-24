@@ -7151,7 +7151,7 @@ OPJ_BOOL opj_j2k_setup_encoder(opj_j2k_t *p_j2k,
 
     /* initialize the mutiple tiles */
     /* ---------------------------- */
-    cp->tcps = (opj_tcp_t*) opj_calloc(cp->tw * cp->th, sizeof(opj_tcp_t));
+    cp->tcps = (opj_tcp_t*) opj_calloc((size_t)cp->tw * cp->th, sizeof(opj_tcp_t));
     if (!cp->tcps) {
         opj_event_msg(p_manager, EVT_ERROR,
                       "Not enough memory to allocate tile coding parameters\n");
