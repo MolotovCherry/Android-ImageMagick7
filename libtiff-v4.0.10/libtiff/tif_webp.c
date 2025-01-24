@@ -284,7 +284,7 @@ TWebPPreDecode(TIFF* tif, uint16 s)
   sp->sDecBuffer.width = segment_width;
   sp->sDecBuffer.height = segment_height;
   sp->sDecBuffer.u.RGBA.stride = segment_width * sp->nSamples;
-  sp->sDecBuffer.u.RGBA.size = segment_width * sp->nSamples * segment_height;
+  sp->sDecBuffer.u.RGBA.size = (size_t)segment_width * sp->nSamples * segment_height;
   
   if (sp->nSamples > 3) {
     sp->sDecBuffer.colorspace = MODE_RGBA;
