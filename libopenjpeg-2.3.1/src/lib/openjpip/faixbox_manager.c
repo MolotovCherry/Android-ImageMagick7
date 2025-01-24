@@ -70,7 +70,7 @@ faixbox_param_t * gene_faixbox(box_param_t *box)
         subfaixbox->nmax = fetch_DBox8bytebigendian(box, (pos += 8) - 8);
         subfaixbox->m    = fetch_DBox8bytebigendian(box, (pos += 8) - 8);
 
-        numOfelem = subfaixbox->nmax * subfaixbox->m;
+        numOfelem = (size_t)subfaixbox->nmax * subfaixbox->m;
 
         subfaixbox->elem = (faixelem8_param_t *)malloc(numOfelem * sizeof(
                                faixelem8_param_t));
@@ -97,7 +97,7 @@ faixbox_param_t * gene_faixbox(box_param_t *box)
         subfaixbox->nmax = fetch_DBox4bytebigendian(box, (pos += 4) - 4);
         subfaixbox->m    = fetch_DBox4bytebigendian(box, (pos += 4) - 4);
 
-        numOfelem = subfaixbox->nmax * subfaixbox->m;
+        numOfelem = (size_t)subfaixbox->nmax * subfaixbox->m;
 
         subfaixbox->elem = (faixelem4_param_t *)malloc(numOfelem * sizeof(
                                faixelem4_param_t));
