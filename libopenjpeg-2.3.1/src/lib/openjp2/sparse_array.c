@@ -235,7 +235,7 @@ static OPJ_BOOL opj_sparse_array_int32_read_or_write(
             } else {
                 if (src_block == NULL) {
                     src_block = (OPJ_INT32*) opj_calloc(1,
-                                                        sa->block_width * sa->block_height * sizeof(OPJ_INT32));
+                                                        (unsigned long)sa->block_width * sa->block_height * sizeof(OPJ_INT32));
                     if (src_block == NULL) {
                         return OPJ_FALSE;
                     }
