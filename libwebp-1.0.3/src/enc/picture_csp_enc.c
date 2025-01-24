@@ -453,13 +453,13 @@ static int PreprocessARGB(const uint8_t* r_ptr,
 
   // TODO(skal): allocate one big memory chunk. But for now, it's easier
   // for valgrind debugging to have several chunks.
-  fixed_y_t* const tmp_buffer = SAFE_ALLOC(w * 3, 2, fixed_y_t);   // scratch
-  fixed_y_t* const best_y_base = SAFE_ALLOC(w, h, fixed_y_t);
-  fixed_y_t* const target_y_base = SAFE_ALLOC(w, h, fixed_y_t);
-  fixed_y_t* const best_rgb_y = SAFE_ALLOC(w, 2, fixed_y_t);
-  fixed_t* const best_uv_base = SAFE_ALLOC(uv_w * 3, uv_h, fixed_t);
-  fixed_t* const target_uv_base = SAFE_ALLOC(uv_w * 3, uv_h, fixed_t);
-  fixed_t* const best_rgb_uv = SAFE_ALLOC(uv_w * 3, 1, fixed_t);
+  fixed_y_t* const tmp_buffer = SAFE_ALLOC((uint64_t)w * 3, 2, fixed_y_t);   // scratch
+  fixed_y_t* const best_y_base = SAFE_ALLOC((uint64_t)w * h, h, fixed_y_t);
+  fixed_y_t* const target_y_base = SAFE_ALLOC((uint64_t)w * h, h, fixed_y_t);
+  fixed_y_t* const best_rgb_y = SAFE_ALLOC((uint64_t)w * 2, 2, fixed_y_t);
+  fixed_t* const best_uv_base = SAFE_ALLOC((uint64_t)uv_w * 3, uv_h, fixed_t);
+  fixed_t* const target_uv_base = SAFE_ALLOC((uint64_t)uv_w * 3, uv_h, fixed_t);
+  fixed_t* const best_rgb_uv = SAFE_ALLOC((uint64_t)uv_w * 3, 1, fixed_t);
   fixed_y_t* best_y = best_y_base;
   fixed_y_t* target_y = target_y_base;
   fixed_t* best_uv = best_uv_base;
