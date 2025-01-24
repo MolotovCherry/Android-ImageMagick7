@@ -1433,7 +1433,7 @@ static int DecodeFrameOntoCanvas(const WebPMuxFrameInfo* const frame,
   config.output.colorspace = MODE_BGRA;
   config.output.u.RGBA.rgba = (uint8_t*)sub_image.argb;
   config.output.u.RGBA.stride = sub_image.argb_stride * 4;
-  config.output.u.RGBA.size = config.output.u.RGBA.stride * sub_image.height;
+  config.output.u.RGBA.size = (size_t)config.output.u.RGBA.stride * sub_image.height;
 
   if (WebPDecode(image->bytes, image->size, &config) != VP8_STATUS_OK) {
     return 0;
