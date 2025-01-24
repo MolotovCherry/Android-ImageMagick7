@@ -7385,9 +7385,8 @@ static MagickBooleanType ProcessMSLScript(const ImageInfo *image_info,
       option = GetImageOption(image_info,"msl:parse-huge");
       if ((option != (char *) NULL) && (IsStringTrue(option) != MagickFalse))
         (void) xmlCtxtUseOptions(parser,XML_PARSE_HUGE);
-      option=GetImageOption(image_info,"msl:substitute-entities");
-      if ((option != (char *) NULL) && (IsStringTrue(option) != MagickFalse))
-        (void) xmlCtxtUseOptions(parser,XML_PARSE_NOENT);
+      // Ensure the parser is configured securely to prevent XXE attacks
+      (void) xmlCtxtUseOptions(parser, XML_PARSE_NOENT | XML_PARSE_DTDLOAD | XML_PARSE_DTDATTR | XML_PARSE_DTDVALID);
     }
   while (ReadBlobString(msl_image,message) != (char *) NULL)
   {
