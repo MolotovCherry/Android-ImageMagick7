@@ -93,7 +93,7 @@ static int ALPHInit(ALPHDecoder* const dec, const uint8_t* data,
   // No need to copy the scaling parameters.
 
   if (dec->method_ == ALPHA_NO_COMPRESSION) {
-    const size_t alpha_decoded_size = dec->width_ * dec->height_;
+    const size_t alpha_decoded_size = (size_t)dec->width_ * dec->height_;
     ok = (alpha_data_size >= alpha_decoded_size);
   } else {
     assert(dec->method_ == ALPHA_LOSSLESS_COMPRESSION);
