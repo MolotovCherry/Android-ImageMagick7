@@ -623,7 +623,7 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
 				  || fip->field_writecount == TIFF_SPP
 				  || tv->count > 1) {
 				_TIFFmemcpy(tv->value, va_arg(ap, void *),
-				    tv->count * tv_size);
+				    (tmsize_t)tv->count * tv_size);
 			} else {
 				char *val = (char *)tv->value;
 				assert( tv->count == 1 );
