@@ -179,7 +179,7 @@ void send_PNMstream(SOCKET connected_socket, Byte_t *pnmstream,
     OPJ_SIZE_T pnmlen = 0;
     Byte_t header[7];
 
-    pnmlen = width * height * numofcomp;
+    pnmlen = (OPJ_SIZE_T)width * (OPJ_SIZE_T)height * (OPJ_SIZE_T)numofcomp;
 
     header[0] = 'P';
     header[1] = numofcomp == 3 ? 6 : 5;
