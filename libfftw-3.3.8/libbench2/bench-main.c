@@ -154,7 +154,7 @@ int bench_main(int argc, char *argv[])
 		   else if (DOUBLE_PRECISION)
 			ovtpvt("double\n");
 		   else 
-			ovtpvt("unknown %d\n", sizeof(bench_real));
+			ovtpvt("unknown %zu\n", sizeof(bench_real));
 		   break;
 
 	      case 403: /* --verify-tolerance */
