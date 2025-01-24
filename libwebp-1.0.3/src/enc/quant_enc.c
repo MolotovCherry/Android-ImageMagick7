@@ -282,7 +282,7 @@ static void SetupMatrices(VP8Encoder* enc) {
     m->min_disto_ = 20 * m->y1_.q_[0];   // quantization-aware min disto
     m->max_edge_  = 0;
 
-    m->i4_penalty_ = 1000 * q_i4 * q_i4;
+    m->i4_penalty_ = (score_t)1000 * q_i4 * q_i4;
   }
 }
 
