@@ -20,41 +20,33 @@ LOCAL_ASMFLAGS += -DELF
 ifeq ($(TARGET_ARCH_ABI),x86_64)
     LOCAL_SRC_FILES += \
         $(JPEG_LIB_PATH)/simd/x86_64/jsimd.c \
-        $(JPEG_LIB_PATH)/simd/x86_64/jccolext-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jccolext-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jccolor-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jccolor-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jcgray-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jcgray-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jcgryext-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jcgryext-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jchuff-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jcphuff-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jcsample-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jcsample-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdcolext-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdcolext-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdcolor-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdcolor-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdmerge-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdmerge-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdmrgext-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdmrgext-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdsample-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jdsample-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jfdctflt-sse.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jfdctfst-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jfdctint-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jfdctint-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jidctflt-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jidctfst-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jidctint-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jidctint-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jidctred-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jquantf-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jquanti-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jquanti-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/x86_64/jsimdcpu.asm
+	$(JPEG_LIB_PATH)/simd/x86_64/jfdctflt-sse.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jfdctfst-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jfdctint-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jfdctint-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jidctflt-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jidctfst-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jidctint-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jidctint-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jidctred-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jccolor-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jccolor-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jcgray-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jcgray-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jcsample-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jcsample-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jdcolor-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jdcolor-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jdmerge-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jdmerge-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jdsample-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jdsample-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jquantf-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jquanti-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jquanti-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jsimdcpu.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jchuff-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/x86_64/jcphuff-sse2.asm \
 
     JCONFIGINT_FLAGS += \
         SIZEOF_SIZE_T=8
@@ -64,62 +56,50 @@ ifeq ($(TARGET_ARCH_ABI),x86_64)
 else ifeq ($(TARGET_ARCH_ABI),x86)
     LOCAL_SRC_FILES += \
         $(JPEG_LIB_PATH)/simd/i386/jsimd.c \
-        $(JPEG_LIB_PATH)/simd/i386/jccolext-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jccolext-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jccolext-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jccolor-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jccolor-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jccolor-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcgray-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcgray-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcgray-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcgryext-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcgryext-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcgryext-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jchuff-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcphuff-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcsample-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcsample-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jcsample-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdcolext-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdcolext-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdcolext-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdcolor-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdcolor-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdcolor-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdmerge-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdmerge-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdmerge-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdmrgext-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdmrgext-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdmrgext-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdsample-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdsample-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jdsample-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jfdctflt-3dn.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jfdctflt-sse.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jfdctfst-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jfdctfst-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jfdctint-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jfdctint-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jfdctint-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctflt-3dn.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctflt-sse.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctflt-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctfst-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctfst-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctint-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctint-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctint-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctred-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jidctred-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jquant-3dn.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jquant-mmx.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jquant-sse.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jquantf-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jquanti-avx2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jquanti-sse2.asm \
-        $(JPEG_LIB_PATH)/simd/i386/jsimdcpu.asm
+	$(JPEG_LIB_PATH)/simd/i386/jsimdcpu.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jccolor-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jccolor-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jccolor-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jcgray-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jcgray-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jcgray-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jchuff-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jcphuff-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jcsample-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jcsample-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jcsample-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdcolor-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdcolor-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdcolor-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdmerge-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdmerge-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdmerge-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdsample-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdsample-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jdsample-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jfdctflt-3dn.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jfdctflt-sse.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jfdctfst-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jfdctfst-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jfdctint-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jfdctint-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jfdctint-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctflt-3dn.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctflt-sse.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctflt-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctfst-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctfst-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctint-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctint-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctint-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctred-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jidctred-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jquant-3dn.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jquant-mmx.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jquant-sse.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jquantf-sse2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jquanti-avx2.asm \
+	$(JPEG_LIB_PATH)/simd/i386/jquanti-sse2.asm \
 
     JCONFIGINT_FLAGS += \
         SIZEOF_SIZE_T=4
@@ -146,7 +126,8 @@ endif
 
 LOCAL_C_INCLUDES += \
     $(JPEG_LIB_PATH)/simd \
-    $(JPEG_LIB_PATH)
+    $(JPEG_LIB_PATH) \
+    $(JPEG_LIB_PATH)/simd/nasm
 
 LOCAL_EXPORT_C_INCLUDES := \
     $(JPEG_LIB_PATH)
