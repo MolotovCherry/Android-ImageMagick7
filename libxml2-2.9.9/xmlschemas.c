@@ -592,7 +592,9 @@ struct _xmlSchemaConstructionCtxt {
 };
 
 #define XML_SCHEMAS_PARSE_ERROR		1
+#ifndef SCHEMAS_PARSE_OPTIONS
 #define SCHEMAS_PARSE_OPTIONS XML_PARSE_NOENT
+#endif
 
 struct _xmlSchemaParserCtxt {
     int type;
