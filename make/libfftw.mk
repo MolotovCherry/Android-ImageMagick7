@@ -38,6 +38,12 @@ else ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
     LOCAL_EXPORT_C_INCLUDES += $(FFTW_LIB_PATH)/configs/arm
     LOCAL_C_INCLUDES += $(FFTW_LIB_PATH)/configs/arm
 
+    # Replace fftw_* with fftwf_* for single-precision usage in ImageMagick
+    $(shell powershell -Command "(Get-Content -Path $(IMAGE_MAGICK_BASEDIR)/MagickCore/fourier.c) -creplace '\b(?<![A-Z])fftw_', 'fftwf_' | Set-Content -Path $(IMAGE_MAGICK_BASEDIR)/MagickCore/fourier.c")
+
+    # armeabi-v7a doesn't support double-precision
+    LOCAL_CFLAGS += -DFFTW_SINGLE -DBENCHFFT_SINGLE
+
     LOCAL_C_INCLUDES += $(FFTW_LIB_PATH)/dft/simd/neon
     include $(FFTW_LIB_PATH)/dft/simd/neon/sources.mk
     include $(FFTW_LIB_PATH)/rdft/simd/neon/sources.mk
