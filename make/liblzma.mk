@@ -28,6 +28,11 @@ LOCAL_CFLAGS := \
     -DTUKLIB_SYMBOL_PREFIX=lzma_ \
     -DHAVE_CONFIG_H
 
+# Define HAVE_IMMINTRIN_H if building for x86
+ifeq ($(TARGET_ARCH_ABI),x86)
+    LOCAL_CFLAGS += -DHAVE_IMMINTRIN_H
+endif
+
 LOCAL_SRC_FILES := \
     $(LZMA_LIB_PATH)/common/tuklib_physmem.c \
     $(LZMA_LIB_PATH)/common/tuklib_cpucores.c \
