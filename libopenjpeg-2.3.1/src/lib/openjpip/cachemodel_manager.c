@@ -144,7 +144,7 @@ void print_cachemodel(cachemodel_param_t cachemodel)
     }
 
     fprintf(logstream, "\t tile header and precinct packet model:\n");
-    for (i = 0; i < target->codeidx->SIZ.XTnum * target->codeidx->SIZ.YTnum; i++) {
+    for (i = 0; i < (unsigned long)target->codeidx->SIZ.XTnum * target->codeidx->SIZ.YTnum; i++) {
         fprintf(logstream, "\t  tile.%" PRIu64 "  %d\n", i, cachemodel.th_model[i]);
         for (j = 0; j < target->codeidx->SIZ.Csiz; j++) {
             fprintf(logstream, "\t   compo.%" PRIu64 ": ", j);
