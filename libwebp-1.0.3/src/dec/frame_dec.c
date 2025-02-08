@@ -692,7 +692,7 @@ static int AllocateMemory(VP8Decoder* const dec) {
         : 0;
   const size_t yuv_size = YUV_SIZE * sizeof(*dec->yuv_b_);
   const size_t mb_data_size =
-      (dec->mt_method_ == 2 ? 2 : 1) * mb_w * sizeof(*dec->mb_data_);
+      (size_t)(dec->mt_method_ == 2 ? 2 : 1) * mb_w * sizeof(*dec->mb_data_);
   const size_t cache_height = (16 * num_caches
                             + kFilterExtraRows[dec->filter_type_]) * 3 / 2;
   const size_t cache_size = top_size * cache_height;
