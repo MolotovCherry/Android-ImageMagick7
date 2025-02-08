@@ -6,8 +6,9 @@ on:
       abi:
         description: "Select target ABI for the release build"
         required: false
-        default: "arm64-v8a"
+        default: "all"
         options:
+          - all
           - arm64-v8a
           - armeabi-v7a
           - x86
@@ -21,9 +22,14 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        abi: ${{ github.event.inputs.abi == 'all' && fromJson('["arm64-v8a", "armeabi-v7a", "x86", "x86_64"]') || fromJson(format('["{0}"]', github.event.inputs.abi)) }}
+      fail-fast: false
+
     if: |
-      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && 
-       github.actor == 'blackhat2233' && github.head_ref == 'imupdate') || 
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true &&
+       github.actor == 'blackhat2233' && github.head_ref == 'imupdate') ||
        github.event_name == 'release' || github.event_name == 'workflow_dispatch'
 
     steps:
@@ -35,7 +41,7 @@ jobs:
 
       - name: Set ABI environment variable
         run: |
-          echo "ABI=${{ github.event.inputs.abi || 'arm64-v8a' }}" >> $env:GITHUB_ENV
+          echo "ABI=${{ matrix.abi }}" >> $env:GITHUB_ENV
 
       - name: Configure ABI for Release Build
         run: |
@@ -56,16 +62,22 @@ jobs:
       - name: Build and Archive Static Library
         run: |
           ./build-release
-          $targetDir = Get-ChildItem -Path "jniLibs" -Directory | Select-Object -ExpandProperty FullName
-          Compress-Archive -CompressionLevel Optimal -Path $targetDir -DestinationPath "imagemagick-7-android-${{ env.ABI }}-static.zip"
-          rm -r jniLibs
+          mv jniLibs static_libs || true
 
       - name: Build and Archive Shared Library
         run: |
           ./.github-deps/change-to-shared-lib.ps1
           ./build-release
-          $targetDir = Get-ChildItem -Path "jniLibs" -Directory | Select-Object -ExpandProperty FullName
-          Compress-Archive -CompressionLevel Optimal -Path $targetDir -DestinationPath "imagemagick-7-android-${{ env.ABI }}-shared.zip"
+          mv jniLibs shared_libs || true
+
+      - name: Collect and Organize Binaries
+        if: github.event.inputs.abi == 'all' || github.event.inputs.abi != 'all'
+        run: |
+          New-Item -ItemType Directory -Path all_libs/static -Force
+          New-Item -ItemType Directory -Path all_libs/shared -Force
+          Move-Item -Path static_libs/*/* -Destination all_libs/static/ -Force -ErrorAction SilentlyContinue
+          Move-Item -Path shared_libs/*/* -Destination all_libs/shared/ -Force -ErrorAction SilentlyContinue
+          Compress-Archive -CompressionLevel Optimal -Path all_libs -DestinationPath "imagemagick-7-android-${{ matrix.abi }}.zip"
 
       - name: Get Latest Release Info
         if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
@@ -81,7 +93,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: 'imagemagick-7-android-${{ env.ABI }}-*.zip'
+          file: 'imagemagick-7-android-${{ matrix.abi }}.zip'
           release_id: ${{ steps.latest_release.outputs.id }}
           overwrite: true
           draft: false
@@ -99,7 +111,7 @@ jobs:
         if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
         with:
           name: Android ImageMagick ${{ steps.tag.outputs.TAG }}
-          artifacts: 'imagemagick-7-android-${{ env.ABI }}-*.zip'
+          artifacts: 'imagemagick-7-android-${{ matrix.abi }}.zip'
           body: |
             Library built using default config.
 
