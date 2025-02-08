@@ -1202,7 +1202,7 @@ static void ClearTransformBuffer(VP8LEncoder* const enc) {
 static WebPEncodingError AllocateTransformBuffer(VP8LEncoder* const enc,
                                                  int width, int height) {
   WebPEncodingError err = VP8_ENC_OK;
-  const uint64_t image_size = width * height;
+  const uint64_t image_size = (uint64_t)width * height;
   // VP8LResidualImage needs room for 2 scanlines of uint32 pixels with an extra
   // pixel in each, plus 2 regular scanlines of bytes.
   // TODO(skal): Clean up by using arithmetic in bytes instead of words.
