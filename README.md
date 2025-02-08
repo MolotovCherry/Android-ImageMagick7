@@ -1,11 +1,7 @@
 
 # Android ImageMagick 7.1.1-43
 
-[![Build](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/MolotovCherry/Android-ImageMagick7?style=plastic)
-
-*This is a developement libary, NOT an app. There is no "APK". There are binaries you can use however. If you want an app, termux has their own imagemagick package*
-
-*Note: This repo is no longer developed. The project is on hold indefinitely. If you are someone who is interested in the project and want to take over maintainership, feel free to contact me.*
+[![Build](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/build.yml/badge.svg)](https://github.com/MolotovCherry//Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/MolotovCherry/Android-ImageMagick7?style=plastic)
 
 This is a fully featured imagemagick build compatible with android [__and has Kotlin bindings__](https://github.com/MolotovCherry/kmagick) (check out KMagick below). All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
 
@@ -43,8 +39,6 @@ Also comes with (**but these are not delegates, only support libraries**):
 # Android support
 
 **Requires API >= 24 (>= Nougat)**
-
-**Currently, only arm64-v8a is supported**
 
 You can test it with earlier versions, but I offer no support for it. If you're using only the binary, you almost certainly can compile for earlier versions. Nothing is stopping you from theoterically making it compatible with earlier Android versions too. If you get it working for earlier versions, let me know
 
