@@ -555,7 +555,7 @@ PixarLogMakeTables(PixarLogState *sp)
 
     j = 0;
     for (i = 0; i < lt2size; i++)  {
-	if ((i*linstep)*(i*linstep) > ToLinearF[j]*ToLinearF[j+1])
+	if ((i*linstep)*(i*linstep) > (double)ToLinearF[j]*(double)ToLinearF[j+1])
 	    j++;
 	FromLT2[i] = (uint16)j;
     }
