@@ -540,8 +540,8 @@ xmlRegEpxFromParse(xmlRegParserCtxtPtr ctxt) {
 #ifdef DEBUG_COMPACTION
 	printf("Final: %d atoms\n", nbatoms);
 #endif
-	transitions = (int *) xmlMalloc(((unsigned long)(nbstates + 1)) *
-	                                (nbatoms + 1) * sizeof(int));
+	transitions = (int *) xmlMalloc((unsigned long)(nbstates + 1) *
+	                                (unsigned long)(nbatoms + 1) * sizeof(int));
 	if (transitions == NULL) {
 	    xmlFree(stateRemap);
 	    xmlFree(stringRemap);
@@ -549,7 +549,7 @@ xmlRegEpxFromParse(xmlRegParserCtxtPtr ctxt) {
 	    xmlFree(ret);
 	    return(NULL);
 	}
-	memset(transitions, 0, (nbstates + 1) * (nbatoms + 1) * sizeof(int));
+	memset(transitions, 0, (unsigned long)(nbstates + 1) * (unsigned long)(nbatoms + 1) * sizeof(int));
 
 	/*
 	 * Allocate the transition table. The first entry for each
