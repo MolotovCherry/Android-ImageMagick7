@@ -108,7 +108,7 @@ static WEBP_INLINE void DoVerticalFilter_NEON(const uint8_t* in,
                                               int width, int height, int stride,
                                               int row, int num_rows,
                                               uint8_t* out) {
-  const size_t start_offset = row * stride;
+  const size_t start_offset = (size_t)row * stride;
   const int last_row = row + num_rows;
   SANITY_CHECK(in, out);
   in += start_offset;
