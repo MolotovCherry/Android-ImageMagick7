@@ -7386,7 +7386,7 @@ static MagickBooleanType ProcessMSLScript(const ImageInfo *image_info,
       if ((option != (char *) NULL) && (IsStringTrue(option) != MagickFalse))
         (void) xmlCtxtUseOptions(parser,XML_PARSE_HUGE);
       // Ensure the parser is configured securely to prevent XXE attacks
-      (void) xmlCtxtUseOptions(parser, XML_PARSE_NOENT | XML_PARSE_DTDLOAD | XML_PARSE_DTDATTR | XML_PARSE_DTDVALID);
+      (void) xmlCtxtUseOptions(parser, XML_PARSE_NOENT | XML_PARSE_NOCDATA | XML_PARSE_NONET);
     }
   while (ReadBlobString(msl_image,message) != (char *) NULL)
   {
