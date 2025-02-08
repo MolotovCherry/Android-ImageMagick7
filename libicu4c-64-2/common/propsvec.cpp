@@ -71,7 +71,7 @@ upvec_open(int32_t columns, UErrorCode *pErrorCode) {
 
     /* set the all-Unicode row and the special-value rows */
     row=pv->v;
-    uprv_memset(row, 0, pv->rows*columns*4);
+    uprv_memset(row, 0, (size_t)pv->rows*columns*4);
     row[0]=0;
     row[1]=0x110000;
     row+=columns;
