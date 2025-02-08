@@ -1903,7 +1903,7 @@ TIFFWriteDirectoryTagTransferfunction(TIFF* tif, uint32* ndir, TIFFDirEntry* dir
 	}
 	if (n==0)
 		n=1;
-	o=_TIFFmalloc((uint32)n * m * sizeof(uint16));
+	o=_TIFFmalloc((uint32)((uint64)n * m) * sizeof(uint16));
 	if (o==NULL)
 	{
 		TIFFErrorExt(tif->tif_clientdata,module,"Out of memory");
