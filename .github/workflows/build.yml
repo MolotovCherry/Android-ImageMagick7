@@ -20,7 +20,11 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        abi: ${{ github.event.inputs.abi == 'all' && fromJson('["arm64-v8a", "armeabi-v7a", "x86", "x86_64"]') || fromJson(format('["{0}"]', github.event.inputs.abi)) }}
+        abi: ${{ 
+          github.event.inputs.abi != '' && github.event.inputs.abi != null
+            ? fromJson(format('["{0}"]', github.event.inputs.abi)) 
+            : fromJson('["arm64-v8a", "armeabi-v7a", "x86", "x86_64"]')
+        }}
       fail-fast: false
 
     steps:
