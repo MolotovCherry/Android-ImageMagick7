@@ -109,7 +109,15 @@ jobs:
         run: |
           $dir = Get-ChildItem -Directory -Path "ImageMagick-*" | Select-Object -Last 1
           $tag = ($dir | Split-Path -Leaf).Substring(12)
-          Write-Host "::set-output name=TAG::$tag"
+
+          # Check if the tag already exists
+          $existingTag = "${{ steps.tag.outputs.TAG }}"
+          if ($existingTag) {
+              Write-Host "Using existing tag: $existingTag"
+          } else {
+              Write-Host "Setting new tag: $tag" 
+              echo "::set-output name=TAG::$tag"
+          }
 
       - uses: ncipollo/release-action@v1
         if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
