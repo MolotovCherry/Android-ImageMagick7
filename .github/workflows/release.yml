@@ -79,16 +79,74 @@ jobs:
           Move-Item -Path shared_libs/*/* -Destination all_libs/shared/ -Force -ErrorAction SilentlyContinue
           Compress-Archive -CompressionLevel Optimal -Path all_libs -DestinationPath "imagemagick-7-android-${{ matrix.abi }}.zip"
 
+      - name: Get Latest Release Tag
+        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+        id: tag
+        run: |
+          $dir = Get-ChildItem -Directory -Path "ImageMagick-*" | Select-Object -Last 1
+          $tag = ($dir | Split-Path -Leaf).Substring(12)
+          Write-Host "Setting new tag: $tag"
+          echo "TAG=$tag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+
+      - name: Check if Release Tag Exists
+        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+        id: check_release
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Authenticate GitHub CLI
+          echo $env:GITHUB_TOKEN | gh auth login --with-token
+
+          # Check if the release exists with the given tag
+          $tag = "${{ env.TAG }}"
+          $release = $null
+
+          try {
+              $release = gh release view "$tag" --json id --jq .id 2>$null
+          } catch {
+              Write-Host "Failed to fetch release info, assuming release does not exist."
+          }
+
+          if ($release) {
+              Write-Host "Release tag $tag already exists."
+              echo "EXISTS=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+          } else {
+              Write-Host "Release tag $tag does not exist."
+              echo "EXISTS=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+          }
+
+          exit 0  # Ensure script exits successfully even if release does not exist
+
+      - name: Create New Release
+        if: env.EXISTS == 'false' && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
+        uses: ncipollo/release-action@v1
+        with:
+          name: Android ImageMagick ${{ env.TAG }}
+          body: |
+            Library built using default config.
+
+            If you need a different config than default, please follow compilation instructions on the main page to manually build it (or, fork the project, change the config file, and use GitHub Actions to build it).
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ github.sha }}
+          tag: ${{ env.TAG }}
+
+      # Added delay to allow the release to fully propagate before fetching info
+      - name: Wait for Release to Propagate
+        run: |
+          echo "Waiting for the release to fully propagate..."
+          sleep 30  # Wait for 30 seconds
+
       - name: Get Latest Release Info
-        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        if: env.EXISTS == 'false' || env.EXISTS == 'true' && (github.event_name == 'release' || github.event_name == 'workflow_dispatch')
         id: latest_release
         uses: kaliber5/action-get-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           latest: true
 
-      - name: Update Release Artifacts
-        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+      - name: Upload Artifacts to Newly Created Release
+        if:  env.EXISTS == 'false' || env.EXISTS == 'true' && (github.event_name == 'release' || github.event_name == 'workflow_dispatch')
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -98,24 +156,3 @@ jobs:
           overwrite: true
           draft: false
           tag_name: ${{ steps.latest_release.outputs.tag_name }}
-
-      - name: Get Latest Release Tag
-        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
-        id: tag
-        run: |
-          $dir = Get-ChildItem -Directory -Path "ImageMagick-*" | Select-Object -Last 1
-          $tag = ($dir | Split-Path -Leaf).Substring(12)
-          Write-Host "::set-output name=TAG::$tag"
-
-      - uses: ncipollo/release-action@v1
-        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
-        with:
-          name: Android ImageMagick ${{ steps.tag.outputs.TAG }}
-          artifacts: 'imagemagick-7-android-${{ matrix.abi }}.zip'
-          body: |
-            Library built using default config.
-
-            If you need a different config than default, please follow compilation instructions on the main page to manually build it (or, fork the project, change the config file, and use GitHub Actions to build it).
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit: ${{ github.sha }}
-          tag: ${{ steps.tag.outputs.TAG }}
