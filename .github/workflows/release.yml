@@ -87,30 +87,49 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           latest: true
 
-      - name: Update Release Artifacts
-        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
-        uses: xresloader/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: 'imagemagick-7-android-${{ matrix.abi }}.zip'
-          release_id: ${{ steps.latest_release.outputs.id }}
-          overwrite: true
-          draft: false
-          tag_name: ${{ steps.latest_release.outputs.tag_name }}
-
       - name: Get Latest Release Tag
         if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
         id: tag
         run: |
           $dir = Get-ChildItem -Directory -Path "ImageMagick-*" | Select-Object -Last 1
           $tag = ($dir | Split-Path -Leaf).Substring(12)
-          Write-Host "::set-output name=TAG::$tag"
+          Write-Host "Setting new tag: $tag"
+          echo "TAG=$tag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
 
-      - uses: ncipollo/release-action@v1
+      - name: Check if Release Tag Exists
         if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+        id: check_release
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = "${{ env.TAG }}"
+          $release = gh release view "$tag" --json id --jq .id 2>$null
+          if ($release) {
+              Write-Host "Release tag $tag already exists."
+              echo "EXISTS=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+          } else {
+              Write-Host "Release tag $tag does not exist."
+              echo "EXISTS=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+          }
+
+      - name: Upload Artifacts to Existing Release
+        if: env.EXISTS == 'true' && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Android ImageMagick ${{ steps.tag.outputs.TAG }}
+           file: 'imagemagick-7-android-${{ matrix.abi }}.zip'
+        release_id: ${{ env.TAG }}
+        overwrite: true
+        draft: false
+        tag_name: ${{ env.TAG }}
+
+      - name: Create New Release
+        if: env.EXISTS == 'false' && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
+        uses: ncipollo/release-action@v1
+        with:
+          name: Android ImageMagick ${{ env.TAG }}
           artifacts: 'imagemagick-7-android-${{ matrix.abi }}.zip'
           body: |
             Library built using default config.
@@ -118,4 +137,4 @@ jobs:
             If you need a different config than default, please follow compilation instructions on the main page to manually build it (or, fork the project, change the config file, and use GitHub Actions to build it).
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ github.sha }}
-          tag: ${{ steps.tag.outputs.TAG }}
+          tag: ${{ env.TAG }} 
