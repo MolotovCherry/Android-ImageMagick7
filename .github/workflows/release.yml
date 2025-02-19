@@ -133,6 +133,7 @@ jobs:
 
       # Added delay to allow the release to fully propagate before fetching info
       - name: Wait for Release to Propagate
+        if: env.EXISTS == 'false' && (github.event_name == 'release' || github.event_name == 'workflow_dispatch')
         run: |
           echo "Waiting for the release to fully propagate..."
           sleep 30  # Wait for 30 seconds
