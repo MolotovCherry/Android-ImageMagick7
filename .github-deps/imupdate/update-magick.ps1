@@ -184,7 +184,7 @@ Copy-Item -Path "$TmpPath\*" -Destination "$newIm" -Recurse
 Remove-Item -Path "$TmpPath" -Force -Recurse
 
 # now update version files for arm64, arm, x86, and x86_64
-$architectures = @("arm64", "arm", "x86", "x86_64")
+$architectures = @("arm64", "arm", "x86", "x86-64")
 
 foreach ($arch in $architectures) {
     $file = "$newIm\configs\$arch\MagickCore\magick-baseconfig.h"
