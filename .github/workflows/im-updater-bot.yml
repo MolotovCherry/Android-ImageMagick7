@@ -49,7 +49,8 @@ jobs:
           labels: |
             update
             automated pr
-          assignees: blackhat2233
+          assignees: |
+            ${{ github.actor == 'blackhat2233' && 'blackhat2233' || github.actor == 'molotovcherry' && 'molotovcherry' || '' }}
           draft: false
 
       - name: Check outputs
