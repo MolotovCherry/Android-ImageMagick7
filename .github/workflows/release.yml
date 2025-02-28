@@ -133,13 +133,13 @@ jobs:
 
       # Added delay to allow the release to fully propagate before fetching info
       - name: Wait for Release to Propagate
-        if: env.EXISTS == 'false' && (github.event_name == 'release' || github.event_name == 'workflow_dispatch')
+        if: env.EXISTS == 'false' && (github.event_name == 'release' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
         run: |
           echo "Waiting for the release to fully propagate..."
           sleep 30  # Wait for 30 seconds
 
       - name: Get Latest Release Info
-        if: env.EXISTS == 'false' || env.EXISTS == 'true' && (github.event_name == 'release' || github.event_name == 'workflow_dispatch')
+        if: env.EXISTS == 'false' || env.EXISTS == 'true' && (github.event_name == 'release' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
         id: latest_release
         uses: kaliber5/action-get-release@v1
         with:
@@ -147,7 +147,7 @@ jobs:
           latest: true
 
       - name: Upload Artifacts to Newly Created Release
-        if:  env.EXISTS == 'false' || env.EXISTS == 'true' && (github.event_name == 'release' || github.event_name == 'workflow_dispatch')
+        if:  env.EXISTS == 'false' || env.EXISTS == 'true' && (github.event_name == 'release' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
