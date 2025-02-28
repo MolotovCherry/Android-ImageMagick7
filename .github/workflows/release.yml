@@ -77,7 +77,7 @@ jobs:
           New-Item -ItemType Directory -Path all_libs/shared -Force
           Move-Item -Path static_libs/*/* -Destination all_libs/static/ -Force -ErrorAction SilentlyContinue
           Move-Item -Path shared_libs/*/* -Destination all_libs/shared/ -Force -ErrorAction SilentlyContinue
-          Compress-Archive -CompressionLevel Optimal -Path all_libs -DestinationPath "imagemagick-7-android-${{ matrix.abi }}.zip"
+          Compress-Archive -CompressionLevel Optimal -Path all_libs/* -DestinationPath "imagemagick-7-android-${{ matrix.abi }}.zip"
 
       - name: Get Latest Release Tag
         if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
