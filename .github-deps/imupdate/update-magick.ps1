@@ -75,7 +75,7 @@ $magick_library_revision = (Select-String -InputObject $content -Pattern "MAGICK
 $magick_library_age = (Select-String -InputObject $content -Pattern "MAGICK_LIBRARY_AGE=([^\s]+)").Matches.Groups[1]
 $magick_lib_version_number = "$magick_library_current,$magick_library_age,$magick_library_revision"
 
-$package_version_addendum = (Select-String -InputObject $content -Pattern "PACKAGE_VERSION_ADDENDUM=([^\s]+)").Matches.Groups[1]
+$package_version_addendum = (Select-String -InputObject $content -Pattern "PACKAGE_VERSION_ADDENDUM=([^\s]+)").Matches.Groups[1].Value.Replace("'","")
 $magick_library_current_min = [int]$magick_library_current.Value - [int]$magick_library_age.Value
 
 $magickpp_lib_version_text = (Select-String -InputObject $content -Pattern "PACKAGE_BASE_VERSION=([^\s]+)").Matches.Groups[1]
