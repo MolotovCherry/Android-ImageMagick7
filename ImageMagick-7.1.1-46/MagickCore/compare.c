@@ -173,6 +173,7 @@ MagickExport Image *CompareImages(Image *image,const Image *reconstruct_image,
   clone_image=DestroyImage(clone_image);
   if (difference_image == (Image *) NULL)
     return((Image *) NULL);
+  (void) ResetImagePage(difference_image,"0x0+0+0");
   (void) SetImageAlphaChannel(difference_image,OpaqueAlphaChannel,exception);
   highlight_image=CloneImage(image,columns,rows,MagickTrue,exception);
   if (highlight_image == (Image *) NULL)
@@ -1208,14 +1209,9 @@ static MagickBooleanType GetPeakSignalToNoiseRatio(const Image *image,
     i;
 
   status=GetMeanSquaredDistortion(image,reconstruct_image,distortion,exception);
-  for (i=0; i < MaxPixelChannels; i++)
+  for (i=0; i <= MaxPixelChannels; i++)
     if (fabs(distortion[i]) >= MagickEpsilon)
-      distortion[i]=(-10.0*MagickLog10(distortion[i]))/48.1647;
-  distortion[CompositePixelChannel]=0.0;
-  for (i=0; i < MaxPixelChannels; i++)
-    if (fabs(distortion[i]) >= MagickEpsilon)
-      distortion[CompositePixelChannel]+=distortion[i];
-  distortion[CompositePixelChannel]/=GetImageChannels(image);
+      distortion[i]=(10.0*MagickLog10(distortion[i]))/48.1647;
   return(status);
 }
 
@@ -3829,7 +3825,7 @@ static Image *PSNRSimilarityImage(const Image *image,const Image *reconstruct,
   status=NegateImage(psnr_image,MagickFalse,exception);
   if (status == MagickFalse)
     ThrowPSNRSimilarityException();
-  *similarity_metric=QuantumScale*minima;
+  *similarity_metric=(-1.0+QuantumScale*minima);
   alpha_image=DestroyImage(alpha_image);
   beta_image=DestroyImage(beta_image);
   return(psnr_image);
@@ -4142,7 +4138,7 @@ MagickExport Image *SimilarityImage(const Image *image,const Image *reconstruct,
   rows=similarity_image->rows;
 #if defined(MAGICKCORE_OPENMP_SUPPORT)
   #pragma omp parallel for schedule(static,1) \
-    shared(progress,status,similarity_metric) \
+    shared(progress,similarity_metric,status) \
     magick_number_threads(similarity_image,similarity_image,rows << 3,1)
 #endif
   for (y=0; y < (ssize_t) rows; y++)
@@ -4187,6 +4183,8 @@ MagickExport Image *SimilarityImage(const Image *image,const Image *reconstruct,
           (metric == StructuralSimilarityErrorMetric) ||
           (metric == UndefinedErrorMetric))
         similarity=1.0-similarity;
+      if (metric == PerceptualHashErrorMetric)
+        similarity=MagickMin(0.01*similarity,1.0);
 #if defined(MAGICKCORE_OPENMP_SUPPORT)
       #pragma omp critical (MagickCore_SimilarityImage)
 #endif
@@ -4196,8 +4194,6 @@ MagickExport Image *SimilarityImage(const Image *image,const Image *reconstruct,
           offset->y=y;
           *similarity_metric=similarity;
         }
-      if (metric == PerceptualHashErrorMetric)
-        similarity=MagickMin(0.01*similarity,1.0);
       for (i=0; i < (ssize_t) GetPixelChannels(image); i++)
       {
         PixelChannel channel = GetPixelChannelChannel(image,i);
@@ -4216,6 +4212,7 @@ MagickExport Image *SimilarityImage(const Image *image,const Image *reconstruct,
           case NormalizedCrossCorrelationErrorMetric:
           case PerceptualHashErrorMetric:
           case RootMeanSquaredErrorMetric:
+          case StructuralSimilarityErrorMetric:
           case StructuralDissimilarityErrorMetric:
           {
             SetPixelChannel(similarity_image,channel,ClampToQuantum((double)

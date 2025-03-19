@@ -2795,6 +2795,9 @@ MagickExport MagickBooleanType SetImageInfo(ImageInfo *image_info,
     path[MagickPathExtent],
     *q;
 
+  const char
+    *p;
+
   const MagicInfo
     *magic_info;
 
@@ -2809,9 +2812,6 @@ MagickExport MagickBooleanType SetImageInfo(ImageInfo *image_info,
 
   MagickBooleanType
     status;
-
-  const char
-    *p;
 
   ssize_t
     count;

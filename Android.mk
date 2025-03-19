@@ -30,7 +30,7 @@ OPENCL_INCLUDE_PATH             := $(OPENCL_PATH)/qualcomm/include
 
 LTDL_LIB_PATH                   := $(LOCAL_PATH)/libltdl-2.4.6
 
-IMAGE_MAGICK_BASEDIR            := ImageMagick-7.1.1-45
+IMAGE_MAGICK_BASEDIR            := ImageMagick-7.1.1-46
 IMAGE_MAGICK                    := $(LOCAL_PATH)/$(IMAGE_MAGICK_BASEDIR)
 
 JPEG_LIB_PATH                   := $(LOCAL_PATH)/libjpeg-turbo-2.0.2
