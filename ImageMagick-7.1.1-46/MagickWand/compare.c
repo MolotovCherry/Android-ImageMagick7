@@ -1249,9 +1249,16 @@ WandExport MagickBooleanType CompareImagesCommand(ImageInfo *image_info,
   {
     case DotProductCorrelationErrorMetric:
     case NormalizedCrossCorrelationErrorMetric:
+    case UndefinedErrorMetric:
     {
       distortion=1.0-distortion;
       similarity_metric=1.0-similarity_metric;
+      break;
+    }
+    case PeakSignalToNoiseRatioErrorMetric:
+    {
+      distortion=fabs(distortion);
+      similarity_metric+=1.0;
       break;
     }
     case PhaseCorrelationErrorMetric:
@@ -1297,8 +1304,7 @@ WandExport MagickBooleanType CompareImagesCommand(ImageInfo *image_info,
             case PeakSignalToNoiseRatioErrorMetric:
             {
               (void) FormatLocaleFile(stderr,"%.*g (%.*g)",GetMagickPrecision(),
-                (double) QuantumRange*distortion,GetMagickPrecision(),
-                distortion);
+                48.1647*distortion,GetMagickPrecision(),distortion);
               break;
             }
             case MeanErrorPerPixelErrorMetric:
@@ -1314,8 +1320,7 @@ WandExport MagickBooleanType CompareImagesCommand(ImageInfo *image_info,
           }
           if (subimage_search != MagickFalse)
             (void) FormatLocaleFile(stderr," @ %.20g,%.20g [%.*g]",
-              (double) difference_image->page.x,
-              (double) difference_image->page.y,GetMagickPrecision(),
+              (double) offset.x,(double) offset.y,GetMagickPrecision(),
               similarity_metric);
         }
       else
