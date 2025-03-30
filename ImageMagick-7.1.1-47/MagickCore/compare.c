@@ -1078,7 +1078,7 @@ static MagickBooleanType GetNormalizedCrossCorrelationDistortion(
   for (i=0; i < (ssize_t) GetPixelChannels(image); i++)
   {
     distortion[i]/=sqrt(alpha_variance[i]*beta_variance[i]);
-    if (fabs(distortion[i]) > MagickEpsilon)
+    if (fabs(distortion[i]) >= MagickEpsilon)
       distortion[CompositePixelChannel]+=distortion[i];
   }
   distortion[CompositePixelChannel]=distortion[CompositePixelChannel]/
@@ -1111,6 +1111,7 @@ static MagickBooleanType GetPeakAbsoluteDistortion(const Image *image,
     y;
 
   status=MagickTrue;
+  (void) memset(distortion,0,(MaxPixelChannels+1)*sizeof(*distortion));
   rows=MagickMax(image->rows,reconstruct_image->rows);
   columns=MagickMax(image->columns,reconstruct_image->columns);
   image_view=AcquireVirtualCacheView(image,exception);
@@ -1141,7 +1142,8 @@ static MagickBooleanType GetPeakAbsoluteDistortion(const Image *image,
         status=MagickFalse;
         continue;
       }
-    (void) memset(channel_distortion,0,sizeof(channel_distortion));
+    (void) memset(channel_distortion,0,(MaxPixelChannels+1)*
+      sizeof(*channel_distortion));
     for (x=0; x < (ssize_t) columns; x++)
     {
       double
@@ -1209,9 +1211,12 @@ static MagickBooleanType GetPeakSignalToNoiseRatio(const Image *image,
     i;
 
   status=GetMeanSquaredDistortion(image,reconstruct_image,distortion,exception);
-  for (i=0; i <= MaxPixelChannels; i++)
-    if (fabs(distortion[i]) >= MagickEpsilon)
-      distortion[i]=(10.0*MagickLog10(distortion[i]))/48.1647;
+  for (i=0; i < MaxPixelChannels; i++)
+    if ((fabs(distortion[i]) < MagickEpsilon) || (fabs(distortion[i]) >= 1.0))
+      distortion[i]=fabs(distortion[i]) < MagickEpsilon ? 0.0 : 1.0;
+    else
+      distortion[i]=fabs(-10.0*MagickLog10(PerceptibleReciprocal(
+        distortion[i])))/48.1647;
   return(status);
 }
 
@@ -2338,7 +2343,8 @@ static MagickBooleanType SIMLogImage(Image *image,ExceptionInfo *exception)
         PixelTrait traits = GetPixelChannelTraits(image,channel);
         if ((traits & UpdatePixelTrait) == 0)
           continue;
-        q[i]=(Quantum) (QuantumRange*10.0*MagickLog10((double) q[i]));
+        q[i]=(Quantum) (-10.0*QuantumRange*MagickLog10(PerceptibleReciprocal(
+          (double) q[i])))/48.1647;
       }
       q+=(ptrdiff_t) GetPixelChannels(image);
     }
@@ -3234,7 +3240,6 @@ static Image *DPCSimilarityImage(const Image *image,const Image *reconstruct,
   geometry.width=image->columns;
   geometry.height=image->rows;
   (void) ResetImagePage(trx_image,"0x0+0+0");
-puts("a");
   dot_product_image=CropImage(trx_image,&geometry,exception);
   trx_image=DestroyImage(trx_image);
   if (dot_product_image == (Image *) NULL)
@@ -3799,8 +3804,8 @@ static Image *PSNRSimilarityImage(const Image *image,const Image *reconstruct,
   if (status == MagickFalse)
     ThrowPSNRSimilarityException();
   mean_image->depth=MAGICKCORE_QUANTUM_DEPTH;
-  status=SIMMultiplyImage(mean_image,1.0/48.1647,
-    (const ChannelStatistics *) NULL,exception);
+  status=SIMMultiplyImage(mean_image,1.0,(const ChannelStatistics *) NULL,
+    exception);
   if (status == MagickFalse)
     ThrowPSNRSimilarityException();
   /*
@@ -4125,7 +4130,6 @@ MagickExport Image *SimilarityImage(const Image *image,const Image *reconstruct,
     return((Image *) NULL);
   similarity_image->depth=MAGICKCORE_QUANTUM_DEPTH;  
   similarity_image->alpha_trait=UndefinedPixelTrait;
-  similarity_image->type=GrayscaleType;
   status=SetImageStorageClass(similarity_image,DirectClass,exception);
   if (status == MagickFalse)
     return(DestroyImage(similarity_image));
@@ -4206,10 +4210,13 @@ MagickExport Image *SimilarityImage(const Image *image,const Image *reconstruct,
           continue;
         switch (metric)
         {
+          case AbsoluteErrorMetric:
           case FuzzErrorMetric:
           case MeanAbsoluteErrorMetric:
+          case MeanErrorPerPixelErrorMetric:
           case MeanSquaredErrorMetric:
           case NormalizedCrossCorrelationErrorMetric:
+          case PeakAbsoluteErrorMetric:
           case PerceptualHashErrorMetric:
           case RootMeanSquaredErrorMetric:
           case StructuralSimilarityErrorMetric:
@@ -4246,6 +4253,7 @@ MagickExport Image *SimilarityImage(const Image *image,const Image *reconstruct,
       }
   }
   similarity_view=DestroyCacheView(similarity_view);
+  (void) SetImageType(similarity_image,GrayscaleType,exception);
   if (status == MagickFalse)
     similarity_image=DestroyImage(similarity_image);
   return(similarity_image);
