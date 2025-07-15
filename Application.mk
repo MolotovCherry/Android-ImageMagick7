@@ -44,6 +44,8 @@ APP_CFLAGS   += -O3 \
     -Wno-pointer-sign \
     -Wno-excess-initializers \
     -Wno-literal-conversion \
+    -Wno-int-conversion \
+    -Wno-error=int-conversion
 
 APP_CPPFLAGS += -O3 
 
