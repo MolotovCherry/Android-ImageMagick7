@@ -157,6 +157,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/scr.c \
     $(IMAGE_MAGICK)/coders/screenshot.c \
     $(IMAGE_MAGICK)/coders/sct.c \
+    $(IMAGE_MAGICK)/coders/sf3.c \
     $(IMAGE_MAGICK)/coders/sfw.c \
     $(IMAGE_MAGICK)/coders/sgi.c \
     $(IMAGE_MAGICK)/coders/sixel.c \
