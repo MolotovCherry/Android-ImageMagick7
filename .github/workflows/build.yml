@@ -76,7 +76,7 @@ jobs:
           mv jniLibs shared_libs
 
       - name: Set error-log to var (Static Build)
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         id: error-log-static
         if: steps.build-static.outcome != 'success'
         with:
@@ -86,7 +86,7 @@ jobs:
           result-encoding: string
 
       - name: Set error-log to var (Shared Build)
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         id: error-log-shared
         if: steps.build-shared.outcome != 'success'
         with:
@@ -132,7 +132,7 @@ jobs:
 
       - name: Static build errors
         if: steps.build-static.outcome != 'success'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
@@ -143,7 +143,7 @@ jobs:
 
       - name: Shared build errors
         if: steps.build-shared.outcome != 'success' 
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
