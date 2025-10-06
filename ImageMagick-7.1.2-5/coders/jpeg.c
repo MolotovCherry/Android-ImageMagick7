@@ -1182,12 +1182,14 @@ static Image *ReadOneJPEGImage(const ImageInfo *image_info,
     Set image resolution.
   */
   units=0;
-  if ((jpeg_info->saw_JFIF_marker != 0) && (jpeg_info->X_density != 1) &&
-      (jpeg_info->Y_density != 1))
+  if (jpeg_info->saw_JFIF_marker != 0)
     {
-      image->resolution.x=(double) jpeg_info->X_density;
-      image->resolution.y=(double) jpeg_info->Y_density;
-      units=(size_t) jpeg_info->density_unit;
+      if (jpeg_info->X_density != 0)
+        image->resolution.x=(double) jpeg_info->X_density;
+      if (jpeg_info->Y_density != 0)
+        image->resolution.y=(double) jpeg_info->Y_density;
+      if (jpeg_info->density_unit != 0)
+        units=(size_t) jpeg_info->density_unit;
     }
   if (units == 1)
     image->units=PixelsPerInchResolution;
