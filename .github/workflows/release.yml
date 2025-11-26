@@ -37,7 +37,7 @@ jobs:
 
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r27c
+          ndk-version: r29
 
       - name: Set ABI environment variable
         run: |
