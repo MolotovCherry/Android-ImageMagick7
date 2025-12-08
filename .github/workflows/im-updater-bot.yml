@@ -50,7 +50,7 @@ jobs:
             update
             automated pr
           assignees: |
-            ${{ github.actor == 'blackhat2233' && 'blackhat2233' || github.actor == 'molotovcherry' && 'molotovcherry' || '' }}
+            ${{ github.actor == 'MrR0b0X' && 'MrR0b0X' || github.actor == 'molotovcherry' && 'molotovcherry' || '' }}
           draft: false
 
       - name: Check outputs
