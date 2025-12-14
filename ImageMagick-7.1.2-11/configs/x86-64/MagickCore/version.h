@@ -30,16 +30,16 @@ extern "C" {
 #define MagickLibVersion  0x712
 #define MagickLibVersionText  "7.1.2"
 #define MagickLibVersionNumber  10,0,2
-#define MagickLibAddendum  "-10"
+#define MagickLibAddendum  "-11"
 #define MagickLibInterface  10
 #define MagickLibMinInterface  10
 #define MagickPlatform  "x86_64"
 #define MagickppLibVersionText  "7.1.2"
 #define MagickppLibVersionNumber  5:0:0
-#define MagickppLibAddendum  "-10"
+#define MagickppLibAddendum  "-11"
 #define MagickppLibInterface  5
 #define MagickppLibMinInterface  5
-#define MagickReleaseDate  "2025-12-06"
+#define MagickReleaseDate  "2025-12-11"
 #define MagickAuthoritativeLicense  \
   "https://imagemagick.org/script/license.php"
 #define MagickAuthoritativeURL  "https://imagemagick.org"
