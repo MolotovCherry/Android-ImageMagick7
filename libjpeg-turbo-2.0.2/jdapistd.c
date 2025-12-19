@@ -297,6 +297,12 @@ noop_convert(j_decompress_ptr cinfo, JSAMPIMAGE input_buf,
 {
 }
 
+/* Dummy color quantization function used by jpeg_skip_scanlines() */
+LOCAL(void)
+noop_quantize(j_decompress_ptr cinfo, JSAMPARRAY input_buf,
+              JSAMPARRAY output_buf, int num_rows)
+{
+}
 
 /* Dummy postprocessing function used by jpeg_skip_scanlines() */
 LOCAL(void)
