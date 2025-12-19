@@ -104,7 +104,7 @@ jobs:
           Move-Item -Path shared_libs/*/* -Destination all_libs/shared/ -Force -ErrorAction SilentlyContinue
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: steps.build-static.outcome == 'success' || steps.build-shared.outcome == 'success'
         with:
           name: imagemagick-7-android-${{ matrix.abi }}

@@ -256,8 +256,7 @@ static int ReadHuffmanCodeLengths(
   HuffmanTables tables;
 
   if (!VP8LHuffmanTablesAllocate(1 << LENGTHS_TABLE_BITS, &tables) ||
-      !VP8LBuildHuffmanTable(&tables, LENGTHS_TABLE_BITS,
-                             code_length_code_lengths, NUM_CODE_LENGTH_CODES)) {
+      !VP8LBuildHuffmanTable(&tables, LENGTHS_TABLE_BITS, NUM_CODE_LENGTH_CODES)) {
     goto End;
   }
 
@@ -475,7 +474,8 @@ static int ReadHuffmanCodes(VP8LDecoder* const dec, int xsize, int ysize,
         if (j == 0 && color_cache_bits > 0) {
           alphabet_size += (1 << color_cache_bits);
         }
-        size = ReadHuffmanCode(alphabet_size, dec, code_lengths, huffman_tables);
+        size =
+            ReadHuffmanCode(alphabet_size, dec, code_lengths, huffman_tables);
         htrees[j] = huffman_tables->curr_segment->curr_table;
         if (size == 0) {
           goto Error;

@@ -158,7 +158,6 @@ static int BuildHuffmanTable(HuffmanCode* const root_table, int root_bits,
       if (num_open < 0) {
         return 0;
       }
-      if (root_table == NULL) continue;
       for (; count[len] > 0; --count[len]) {
         HuffmanCode code;
         code.bits = (uint8_t)len;
@@ -250,12 +249,14 @@ int VP8LBuildHuffmanTable(HuffmanTables* const root_table, int root_bits,
   if (code_lengths_size <= SORTED_SIZE_CUTOFF) {
     // use local stack-allocated array.
     uint16_t sorted[SORTED_SIZE_CUTOFF];
-    BuildHuffmanTable(root_table->curr_segment->curr_table, root_bits, code_lengths, code_lengths_size, sorted);
+    BuildHuffmanTable(root_table->curr_segment->curr_table, root_bits,
+                      code_lengths, code_lengths_size, sorted);
   } else {  // rare case. Use heap allocation.
     uint16_t* const sorted =
         (uint16_t*)WebPSafeMalloc(code_lengths_size, sizeof(*sorted));
     if (sorted == NULL) return 0;
-    BuildHuffmanTable(root_table->curr_segment->curr_table, root_bits, code_lengths, code_lengths_size, sorted);
+    BuildHuffmanTable(root_table->curr_segment->curr_table, root_bits,
+                      code_lengths, code_lengths_size, sorted);
     WebPSafeFree(sorted);
   }
   return total_size;
