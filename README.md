@@ -59,8 +59,3 @@ Please visit the [wiki](https://github.com/MolotovCherry/Android-ImageMagick7/wi
 
 # Questions and everything else
 Please use [Discussions](https://github.com/MolotovCherry/Android-ImageMagick7/discussions) for everything else that doesn't fit into an issue report
-
-# Did this library help you?
-
-If you found this library useful, please consider showing appreciation and help fund it by sending a donation my way.  
-All donations help this project continue to be supported for longer and receive more frequent updates! Thanks for your support! <3
