@@ -3,7 +3,7 @@
 
 [![Build](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/build.yml/badge.svg)](https://github.com/MolotovCherry//Android-ImageMagick7/actions/workflows/build.yml) [![CodeQL](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/MolotovCherry/Android-ImageMagick7/actions/workflows/codeql-analysis.yml) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/MolotovCherry/Android-ImageMagick7?style=plastic)
 
-This is a fully featured imagemagick build compatible with android [__and has Kotlin bindings__](https://github.com/MolotovCherry/kmagick) (check out KMagick below). All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
+This is a fully featured imagemagick build compatible with android. All libaries used are the absolute latest versions with the latest and greatest features. ___This repo automatically updates itself with the latest imagemagick releases and issues full binary releases!___
 
 It can be configured to both build as a binary (with shared libaries or statically linked), or as separate shared libraries (and no binary).
 
@@ -47,10 +47,6 @@ You can test it with earlier versions, but I offer no support for it. If you're 
 Check out the release page for the [latest built binaries](https://github.com/MolotovCherry/Android-ImageMagick7/releases). This is built using the [default configuration](https://github.com/MolotovCherry/Android-ImageMagick7/blob/master/Application.mk). If you need a special configuration (for example OpenCL), you will need to build it for yourself from source.
 
 - OpenCL support is available for Qualcomm. OpenCL is recommended over OpenMP. Please [go here](https://github.com/MolotovCherry/Android-ImageMagick7/tree/master/libopencl/qualcomm/lib) in order to learn how to setup OpenCL build for the project.
-
-# KMagick
-
-Check out the [KMagick](https://github.com/MolotovCherry/kmagick) repo for instructions on how to use ImageMagick with Kotlin in your project (instead of the binary).
 
 # Setup, testing, FAQ, and all other questions
 
