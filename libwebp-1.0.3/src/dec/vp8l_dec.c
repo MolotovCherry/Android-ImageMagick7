@@ -256,7 +256,9 @@ static int ReadHuffmanCodeLengths(
   HuffmanTables tables;
 
   if (!VP8LHuffmanTablesAllocate(1 << LENGTHS_TABLE_BITS, &tables) ||
-      !VP8LBuildHuffmanTable(&tables, LENGTHS_TABLE_BITS, NUM_CODE_LENGTH_CODES)) {
+      !VP8LBuildHuffmanTable(&tables, LENGTHS_TABLE_BITS,
+                             code_length_code_lengths,
+                             NUM_CODE_LENGTH_CODES)) {
     goto End;
   }
 
