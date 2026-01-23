@@ -1439,7 +1439,7 @@ opj_pi_iterator_t *opj_pi_create_decode(opj_image_t *p_image,
     /* 0 < l_tcp->numlayers < 65536 c.f. opj_j2k_read_cod in j2k.c */
     l_current_pi->include = 00;
     if (l_step_l <= (UINT_MAX / (l_tcp->numlayers + 1U))) {
-        l_current_pi->include_size = (l_tcp->numlayers + 1U) * l_step_l;
+        l_current_pi->include_size = (size_t)(l_tcp->numlayers + 1U) * l_step_l;
         l_current_pi->include = (OPJ_INT16*) opj_calloc(
                                     l_current_pi->include_size, sizeof(OPJ_INT16));
     }
