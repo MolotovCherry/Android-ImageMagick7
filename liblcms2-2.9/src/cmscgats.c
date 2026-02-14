@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 //
+//  Copyright (c) 1998-2018 Marti Maria Saguer
 //  Little Color Management System
-//  Copyright (c) 1998-2017 Marti Maria Saguer
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the "Software"),
