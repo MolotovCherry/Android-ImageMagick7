@@ -2251,11 +2251,18 @@ xmlPushInput(xmlParserCtxtPtr ctxt, xmlParserInputPtr input) {
 		"Pushing input %d : %.30s\n", ctxt->inputNr+1, input->cur);
     }
     if (((ctxt->inputNr > 40) && ((ctxt->options & XML_PARSE_HUGE) == 0)) ||
+    if (((ctxt->inputNr > 40) && ((ctxt->options & XML_PARSE_HUGE) == 0)) ||
+        (ctxt->inputNr > 1024)) {
         (ctxt->inputNr > 1024)) {
         xmlFatalErr(ctxt, XML_ERR_ENTITY_LOOP, NULL);
+        xmlFatalErr(ctxt, XML_ERR_ENTITY_LOOP, NULL);
+        while (ctxt->inputNr > 1)
         while (ctxt->inputNr > 1)
             xmlFreeInputStream(inputPop(ctxt));
+            xmlFreeInputStream(inputPop(ctxt));
 	return(-1);
+	return(-1);
+    }
     }
     ret = inputPush(ctxt, input);
     if (ctxt->instate == XML_PARSER_EOF)
