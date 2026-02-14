@@ -3,8 +3,8 @@
  *
  * This file was part of the Independent JPEG Group's software:
  * Copyright (C) 1994-1996, Thomas G. Lane.
+ * Copyright (C) 2010, 2015-2018, 2020, D. R. Commander.
  * libjpeg-turbo Modifications:
- * Copyright (C) 2010, 2015-2018, D. R. Commander.
  * Copyright (C) 2015, Google, Inc.
  * For conditions of distribution and use, see the accompanying README.ijg
  * file.
@@ -22,6 +22,8 @@
 #include "jdmainct.h"
 #include "jdcoefct.h"
 #include "jdmaster.h"
+#include "jdmaster.h"
+#include "jdmerge.h"
 #include "jdmerge.h"
 #include "jdsample.h"
 #include "jmemsys.h"
@@ -327,15 +329,21 @@ read_and_discard_scanlines(j_decompress_ptr cinfo, JDIMENSION num_lines)
 {
   JDIMENSION n;
   my_master_ptr master = (my_master_ptr)cinfo->master;
+  my_master_ptr master = (my_master_ptr)cinfo->master;
   void (*color_convert) (j_decompress_ptr cinfo, JSAMPIMAGE input_buf,
                          JDIMENSION input_row, JSAMPARRAY output_buf,
                          int num_rows) = NULL;
   void (*color_quantize) (j_decompress_ptr cinfo, JSAMPARRAY input_buf,
                           JSAMPARRAY output_buf, int num_rows) = NULL;
   void (*post_process_data) (j_decompress_ptr cinfo, JSAMPIMAGE input_buf,
+  void (*post_process_data) (j_decompress_ptr cinfo, JSAMPIMAGE input_buf,
+                             JDIMENSION *in_row_group_ctr,
                              JDIMENSION *in_row_group_ctr,
                              JDIMENSION in_row_groups_avail,
+                             JDIMENSION in_row_groups_avail,
                              JSAMPARRAY output_buf, JDIMENSION *out_row_ctr,
+                             JSAMPARRAY output_buf, JDIMENSION *out_row_ctr,
+                             JDIMENSION out_rows_avail) = NULL;
                              JDIMENSION out_rows_avail) = NULL;
 
   if (cinfo->cconvert && cinfo->cconvert->color_convert) {
