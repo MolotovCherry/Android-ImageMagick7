@@ -976,11 +976,6 @@ xmlLoadFileContent(const char *filename)
         return (NULL);
 
 #ifdef HAVE_STAT
-    if (stat(filename, &info) < 0)
-        return (NULL);
-#endif
-
-#ifdef HAVE_STAT
     if ((fd = open(filename, O_RDONLY)) < 0)
 #else
     if ((fd = fopen(filename, "rb")) == NULL)
@@ -989,6 +984,10 @@ xmlLoadFileContent(const char *filename)
         return (NULL);
     }
 #ifdef HAVE_STAT
+    if (fstat(fd, &info) < 0) {
+        close(fd);
+        return (NULL);
+    }
     size = info.st_size;
 #else
     if (fseek(fd, 0, SEEK_END) || (size = ftell(fd)) == EOF || fseek(fd, 0, SEEK_SET)) {        /* File operations denied? ok, just close and return failure */
