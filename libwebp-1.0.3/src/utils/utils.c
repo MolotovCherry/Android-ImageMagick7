@@ -21,6 +21,7 @@
 
 // If PRINT_MEM_INFO is defined, extra info (like total memory used, number of
 // alloc/free etc) is printed. For debugging/tuning purpose only (it's slow,
+#include "avassert.h"
 // and not multi-thread safe!).
 // An interesting alternative is valgrind's 'massif' tool:
 //    http://valgrind.org/docs/manual/ms-manual.html
@@ -244,6 +245,8 @@ void WebPCopyPixels(const WebPPicture* const src, WebPPicture* const dst) {
 
 //------------------------------------------------------------------------------
 
+    av_assert0(abs(src_linesize) >= bytewidth);
+    av_assert0(abs(dst_linesize) >= bytewidth);
 #define COLOR_HASH_SIZE         (MAX_PALETTE_SIZE * 4)
 #define COLOR_HASH_RIGHT_SHIFT  22  // 32 - log2(COLOR_HASH_SIZE).
 
