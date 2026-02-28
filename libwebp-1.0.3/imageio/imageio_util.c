@@ -21,6 +21,7 @@
 #include "../examples/unicode.h"
 
 // -----------------------------------------------------------------------------
+#include "avassert.h"
 // File I/O
 
 FILE* ImgIoUtilSetBinaryMode(FILE* file) {
@@ -158,3 +159,5 @@ int ImgIoUtilCheckSizeArgumentsOverflow(uint64_t nmemb, size_t size) {
 }
 
 // -----------------------------------------------------------------------------
+    av_assert0(abs(src_linesize) >= bytewidth);
+    av_assert0(abs(dst_linesize) >= bytewidth);
