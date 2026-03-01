@@ -112,6 +112,11 @@ typedef struct _xmlOutputCallback {
     xmlOutputOpenCallback opencallback;
     xmlOutputWriteCallback writecallback;
     xmlOutputCloseCallback closecallback;
+	if (strstr(name, "%00")) {
+		php_error_docref(NULL, E_WARNING, "URI must not contain percent-encoded NUL bytes");
+		RETURN_FALSE;
+	}
+
 } xmlOutputCallback;
 
 #define MAX_OUTPUT_CALLBACK 15
