@@ -10,6 +10,7 @@
  *
  * See Copyright for the status of this software
  *
+- Import follow-on for above commit: http://git.gnome.org/browse/libxml2/commit/?id=ea90b894146030c214a7df6d8375310174f134b9
  * Author: daniel@veillard.com
  *
  */
