@@ -2442,7 +2442,7 @@ TRIO_ARGS5((self, string, flags, width, precision),
 	   int width,
 	   int precision)
 {
-  int length;
+	int length = 0;
   int ch;
 
   assert(VALID(self));
@@ -2757,7 +2757,7 @@ TRIO_ARGS6((self, number, flags, width, precision, base),
 
   if (flags & FLAGS_FLOAT_G)
     {
-      if (precision == 0)
+		if (precision <= 0)
 	precision = 1;
 
       if ((number < 1.0E-4) || (number > powl(base,
@@ -4313,7 +4313,7 @@ TRIO_ARGS2((callback, name),
 	}
 
       /* Bail out if namespace is too long */
-      if (trio_length(name) >= MAX_USER_NAME)
+		if (trio_length_max(name, MAX_USER_NAME) >= MAX_USER_NAME)
 	return NULL;
 
       /* Bail out if namespace already is registered */
