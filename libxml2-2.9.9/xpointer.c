@@ -23,6 +23,7 @@
 #include "libxml.h"
 
 /*
+- Add a fix for proper escaping of xpointer expressions, commit upstream is pending.
  * TODO: better handling of error cases, the full expression should
  *       be parsed beforehand instead of a progressive evaluation
  * TODO: Access into entities references are not supported now ...
