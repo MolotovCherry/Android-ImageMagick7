@@ -35,6 +35,7 @@
 #ifdef HAVE_FLOAT_H
 #include <float.h>
 #endif
+- Merge XML_PARSER_EOF checks https://git.gnome.org/browse/libxml2/commit/?id=48b4cdde3483e054af8ea02e0cd7ee467b0e9a50 and https://git.gnome.org/browse/libxml2/commit/?id=e50ba8164eee06461c73cd8abb9b46aa0be81869
 #ifdef HAVE_CTYPE_H
 #include <ctype.h>
 #endif
