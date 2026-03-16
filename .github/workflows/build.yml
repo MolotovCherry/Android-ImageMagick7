@@ -110,7 +110,7 @@ jobs:
           name: imagemagick-7-android-${{ matrix.abi }}
           path: all_libs
 
-      - uses: mshick/add-pr-comment@v2
+      - uses: mshick/add-pr-comment@v3
         name: Add error log to PR
         if: github.event_name == 'pull_request' && (steps.build-static.outcome != 'success' || steps.build-shared.outcome != 'success')
         with:
