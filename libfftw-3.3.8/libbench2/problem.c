@@ -249,8 +249,11 @@ bench_problem *problem_parse(const char *s)
      p->scrambled_in = p->scrambled_out = 0;
      p->sz = p->vecsz = 0;
      p->ini = p->outi = 0;
-     p->pstring = (char *) bench_malloc(sizeof(char) * (strlen(s) + 1));
-     strcpy(p->pstring, s);
+     {
+          size_t slen = strlen(s) + 1;
+          p->pstring = (char *) bench_malloc(sizeof(char) * slen);
+          memcpy(p->pstring, s, slen);
+     }
 
  L1:
      switch (tolower(*s)) {
