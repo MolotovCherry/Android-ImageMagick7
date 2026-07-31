@@ -104,7 +104,14 @@ $ExcludeFileTypes = @(
 )
 
 ForEach ($d in $DelDirs) {
-    Remove-Item -Path "$TmpPath\$d" -Force -Recurse
+    $path = Join-Path $TmpPath $d
+
+    if (Test-Path -LiteralPath $path) {
+        Remove-Item -LiteralPath $path -Force -Recurse
+    }
+    else {
+        Write-Host "Skipping '$d' (not found)"
+    }
 }
 
 $magickpp_folders = Get-ChildItem -Path "$TmpPath\Magick++" -Directory | Where-Object { $_.Name -ne "lib" }
