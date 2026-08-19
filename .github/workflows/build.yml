@@ -24,56 +24,69 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - uses: nttld/setup-ndk@v1
-        with:
-          ndk-version: r27c
+      # 手动下载并配置 NDK r30-beta2 (Windows 版)
+      - name: Setup NDK r30-beta2
+        run: |
+          curl -L -o android-ndk-r30-beta2-windows.zip "https://dl.google.com/android/repository/android-ndk-r30-beta2-windows.zip?hl=zh-cn"
+          7z x android-ndk-r30-beta2-windows.zip -y
+          $ndkPath = "$pwd\android-ndk-r30-beta2"
+          echo "ANDROID_NDK_HOME=$ndkPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "$ndkPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Set ABI environment variable
         run: |
-          echo "ABI=${{ matrix.abi }}" >> $env:GITHUB_ENV
+          echo "ABI=${{ matrix.abi }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Configure Build ABI
+      - name: Configure Build ABI and Platform (android-35)
         run: |
-          Write-Host "Setting ABI to $env:ABI"
+          Write-Host "Setting ABI to $env:ABI and Platform to android-35"
           $file = "Application.mk"
-          $line = "APP_ABI := $env:ABI"
+          $abiLine = "APP_ABI := $env:ABI"
+          $platformLine = "APP_PLATFORM := android-35"
 
-          # Read the file and replace or add the line
-          $content = Get-Content $file
-          $content = $content -replace "APP_ABI :=.*", $line
-          if ($content -eq (Get-Content $file)) {
-              $content += $line
+          if (Test-Path $file) {
+            $content = Get-Content $file
+            $abiFound = $false
+            $platformFound = $false
+            for ($i=0; $i -lt $content.Count; $i++) {
+              if ($content[$i] -match "^APP_ABI\s*:=") {
+                $content[$i] = $abiLine
+                $abiFound = $true
+              }
+              if ($content[$i] -match "^APP_PLATFORM\s*:=") {
+                $content[$i] = $platformLine
+                $platformFound = $true
+              }
+            }
+            if (-not $abiFound) { $content += $abiLine }
+            if (-not $platformFound) { $content += $platformLine }
+            $content | Set-Content $file
+          } else {
+            $abiLine, $platformLine | Set-Content $file
           }
 
-          # Write the modified content back to the file
-          $content | Set-Content $file
-
-      # This must be run as cmd /c to redirect output properly
-      # because powershell considers stderr an error and doesn't
-      # log it into the output properly
       - name: Build Static Library
         id: build-static
         continue-on-error: true
         run: |
-          # Build the static library using build-release
-          cmd /c "build-release 2> errors-static-${{ matrix.abi }}.txt"
-          # Move static library files to the appropriate directory
-          mv jniLibs static_libs
+          cmd /c "build-release.bat 2> errors-static-${{ matrix.abi }}.txt"
+          if (Test-Path jniLibs) {
+            Move-Item -Path jniLibs -Destination static_libs -Force -ErrorAction SilentlyContinue
+          }
 
       - name: Build Shared Library
         id: build-shared
         continue-on-error: true
         run: |
-          # Change to shared library mode before building
           ./.github-deps/change-to-shared-lib.ps1
-          # Build the shared library using build-release
-          cmd /c "build-release 2> errors-shared-${{ matrix.abi }}.txt"
-          # Move static library files to the appropriate directory
-          mv jniLibs shared_libs
+          cmd /c "build-release.bat 2> errors-shared-${{ matrix.abi }}.txt"
+          if (Test-Path jniLibs) {
+            Move-Item -Path jniLibs -Destination shared_libs -Force -ErrorAction SilentlyContinue
+          }
 
       - name: Set error-log to var (Static Build)
         uses: actions/github-script@v9
@@ -82,7 +95,8 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            return fs.readFileSync('errors-static-${{ matrix.abi }}.txt', 'utf8').toString();
+            const file = `errors-static-${{ matrix.abi }}.txt`;
+            return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
           result-encoding: string
 
       - name: Set error-log to var (Shared Build)
@@ -92,19 +106,24 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            return fs.readFileSync('errors-shared-${{ matrix.abi }}.txt', 'utf8').toString();
+            const file = `errors-shared-${{ matrix.abi }}.txt`;
+            return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
           result-encoding: string
 
       - name: Collect and Organize Binaries
-        if: github.event.inputs.abi == 'all' || github.event.inputs.abi != 'all'
+        if: always()
         run: |
           New-Item -ItemType Directory -Path all_libs/static -Force
           New-Item -ItemType Directory -Path all_libs/shared -Force
-          Move-Item -Path static_libs/*/* -Destination all_libs/static/ -Force -ErrorAction SilentlyContinue
-          Move-Item -Path shared_libs/*/* -Destination all_libs/shared/ -Force -ErrorAction SilentlyContinue
+          if (Test-Path static_libs) {
+            Get-ChildItem -Path static_libs -Recurse -File | Move-Item -Destination all_libs/static/ -Force -ErrorAction SilentlyContinue
+          }
+          if (Test-Path shared_libs) {
+            Get-ChildItem -Path shared_libs -Recurse -File | Move-Item -Destination all_libs/shared/ -Force -ErrorAction SilentlyContinue
+          }
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: steps.build-static.outcome == 'success' || steps.build-shared.outcome == 'success'
         with:
           name: imagemagick-7-android-${{ matrix.abi }}
@@ -136,18 +155,20 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            if (fs.existsSync('errors-static-${{ matrix.abi }}.txt')) {
-                console.log(fs.readFileSync('errors-static-${{ matrix.abi }}.txt', 'utf8').toString());
+            const file = `errors-static-${{ matrix.abi }}.txt`;
+            if (fs.existsSync(file)) {
+              console.log(fs.readFileSync(file, 'utf8'));
             }
-            core.setFailed('Build failed');
+            core.setFailed('Static build failed');
 
       - name: Shared build errors
-        if: steps.build-shared.outcome != 'success' 
+        if: steps.build-shared.outcome != 'success'
         uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
-            if (fs.existsSync('errors-shared-${{ matrix.abi }}.txt')) {
-                console.log(fs.readFileSync('errors-${{ matrix.abi }}.txt', 'utf8').toString());
+            const file = `errors-shared-${{ matrix.abi }}.txt`;
+            if (fs.existsSync(file)) {
+              console.log(fs.readFileSync(file, 'utf8'));
             }
-            core.setFailed('Build failed'); 
+            core.setFailed('Shared build failed');
