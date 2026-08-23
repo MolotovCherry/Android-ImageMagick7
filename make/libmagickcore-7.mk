@@ -55,6 +55,7 @@ endif
 LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/aai.c \
     $(IMAGE_MAGICK)/coders/art.c \
+    $(IMAGE_MAGICK)/coders/ase.c \
     $(IMAGE_MAGICK)/coders/ashlar.c \
     $(IMAGE_MAGICK)/coders/avs.c \
     $(IMAGE_MAGICK)/coders/bayer.c \
@@ -182,6 +183,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/video.c \
     $(IMAGE_MAGICK)/coders/viff.c \
     $(IMAGE_MAGICK)/coders/vips.c \
+    $(IMAGE_MAGICK)/coders/wbinfo.c \
     $(IMAGE_MAGICK)/coders/wbmp.c \
     $(IMAGE_MAGICK)/coders/webp.c \
     $(IMAGE_MAGICK)/coders/wmf.c \
