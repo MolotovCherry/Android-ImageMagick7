@@ -62,6 +62,7 @@ LOCAL_SRC_FILES += \
     $(IMAGE_MAGICK)/coders/bgr.c \
     $(IMAGE_MAGICK)/coders/bmp.c \
     $(IMAGE_MAGICK)/coders/braille.c \
+    $(IMAGE_MAGICK)/coders/c2pa.c \
     $(IMAGE_MAGICK)/coders/cals.c \
     $(IMAGE_MAGICK)/coders/caption.c \
     $(IMAGE_MAGICK)/coders/cin.c \
